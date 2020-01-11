@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TopBar">
+        <attr name="rightImg" format="reference"/>
+        <attr name="rightTxt" format="string"/>
+        <attr name="title" format="string"/>
+        <attr name="titleColor" format="color"/>
+        <attr name="showBack" format="boolean"/>
+    </declare-styleable>
+</resources>

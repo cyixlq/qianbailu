@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#151719"
+    android:padding="5dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="5dp">
+    <ImageView
+        android:id="@+id/ivCover"
+        android:layout_width="match_parent"
+        android:layout_height="213dp"
+        tools:src="@drawable/ic_loading"
+        tools:ignore="ContentDescription" />
+    <TextView
+        android:id="@+id/tvDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="50:00"
+        android:textColor="#fff"
+        android:background="#000"
+        android:padding="2dp"
+        android:layout_alignEnd="@id/ivCover"
+        android:layout_alignBottom="@id/ivCover"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"/>
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#2cbcbc"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_below="@id/ivCover"
+        android:layout_marginTop="5dp"
+        tools:text="影片名称"/>
+    <TextView
+        android:id="@+id/tvViewCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvName"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="#fff"
+        android:layout_marginTop="5dp"
+        android:textSize="12dp"
+        tools:text="200人观看"
+        tools:ignore="SpUsage" />
+</RelativeLayout>

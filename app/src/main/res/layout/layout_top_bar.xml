@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="#000"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:padding="13dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_left"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="16dp"
+        tools:ignore="SpUsage"
+        tools:text="标题" />
+
+    <TextView
+        android:id="@+id/tvRight"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:textColor="#fff"
+        tools:text="更多" />
+
+</merge>
