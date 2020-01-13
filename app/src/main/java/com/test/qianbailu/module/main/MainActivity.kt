@@ -14,7 +14,7 @@ import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import top.cyixlq.core.common.activity.CommonActivity
-import top.cyixlq.core.utils.toastLong
+import top.cyixlq.core.utils.toastShort
 
 class MainActivity : CommonActivity() {
 
@@ -28,6 +28,8 @@ class MainActivity : CommonActivity() {
     private lateinit var infoText: TextView
     private lateinit var videoCoverAdapter: VideoCoverAdapter
     private lateinit var emptyView: View
+    private var lastTime = 0L
+    private val duration = 2000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +62,7 @@ class MainActivity : CommonActivity() {
         videoCoverAdapter = VideoCoverAdapter()
         videoCoverAdapter.setOnItemClickListener { _, _, position ->
             videoCoverAdapter.getItem(position)?.let {
-                VideoActivity.launch(this, it.videoId, it.image, it.name)
+                VideoActivity.launch(this, it)
             }
         }
         emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, rvVideoCover, false)
@@ -72,6 +74,16 @@ class MainActivity : CommonActivity() {
 
     private fun refresh() {
         mViewModel.getIndexVideoCovers()
+    }
+
+    override fun onBackPressed() {
+        val currentTime = System.currentTimeMillis()
+        if ((currentTime - lastTime) > duration) {
+            "再按一次退出".toastShort()
+            lastTime = currentTime
+        } else {
+            super.onBackPressed()
+        }
     }
 
     companion object {

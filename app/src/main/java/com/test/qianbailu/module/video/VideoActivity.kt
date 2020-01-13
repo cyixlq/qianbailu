@@ -3,15 +3,15 @@ package com.test.qianbailu.module.video
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import cn.jzvd.Jzvd
+import cn.jzvd.JzvdStd
 import com.test.qianbailu.GlideApp
 import com.test.qianbailu.R
+import com.test.qianbailu.model.bean.VideoCover
 import kotlinx.android.synthetic.main.activity_video.*
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.toastLong
@@ -25,31 +25,42 @@ class VideoActivity : CommonActivity() {
     }
 
     override val layoutId: Int = R.layout.activity_video
-    private lateinit var name: String
+    private var videoCover: VideoCover? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
-        val videoId = intent.getStringExtra("videoId")
-        if (TextUtils.isEmpty(videoId)) {
+        videoCover = intent.getParcelableExtra("videoCover")
+        if (videoCover == null || TextUtils.isEmpty(videoCover?.videoId)) {
+            videoPlayer.changeUiToError()
             "视频id有误".toastShort()
             return
         }
-        val imageUrl = intent.getStringExtra("cover")
-        if (!TextUtils.isEmpty(imageUrl)) {
-            videoPlayer.thumbImageView.scaleType = ImageView.ScaleType.FIT_CENTER
-            GlideApp.with(this).load(imageUrl)
+        binds()
+        videoCover?.let {
+            GlideApp.with(this).load(it.image)
                 .placeholder(R.drawable.ic_loading)
                 .fitCenter()
                 .into(videoPlayer.thumbImageView)
+            tvName.text = it.name
+            tvDuration.text = it.duration
+            tvViewCount.text = it.viewCount
+            mViewModel.getVideo(it.videoId)
         }
-        name = intent.getStringExtra("name") ?: "未知视频名称"
-        binds()
-        mViewModel.getVideo(videoId)
     }
 
     override fun onPause() {
         super.onPause()
+        JzvdStd.goOnPlayOnPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        JzvdStd.goOnPlayOnResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         Jzvd.releaseAllVideos()
     }
 
@@ -64,7 +75,8 @@ class VideoActivity : CommonActivity() {
         mViewModel.viewState.observe(this, Observer {
             progressBar.visibility = if (it.isLoading) View.VISIBLE else View.INVISIBLE
             if (it.video != null) {
-                videoPlayer.setUp(it.video.url, name)
+                videoPlayer.setUp(it.video.url, videoCover?.name)
+                videoPlayer.startVideo()
             }
             if (it.throwable != null) {
                 it.throwable.localizedMessage.toastLong()
@@ -73,11 +85,10 @@ class VideoActivity : CommonActivity() {
     }
 
     companion object {
-        fun launch(activity: FragmentActivity, videoId: String, cover: String, name: String) {
-            val intent = Intent(activity, VideoActivity::class.java)
-            intent.putExtra("videoId", videoId)
-            intent.putExtra("cover", cover)
-            intent.putExtra("name", name)
+        fun launch(activity: FragmentActivity, videoCover: VideoCover) {
+            val intent = Intent(activity, VideoActivity::class.java)?.apply {
+                putExtra("videoCover", videoCover)
+            }
             activity.startActivity(intent)
         }
     }
