@@ -1,6 +1,5 @@
 package com.test.qianbailu.utils
 
-import android.util.Log
 import com.test.qianbailu.model.bean.Video
 import com.test.qianbailu.model.bean.VideoCover
 import org.jsoup.Jsoup
@@ -15,7 +14,6 @@ fun String.html2VideoCoverList(): MutableList<VideoCover> {
         val thumbElement = aElement.selectFirst("div.thumb-overlay")
         val image = thumbElement.selectFirst("img.lazy.img-responsive").attr("data-original")
         val videoId = aElement.attr("href").replace("/video/", "").replace("/", "")
-        Log.e("CY_TAG", "videoId:$videoId")
         val duration = thumbElement.selectFirst("div.duration").text()
         val viewCount = element.select("div.well.well-sm > div.video-views.pull-left").text()
         list.add(VideoCover(name, image, videoId, duration, viewCount))
