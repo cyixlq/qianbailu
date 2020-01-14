@@ -6,15 +6,17 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.test.qianbailu.R;
 
-import cn.jzvd.JZDataSource;
-import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 
 public class MyJzVideoPlayer extends JzvdStd {
-    TextView tvSpeed;
-    int currentSpeedIndex = 2;
+
+    protected TextView tvSpeed;
+    private int currentSpeedIndex = 2;
+    private AlertDialog speedDialog;
 
     public MyJzVideoPlayer(Context context) {
         super(context);
@@ -31,27 +33,12 @@ public class MyJzVideoPlayer extends JzvdStd {
         tvSpeed.setOnClickListener(this);
     }
 
-    public void setScreenNormal() {
-        super.setScreenNormal();
-        tvSpeed.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void setUp(JZDataSource jzDataSource, int screen) {
-        super.setUp(jzDataSource, screen);
-        if (screen == Jzvd.SCREEN_FULLSCREEN) {
-            titleTextView.setVisibility(View.VISIBLE);
-        } else {
-            titleTextView.setVisibility(View.INVISIBLE);
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     @Override
-    public void setScreenFullscreen() {
-        super.setScreenFullscreen();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
-            tvSpeed.setVisibility(View.VISIBLE);
+    public void setScreenNormal() {
+        super.setScreenNormal();
+        //tvSpeed.setVisibility(View.GONE);
+        titleTextView.setVisibility(View.INVISIBLE);
 
         if (jzDataSource.objects == null) {
             jzDataSource.objects = new Object[]{2};
@@ -60,10 +47,17 @@ public class MyJzVideoPlayer extends JzvdStd {
             currentSpeedIndex = (int) jzDataSource.objects[0];
         }
         if (currentSpeedIndex == 2) {
-            tvSpeed.setText("倍速");
+            tvSpeed.setText("1.0x");
         } else {
-            tvSpeed.setText(getSpeedFromIndex(currentSpeedIndex) + "X");
+            tvSpeed.setText(getSpeedFromIndex(currentSpeedIndex) + "x");
         }
+    }
+
+    @Override
+    public void setScreenFullscreen() {
+        super.setScreenFullscreen();
+        tvSpeed.setVisibility(View.VISIBLE);
+        titleTextView.setVisibility(VISIBLE);
     }
 
 
@@ -73,24 +67,19 @@ public class MyJzVideoPlayer extends JzvdStd {
         super.onClick(v);
         final int id = v.getId();
         if (id == R.id.tv_speed) {//0.5 0.75 1.0 1.25 1.5 1.75 2.0
-            if (currentSpeedIndex == 6) {
-                currentSpeedIndex = 0;
-            } else {
-                currentSpeedIndex += 1;
+            if (speedDialog == null) {
+                final String[] speedArgs = new String[]{"0.5", "0.75", "1.0", "1.25", "1.5", "1.75", "2.0"};
+                speedDialog = new AlertDialog.Builder(getContext())
+                        .setTitle("倍速选择")
+                        .setSingleChoiceItems(speedArgs, currentSpeedIndex, (dialog, which) -> {
+                            currentSpeedIndex = which;
+                            mediaInterface.setSpeed(getSpeedFromIndex(currentSpeedIndex));
+                            tvSpeed.setText(getSpeedFromIndex(currentSpeedIndex) + "x");
+                            jzDataSource.objects[0] = currentSpeedIndex;
+                            dialog.dismiss();
+                        }).create();
             }
-            mediaInterface.setSpeed(getSpeedFromIndex(currentSpeedIndex));
-            tvSpeed.setText(getSpeedFromIndex(currentSpeedIndex) + "X");
-            jzDataSource.objects[0] = currentSpeedIndex;
-        } else if (id == R.id.fullscreen) {
-            if (state == STATE_AUTO_COMPLETE) return;
-            if (screen == SCREEN_FULLSCREEN) {
-                titleTextView.setVisibility(VISIBLE);
-            } else {
-                titleTextView.setVisibility(INVISIBLE);
-            }
-        } else if (id == R.id.back) {
-            if (state == STATE_AUTO_COMPLETE) return;
-            titleTextView.setVisibility(INVISIBLE);
+            speedDialog.show();
         }
     }
 

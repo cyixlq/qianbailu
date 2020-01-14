@@ -86,10 +86,9 @@ class VideoActivity : CommonActivity() {
 
     companion object {
         fun launch(activity: FragmentActivity, videoCover: VideoCover) {
-            val intent = Intent(activity, VideoActivity::class.java)?.apply {
+            activity.startActivity(Intent(activity, VideoActivity::class.java).apply {
                 putExtra("videoCover", videoCover)
-            }
-            activity.startActivity(intent)
+            })
         }
     }
 }

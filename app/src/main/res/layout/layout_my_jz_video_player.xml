@@ -31,7 +31,8 @@
         android:background="@drawable/jz_bottom_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/current"
@@ -78,6 +79,17 @@
             android:textAlignment="center"
             android:textColor="#ffffff"
             android:focusable="true"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tv_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"
+            android:textAlignment="center"
+            android:text="1.0x"
+            android:textColor="#ffffffff"
             tools:ignore="HardcodedText" />
 
         <ImageView
@@ -140,6 +152,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:textColor="#ffffff"
+            tools:text="视频标题"
             android:textSize="18sp" />
 
         <LinearLayout
@@ -151,6 +164,7 @@
             android:layout_marginEnd="14dp"
             android:gravity="center_vertical"
             android:visibility="invisible"
+            tools:visibility="visible"
             android:orientation="vertical"
             tools:ignore="UseCompoundDrawables">
 
@@ -159,7 +173,7 @@
                 android:layout_width="23dp"
                 android:layout_height="10dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/jz_battery_level_10"
+                android:background="@drawable/jz_battery_level_100"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -170,21 +184,9 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:textColor="#ffffffff"
+                tools:text="12:00"
                 android:textSize="12.0sp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_speed"
-            android:layout_width="42dp"
-            android:layout_height="60dp"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="13dp"
-            android:layout_toStartOf="@+id/battery_time_layout"
-            android:gravity="center"
-            android:text="倍速"
-            android:visibility="invisible"
-            android:textColor="#ffffffff"
-            tools:ignore="HardcodedText" />
     </RelativeLayout>
 
     <ProgressBar

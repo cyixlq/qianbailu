@@ -5,13 +5,11 @@ import android.os.Bundle
 import com.test.qianbailu.module.main.MainActivity
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
-import top.cyixlq.core.common.activity.CommonActivity
+import top.cyixlq.core.common.activity.AutoDisposeActivity
 import top.cyixlq.core.utils.RxSchedulers
 import java.util.concurrent.TimeUnit
 
-class SplashActivity : CommonActivity() {
-
-    override val layoutId = R.layout.activity_splash
+class SplashActivity : AutoDisposeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
