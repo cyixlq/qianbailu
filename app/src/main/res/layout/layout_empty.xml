@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000">
+    android:layout_height="match_parent">
     <View
         android:layout_width="1dp"
         android:layout_height="0dp"
@@ -21,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:textColor="#fff"
+        android:textColor="#000"
         tools:text="发生错误，点击重试"/>
     <View
         android:layout_width="1dp"
