@@ -10,8 +10,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.test.qianbailu.R
+import com.test.qianbailu.model.bean.UpdateAppBean
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
+import com.test.qianbailu.ui.widget.UpdateDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.toastShort
@@ -36,6 +38,9 @@ class MainActivity : CommonActivity() {
         supportActionBar?.hide()
         initView()
         binds()
+        UpdateDialogFragment.newInstance(UpdateAppBean(
+            "1.0.0", 100, "xxoo", "https://www.baidu.com/", false
+        )).show(supportFragmentManager, "tag")
         refresh()
     }
 

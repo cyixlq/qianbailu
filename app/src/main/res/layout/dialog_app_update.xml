@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_update_top"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="1dp"
+        android:layout_height="50dp"
+        android:background="#d8d8d8"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/iv_close"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_update_close"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/iv_top"
+        android:layout_above="@id/line"
+        android:orientation="vertical"
+        android:background="@drawable/bg_update_info"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            tools:ignore="SpUsage"
+            tools:text="是否升级到4.1.1版本？" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:scrollbars="none">
+
+            <TextView
+                android:id="@+id/tv_update_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#666"
+                android:textSize="14sp"
+                tools:text="1，xxxxxxxx\n2，ooooooooo" />
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EF4340"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:text="升级"
+            android:textColor="@android:color/white"
+            android:textSize="15dp"
+            tools:ignore="HardcodedText,SpUsage" />
+    </LinearLayout>
+
+</RelativeLayout>
