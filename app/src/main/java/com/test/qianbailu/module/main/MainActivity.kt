@@ -16,6 +16,7 @@ import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import com.test.qianbailu.ui.widget.UpdateDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import top.cyixlq.core.common.activity.CommonActivity
+import top.cyixlq.core.utils.VersionUtil
 import top.cyixlq.core.utils.toastShort
 
 class MainActivity : CommonActivity() {
@@ -38,9 +39,6 @@ class MainActivity : CommonActivity() {
         supportActionBar?.hide()
         initView()
         binds()
-        UpdateDialogFragment.newInstance(UpdateAppBean(
-            "1.0.0", 100, "xxoo", "https://www.baidu.com/", false
-        )).show(supportFragmentManager, "tag")
         refresh()
     }
 
@@ -54,6 +52,11 @@ class MainActivity : CommonActivity() {
                     videoCoverAdapter.setEmptyView(emptyView)
                 }
                 videoCoverAdapter.setNewData(it.list)
+            }
+            if (it.updateAppBean != null && VersionUtil.getVersionCode() < it.updateAppBean.code) {
+                    UpdateDialogFragment
+                        .newInstance(it.updateAppBean)
+                        .show(supportFragmentManager, "tag")
             }
             if (it.throwable != null) {
                 infoText.text = "发生错误：${it.throwable.localizedMessage}\n点击重试"
@@ -78,6 +81,7 @@ class MainActivity : CommonActivity() {
     }
 
     private fun refresh() {
+        mViewModel.getVersionInfo()
         mViewModel.getIndexVideoCovers()
     }
 

@@ -30,6 +30,16 @@ class MainViewModel(private val repo: MainDataSourceRepository) : CommonViewMode
             )
     }
 
+    fun getVersionInfo() {
+        repo.getVersionInfo()
+            .subscribeOn(RxSchedulers.io)
+            .observeOn(RxSchedulers.ui)
+            .autoDisposable(this)
+            .subscribe {
+                viewState.postValue(MainViewState(updateAppBean = it))
+            }
+    }
+
 }
 
 @Suppress("UNCHECKED_CAST")

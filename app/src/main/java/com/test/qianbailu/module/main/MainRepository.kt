@@ -1,6 +1,7 @@
 package com.test.qianbailu.module.main
 
 import com.test.qianbailu.model.Repo
+import com.test.qianbailu.model.bean.UpdateAppBean
 import com.test.qianbailu.model.bean.VideoCover
 import com.test.qianbailu.utils.html2VideoCoverList
 import io.reactivex.Observable
@@ -10,6 +11,10 @@ class MainDataSourceRepository(
 ) {
     fun getIndexVideoCovers(): Observable<MutableList<VideoCover>> {
         return remote.getIndexVideoCovers()
+    }
+
+    fun getVersionInfo(): Observable<UpdateAppBean> {
+        return remote.getVersionInfo()
     }
 }
 
@@ -23,6 +28,11 @@ class MainRemoteDataSource {
             .map {
                 return@map it.html2VideoCoverList()
             }
+    }
+
+    fun getVersionInfo(): Observable<UpdateAppBean> {
+        return Repo.api
+            .getVersionInfo()
     }
 
 }
