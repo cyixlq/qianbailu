@@ -43,17 +43,16 @@ class UpdateDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.let { dialog ->
-            dialog.window?.let { window ->
-                window.setGravity(Gravity.CENTER)
-                val lp = window.attributes
-                val displayMetrics = context?.resources?.displayMetrics
-                if (displayMetrics != null) {
-                    lp.height = (displayMetrics.heightPixels * 0.7f).toInt()
-                    lp.width = (displayMetrics.widthPixels * 0.8f).toInt()
-                }
-                window.attributes = lp
+        val dialogWindow = dialog?.window
+        if (dialogWindow != null) {
+            dialogWindow.setGravity(Gravity.CENTER)
+            val lp = dialogWindow.attributes
+            val displayMetrics = context?.resources?.displayMetrics
+            if (displayMetrics != null) {
+                lp.height = (displayMetrics.heightPixels * 0.7f).toInt()
+                lp.width = (displayMetrics.widthPixels * 0.8f).toInt()
             }
+            dialogWindow.attributes = lp
         }
     }
 
