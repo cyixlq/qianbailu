@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.test.qianbailu.model.bean.VideoCover
 import com.uber.autodispose.autoDisposable
 import top.cyixlq.core.common.viewmodel.CommonViewModel
+import top.cyixlq.core.utils.CLog
 import top.cyixlq.core.utils.RxSchedulers
+import top.cyixlq.core.utils.toastShort
 
 class MainViewModel(private val repo: MainDataSourceRepository) : CommonViewModel() {
 
@@ -35,9 +37,11 @@ class MainViewModel(private val repo: MainDataSourceRepository) : CommonViewMode
             .subscribeOn(RxSchedulers.io)
             .observeOn(RxSchedulers.ui)
             .autoDisposable(this)
-            .subscribe {
+            .subscribe({
                 viewState.postValue(MainViewState(updateAppBean = it))
-            }
+            }, {
+                "版本更新检查出错".toastShort()
+            })
     }
 
 }
