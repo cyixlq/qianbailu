@@ -22,12 +22,4 @@
         <item name="android:windowExitAnimation">@anim/update_app_window_out</item>
     </style>
 
-    <style name="VideoSpeedDialog" parent="android:style/Theme.Dialog">
-        <item name="android:background">#33000000</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowEnterAnimation">@anim/video_speed_window_in</item>
-        <item name="android:windowExitAnimation">@anim/video_speed_window_out</item>
-    </style>
-
 </resources>
