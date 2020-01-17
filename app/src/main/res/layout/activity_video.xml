@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <com.test.qianbailu.ui.widget.TopBar
+    <com.zm.video.ui.widget.TopBar
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:layout_below="@id/topBar">
-        <com.test.qianbailu.ui.widget.MyJzVideoPlayer
+        <com.zm.video.ui.widget.MyJzVideoPlayer
             android:id="@+id/videoPlayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
