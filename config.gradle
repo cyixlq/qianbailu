@@ -3,7 +3,7 @@ ext {
     android = [
             "compileSdkVersion": 28,
             "buildToolsVersion": "28.0.3",
-            "applicationId"    : "com.zm.video",
+            "applicationId"    : "com.test.qianbailu",
             "minSdkVersion"    : 23,
             "targetSdkVersion" : 29,
             "versionCode"      : 100,
