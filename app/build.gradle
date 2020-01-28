@@ -23,6 +23,7 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+    buildToolsVersion = rootProject.ext.android.buildToolsVersion
 }
 
 dependencies {
@@ -31,6 +32,8 @@ dependencies {
     implementation rootProject.ext.support.constraintLayout
     implementation rootProject.ext.support.kotlin
     implementation rootProject.ext.support.ktx
+    implementation rootProject.ext.support.material
+    implementation rootProject.ext.support.swipeRefreshLayout
     implementation rootProject.ext.dependencies.jsoup
     implementation rootProject.ext.dependencies.brvah
     implementation rootProject.ext.dependencies.jzVideoPlayer
@@ -39,8 +42,6 @@ dependencies {
     implementation(rootProject.ext.dependencies.glide) {
         exclude group: "com.android.support"
     }
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     kapt rootProject.ext.dependencies.glideCompiler
     implementation project(path: ':core')
 
