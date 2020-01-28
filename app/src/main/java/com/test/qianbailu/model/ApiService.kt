@@ -24,6 +24,6 @@ interface ApiService {
     @GET("/search$ALL_CATALOG_URL")
     fun searchVideo(@Query("search_query") keyword: String, @Query("page") page: Int): Observable<ResponseBody>
 
-    @GET("https://raw.githubusercontent.com/cyixlq/qianbailu/master/version.json")
+    @GET("https://raw.githubusercontent.com/cyixlq/qianbailu/develop/version.json")
     fun getVersionInfo(): Observable<UpdateAppBean>
 }
