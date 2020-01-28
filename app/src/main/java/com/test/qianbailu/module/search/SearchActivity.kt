@@ -48,6 +48,7 @@ class SearchActivity : CommonActivity() {
                 inputMethodManager
                     .hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
                 keyword = edtSearch.text.trim().toString()
+                page = 1
                 doSearch()
                 return@setOnEditorActionListener true
             }
@@ -91,6 +92,10 @@ class SearchActivity : CommonActivity() {
             if (it.counts != null) {
                 if (page <= 1) {
                     videoCoverAdapter.setNewData(it.counts.list)
+                    // 防止一页就加载完全部数据，而网站传下一页的话仍然会返回数据，所以在第一页的时候就判断是否超过总数，超过就要加载所有完成
+                    if (videoCoverAdapter.itemCount >= it.counts.count) {
+                        videoCoverAdapter.loadMoreModule?.loadMoreEnd()
+                    }
                 } else {
                     videoCoverAdapter.addData(it.counts.list)
                     if (videoCoverAdapter.itemCount >= it.counts.count) {
