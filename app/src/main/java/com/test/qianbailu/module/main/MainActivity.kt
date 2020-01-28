@@ -51,12 +51,7 @@ class MainActivity : CommonActivity() {
     private fun initView() {
         vpMain.adapter = ViewPagerFragmentAdapter(
             this, arrayListOf(HomeFragment.instance(), CatalogFragment.instance()))
-        vpMain.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                btmNav.menu.getItem(position).isChecked = true
-            }
-        })
+        vpMain.isUserInputEnabled = false
         btmNav.setOnNavigationItemSelectedListener {
             return@setOnNavigationItemSelectedListener if (it.itemId == R.id.menuHome) {
                 vpMain.currentItem = 0
