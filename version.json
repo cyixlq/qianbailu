@@ -1,7 +1,7 @@
 {
-  "code": 100,
-  "version": "1.0.0",
-  "desc": "1. 正式版正式发布，欢迎体验",
-  "url": "https://www.lanzous.com/i8q9dvc",
-  "must": true
+  "code": 110,
+  "version": "1.1.0",
+  "desc": "1. 增加视频分类栏目\n2. 增加影片搜索功能\n3. 细节优化",
+  "url": "https://www.lanzous.com/i8w3x6h",
+  "must": false
 }

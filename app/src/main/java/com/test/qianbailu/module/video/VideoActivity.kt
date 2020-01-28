@@ -79,7 +79,7 @@ class VideoActivity : CommonActivity() {
                 videoPlayer.startVideo()
             }
             if (it.throwable != null) {
-                it.throwable.localizedMessage.toastLong()
+                it.throwable.localizedMessage?.toastLong()
             }
         })
     }

@@ -1,12 +1,15 @@
 package com.test.qianbailu.ui.adapter
 
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.test.qianbailu.GlideApp
 import com.test.qianbailu.R
 import com.test.qianbailu.model.bean.VideoCover
 
-class VideoCoverAdapter : BaseQuickAdapter<VideoCover, BaseViewHolder>(R.layout.item_video_cover) {
+class VideoCoverAdapter :
+    BaseQuickAdapter<VideoCover, BaseViewHolder>(R.layout.item_video_cover),
+    LoadMoreModule {
 
     override fun convert(helper: BaseViewHolder, item: VideoCover?) {
         item?.let {

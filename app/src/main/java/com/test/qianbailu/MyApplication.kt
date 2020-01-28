@@ -10,7 +10,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         CrashReport.initCrashReport(applicationContext, "6059853783", BuildConfig.DEBUG)
-        CoreManager.configNetWork(baseUrl = "https://011009.www.cdn.cmavs.com")
+        CoreManager.configNetWork(baseUrl = "http://www.600avs.com/")
             .configCLog(isEnableLog = BuildConfig.DEBUG)
             .init(this)
         Repo.init()

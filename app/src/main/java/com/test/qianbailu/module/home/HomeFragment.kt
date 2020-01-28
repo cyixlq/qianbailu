@@ -1,0 +1,81 @@
+package com.test.qianbailu.module.home
+
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.test.qianbailu.R
+import com.test.qianbailu.module.video.VideoActivity
+import com.test.qianbailu.ui.adapter.VideoCoverAdapter
+import kotlinx.android.synthetic.main.fragment_home.*
+import top.cyixlq.core.common.fragment.CommonFragment
+
+class HomeFragment : CommonFragment() {
+
+    private val mViewModel by lazy {
+        ViewModelProviders.of(this, HomeViewModelFactory(HomeDataSourceRepository()))
+            .get(HomeViewModel::class.java)
+    }
+
+    override val layoutId: Int = R.layout.fragment_home
+
+    private lateinit var infoText: TextView
+    private lateinit var videoCoverAdapter: VideoCoverAdapter
+    private lateinit var emptyView: View
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        binds()
+        refresh()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun binds() {
+        mViewModel.viewState.observe(this, Observer {
+            srl.isRefreshing = it.isLoading
+            if (it.list != null) {
+                if (it.list.isEmpty()) {
+                    infoText.text = "空空如也，点击重试"
+                    videoCoverAdapter.setEmptyView(emptyView)
+                }
+                videoCoverAdapter.setNewData(it.list)
+            }
+            if (it.throwable != null) {
+                infoText.text = "发生错误：${it.throwable.localizedMessage}\n点击重试"
+                videoCoverAdapter.setEmptyView(emptyView)
+                videoCoverAdapter.setNewData(null)
+            }
+        })
+    }
+
+    private fun initView() {
+        context?.let {
+            srl.setColorSchemeColors(it.getColor(R.color.colorPrimary))
+        }
+        srl.setOnRefreshListener { refresh() }
+        videoCoverAdapter = VideoCoverAdapter()
+        videoCoverAdapter.setOnItemClickListener { _, _, position ->
+            videoCoverAdapter.getItem(position)?.let {
+                val parent = activity
+                if (parent != null)
+                    VideoActivity.launch(parent, it)
+            }
+        }
+        emptyView = LayoutInflater.from(context).inflate(R.layout.layout_empty, rvVideoCover, false)
+        emptyView.setOnClickListener { refresh() }
+        infoText = emptyView.findViewById(R.id.tvInfo)
+        rvVideoCover.adapter = videoCoverAdapter
+    }
+
+    private fun refresh() {
+        mViewModel.getIndexVideoCovers()
+    }
+
+    companion object {
+        fun instance(): HomeFragment = HomeFragment()
+    }
+}

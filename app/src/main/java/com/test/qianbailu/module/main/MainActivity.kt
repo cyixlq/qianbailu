@@ -3,16 +3,14 @@ package com.test.qianbailu.module.main
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager2.widget.ViewPager2
 import com.test.qianbailu.R
-import com.test.qianbailu.model.bean.UpdateAppBean
-import com.test.qianbailu.module.video.VideoActivity
-import com.test.qianbailu.ui.adapter.VideoCoverAdapter
+import com.test.qianbailu.module.catalog.CatalogFragment
+import com.test.qianbailu.module.home.HomeFragment
+import com.test.qianbailu.ui.adapter.ViewPagerFragmentAdapter
 import com.test.qianbailu.ui.widget.UpdateDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import top.cyixlq.core.common.activity.CommonActivity
@@ -28,9 +26,6 @@ class MainActivity : CommonActivity() {
 
     override val layoutId: Int = R.layout.activity_main
 
-    private lateinit var infoText: TextView
-    private lateinit var videoCoverAdapter: VideoCoverAdapter
-    private lateinit var emptyView: View
     private var lastTime = 0L
     private val duration = 2000
 
@@ -39,50 +34,38 @@ class MainActivity : CommonActivity() {
         supportActionBar?.hide()
         initView()
         binds()
-        refresh()
+        mViewModel.getVersionInfo()
     }
 
     @SuppressLint("SetTextI18n")
     private fun binds() {
         mViewModel.viewState.observe(this, Observer {
-            progressBar.visibility = if (it.isLoading) View.VISIBLE else View.INVISIBLE
-            if (it.list != null) {
-                if (it.list.isEmpty()) {
-                    infoText.text = "空空如也，点击重试"
-                    videoCoverAdapter.setEmptyView(emptyView)
-                }
-                videoCoverAdapter.setNewData(it.list)
-            }
             if (it.updateAppBean != null && VersionUtil.getVersionCode() < it.updateAppBean.code) {
                     UpdateDialogFragment
                         .newInstance(it.updateAppBean)
                         .show(supportFragmentManager, "tag")
             }
-            if (it.throwable != null) {
-                infoText.text = "发生错误：${it.throwable.localizedMessage}\n点击重试"
-                videoCoverAdapter.setEmptyView(emptyView)
-                videoCoverAdapter.setNewData(null)
-            }
         })
     }
 
     private fun initView() {
-        videoCoverAdapter = VideoCoverAdapter()
-        videoCoverAdapter.setOnItemClickListener { _, _, position ->
-            videoCoverAdapter.getItem(position)?.let {
-                VideoActivity.launch(this, it)
+        vpMain.adapter = ViewPagerFragmentAdapter(
+            this, arrayListOf(HomeFragment.instance(), CatalogFragment.instance()))
+        vpMain.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                btmNav.menu.getItem(position).isChecked = true
+            }
+        })
+        btmNav.setOnNavigationItemSelectedListener {
+            return@setOnNavigationItemSelectedListener if (it.itemId == R.id.menuHome) {
+                vpMain.currentItem = 0
+                true
+            } else {
+                vpMain.currentItem = 1
+                true
             }
         }
-        emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, rvVideoCover, false)
-        emptyView.setOnClickListener { refresh() }
-        infoText = emptyView.findViewById(R.id.tvInfo)
-        rvVideoCover.adapter = videoCoverAdapter
-
-    }
-
-    private fun refresh() {
-        mViewModel.getVersionInfo()
-        mViewModel.getIndexVideoCovers()
     }
 
     override fun onBackPressed() {
