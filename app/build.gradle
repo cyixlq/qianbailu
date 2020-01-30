@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion = rootProject.ext.android.buildToolsVersion
     defaultConfig {
         applicationId rootProject.ext.android.applicationId
         minSdkVersion rootProject.ext.android.minSdkVersion
@@ -13,8 +14,24 @@ android {
         versionName rootProject.ext.android.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            storeFile file('..key.jks')
+            storePassword '123456'
+            keyAlias = 'qianbailu'
+            keyPassword '123456'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -23,7 +40,15 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
-    buildToolsVersion = rootProject.ext.android.buildToolsVersion
+    //文件输出
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            //获取当前模式debug或release
+            def buildType = variant.buildType.name
+            variant.getPackageApplicationProvider().get().outputDirectory = new File("./${project.getName()}/${buildType}")
+            outputFileName = "aiqiyi_${buildType}_v${defaultConfig.versionName}.apk"
+        }
+    }
 }
 
 dependencies {

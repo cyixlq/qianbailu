@@ -92,7 +92,7 @@ public class MyJzVideoPlayer extends JzvdStd {
                         .setTitle("倍速选择")
                         .setSingleChoiceItems(speed, currentSpeedIndex, (dialog, which) -> {
                             currentSpeedIndex = which;
-                            mediaInterface.setSpeed(currentSpeedIndex);
+                            mediaInterface.setSpeed(getSpeedFromIndex(currentSpeedIndex));
                             tvSpeed.setText(getSpeedFromIndex(currentSpeedIndex) + "x");
                             jzDataSource.objects[0] = currentSpeedIndex;
                             dialog.dismiss();
