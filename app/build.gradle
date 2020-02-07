@@ -16,7 +16,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('..key.jks')
+            storeFile file('../key.jks')
             storePassword '123456'
             keyAlias = 'qianbailu'
             keyPassword '123456'
@@ -45,8 +45,10 @@ android {
         variant.outputs.all { output ->
             //获取当前模式debug或release
             def buildType = variant.buildType.name
-            variant.getPackageApplicationProvider().get().outputDirectory = new File("./${project.getName()}/${buildType}")
-            outputFileName = "aiqiyi_${buildType}_v${defaultConfig.versionName}.apk"
+            if (buildType == "release") {
+                variant.getPackageApplicationProvider().get().outputDirectory = new File("./${project.getName()}/${buildType}")
+                outputFileName = "aiqiyi_${buildType}_v${defaultConfig.versionName}.apk"
+            }
         }
     }
 }

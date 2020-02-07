@@ -68,7 +68,7 @@ class CatalogFragment : CommonFragment() {
         }
         rvMenu.adapter = menuAdapter
         videoCoverAdapter = VideoCoverAdapter()
-        videoCoverAdapter.loadMoreModule?.isEnableLoadMoreIfNotFullPage = false
+        //videoCoverAdapter.loadMoreModule?.isEnableLoadMoreIfNotFullPage = false
         videoCoverAdapter.loadMoreModule?.setOnLoadMoreListener {
             page++
             mViewModel.getCatalogContent(catalogUrl, page)
@@ -92,9 +92,13 @@ class CatalogFragment : CommonFragment() {
                 videoCoverAdapter.setNewData(it.allCatalog.videocCovers)
             }
             if (it.videoCovers != null) {
-                if (page == 1) {
+                if (page <= 1) {
                     rvContent.scrollToPosition(0)
                     videoCoverAdapter.setNewData(it.videoCovers.list)
+                    // 防止一页就加载完全部数据，而网站传下一页的话仍然会返回数据，所以在第一页的时候就判断是否超过总数，超过就要加载所有完成
+                    if (videoCoverAdapter.itemCount >= it.videoCovers.count) {
+                        videoCoverAdapter.loadMoreModule?.loadMoreEnd()
+                    }
                 } else {
                     videoCoverAdapter.addData(it.videoCovers.list)
                     if (videoCoverAdapter.itemCount >= it.videoCovers.count) {
