@@ -3,8 +3,6 @@ package com.test.qianbailu.module.catalog
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import top.cyixlq.core.common.fragment.CommonFragment
 import com.test.qianbailu.R
 import com.test.qianbailu.model.ALL_CATALOG_URL
 import com.test.qianbailu.model.bean.Catalog
@@ -13,15 +11,15 @@ import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.MenuAdapter
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import kotlinx.android.synthetic.main.fragment_catalog.*
+import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.viewmodel.scope.viewModel
+import top.cyixlq.core.common.fragment.CommonFragment
 import top.cyixlq.core.utils.CLog
 import top.cyixlq.core.utils.toastLong
 
 class CatalogFragment : CommonFragment() {
 
-    private val mViewModel by lazy {
-        ViewModelProviders.of(this, CatalogViewModelFactory(CatalogDataSourceRepository()))
-            .get(CatalogViewModel::class.java)
-    }
+    private val mViewModel by lifecycleScope.viewModel<CatalogViewModel>(this)
 
     override val layoutId: Int = R.layout.fragment_catalog
     private var page = 1

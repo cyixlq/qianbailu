@@ -66,6 +66,8 @@ dependencies {
     implementation rootProject.ext.dependencies.jzVideoPlayer
     implementation rootProject.ext.dependencies.recyclerview
     implementation rootProject.ext.dependencies.bugly
+    implementation rootProject.ext.dependencies.koinScope
+    implementation rootProject.ext.dependencies.koinViewModel
     implementation(rootProject.ext.dependencies.glide) {
         exclude group: "com.android.support"
     }

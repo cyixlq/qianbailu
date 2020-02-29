@@ -6,23 +6,21 @@ import android.text.TextUtils
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import cn.jzvd.Jzvd
 import cn.jzvd.JzvdStd
 import com.test.qianbailu.GlideApp
 import com.test.qianbailu.R
 import com.test.qianbailu.model.bean.VideoCover
 import kotlinx.android.synthetic.main.activity_video.*
+import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.viewmodel.scope.viewModel
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.toastLong
 import top.cyixlq.core.utils.toastShort
 
 class VideoActivity : CommonActivity() {
 
-    private val mViewModel by lazy {
-        ViewModelProviders.of(this, VideoViewModelFactory(VideoDataSourceRepository()))
-            .get(VideoViewModel::class.java)
-    }
+    private val mViewModel by lifecycleScope.viewModel<VideoViewModel>(this)
 
     override val layoutId: Int = R.layout.activity_video
     private var videoCover: VideoCover? = null

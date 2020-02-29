@@ -2,30 +2,27 @@ package com.test.qianbailu.module.search
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.test.qianbailu.R
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.activity_search.rvVideoCover
+import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.viewmodel.scope.viewModel
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.toastShort
 
 class SearchActivity : CommonActivity() {
 
-    private val mViewModel by lazy {
-        ViewModelProviders.of(this, SearchViewModelFactory(SearchDataSourceRepository()))
-            .get(SearchViewModel::class.java)
-    }
+    private val mViewModel by lifecycleScope.viewModel<SearchViewModel>(this)
 
     override val layoutId: Int = R.layout.activity_search
     private var keyword = ""

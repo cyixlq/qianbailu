@@ -6,19 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.test.qianbailu.R
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.viewmodel.scope.viewModel
 import top.cyixlq.core.common.fragment.CommonFragment
 
 class HomeFragment : CommonFragment() {
 
-    private val mViewModel by lazy {
-        ViewModelProviders.of(this, HomeViewModelFactory(HomeDataSourceRepository()))
-            .get(HomeViewModel::class.java)
-    }
+    private val mViewModel by lifecycleScope.viewModel<HomeViewModel>(this)
 
     override val layoutId: Int = R.layout.fragment_home
 

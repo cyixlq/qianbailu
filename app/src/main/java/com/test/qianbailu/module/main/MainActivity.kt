@@ -5,24 +5,21 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.viewpager2.widget.ViewPager2
 import com.test.qianbailu.R
 import com.test.qianbailu.module.catalog.CatalogFragment
 import com.test.qianbailu.module.home.HomeFragment
 import com.test.qianbailu.ui.adapter.ViewPagerFragmentAdapter
 import com.test.qianbailu.ui.widget.UpdateDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.viewmodel.scope.viewModel
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.VersionUtil
 import top.cyixlq.core.utils.toastShort
 
 class MainActivity : CommonActivity() {
 
-    private val mViewModel by lazy {
-        ViewModelProviders.of(this, MainViewModelFactory(MainDataSourceRepository()))
-            .get(MainViewModel::class.java)
-    }
+    private val mViewModel by lifecycleScope.viewModel<MainViewModel>(this)
 
     override val layoutId: Int = R.layout.activity_main
 
@@ -41,16 +38,18 @@ class MainActivity : CommonActivity() {
     private fun binds() {
         mViewModel.viewState.observe(this, Observer {
             if (it.updateAppBean != null && VersionUtil.getVersionCode() < it.updateAppBean.code) {
-                    UpdateDialogFragment
-                        .newInstance(it.updateAppBean)
-                        .show(supportFragmentManager, "tag")
+                UpdateDialogFragment
+                    .newInstance(it.updateAppBean)
+                    .show(supportFragmentManager, "tag")
             }
         })
     }
 
     private fun initView() {
         vpMain.adapter = ViewPagerFragmentAdapter(
-            this, arrayListOf(HomeFragment.instance(), CatalogFragment.instance()))
+            this,
+            arrayListOf(HomeFragment.instance(), CatalogFragment.instance())
+        )
         vpMain.isUserInputEnabled = false
         btmNav.setOnNavigationItemSelectedListener {
             return@setOnNavigationItemSelectedListener if (it.itemId == R.id.menuHome) {
