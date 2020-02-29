@@ -1,6 +1,5 @@
 package com.test.qianbailu
 
-import android.content.Intent
 import android.os.Bundle
 import com.test.qianbailu.module.main.MainActivity
 import com.uber.autodispose.autoDisposable
@@ -18,7 +17,7 @@ class SplashActivity : AutoDisposeActivity() {
             .observeOn(RxSchedulers.ui)
             .autoDisposable(scopeProvider)
             .subscribe {
-                startActivity(Intent(this, MainActivity::class.java))
+                MainActivity.launch(this)
                 finish()
             }
     }
