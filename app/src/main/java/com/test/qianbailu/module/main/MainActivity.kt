@@ -6,13 +6,12 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import com.test.qianbailu.R
-import com.test.qianbailu.module.catalog.CatalogFragment
-import com.test.qianbailu.module.home.HomeFragment
 import com.test.qianbailu.ui.adapter.ViewPagerFragmentAdapter
 import com.test.qianbailu.ui.widget.UpdateDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.scope.lifecycleScope
 import org.koin.androidx.viewmodel.scope.viewModel
+import org.koin.core.parameter.parametersOf
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.VersionUtil
 import top.cyixlq.core.utils.toastShort
@@ -46,10 +45,7 @@ class MainActivity : CommonActivity() {
     }
 
     private fun initView() {
-        vpMain.adapter = ViewPagerFragmentAdapter(
-            this,
-            arrayListOf(HomeFragment.instance(), CatalogFragment.instance())
-        )
+        vpMain.adapter = lifecycleScope.get<ViewPagerFragmentAdapter> { parametersOf(this) }
         vpMain.isUserInputEnabled = false
         btmNav.setOnNavigationItemSelectedListener {
             return@setOnNavigationItemSelectedListener if (it.itemId == R.id.menuHome) {

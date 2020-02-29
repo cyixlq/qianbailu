@@ -1,5 +1,6 @@
 package com.test.qianbailu
 
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import com.test.qianbailu.model.ApiService
 import com.test.qianbailu.module.catalog.*
@@ -12,7 +13,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import top.cyixlq.core.net.RetrofitManager
 import top.cyixlq.core.utils.FormatUtil
-import kotlin.coroutines.coroutineContext
 
 val httpModule = module {
 
@@ -31,6 +31,12 @@ val mvvmModule = module {
         factory { MainRemoteDataSource(get()) }
         factory { MainDataSourceRepository(get()) }
         factory { MutableLiveData<MainViewState>() }
+        scoped { (activity: FragmentActivity) ->
+            ViewPagerFragmentAdapter(
+                activity,
+                arrayListOf(HomeFragment.instance(), CatalogFragment.instance())
+            )
+        }
         viewModel { MainViewModel(get(), get()) }
     }
 

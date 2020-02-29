@@ -55,7 +55,8 @@ ext {
             'jzVideoPlayer'        : 'cn.jzvd:jiaozivideoplayer:7.1.0',
             'bugly'                : 'com.tencent.bugly:crashreport:latest.release',
             koinScope              : "org.koin:koin-androidx-scope:${versions.koinVersion}",
-            koinViewModel          : "org.koin:koin-androidx-viewmodel:${versions.koinVersion}"
+            koinViewModel          : "org.koin:koin-androidx-viewmodel:${versions.koinVersion}",
+            leakcanary             : 'com.squareup.leakcanary:leakcanary-android:2.2'
     ]
 }
 

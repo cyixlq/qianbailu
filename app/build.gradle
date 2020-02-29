@@ -68,6 +68,7 @@ dependencies {
     implementation rootProject.ext.dependencies.bugly
     implementation rootProject.ext.dependencies.koinScope
     implementation rootProject.ext.dependencies.koinViewModel
+    debugImplementation rootProject.ext.dependencies.leakcanary
     implementation(rootProject.ext.dependencies.glide) {
         exclude group: "com.android.support"
     }
