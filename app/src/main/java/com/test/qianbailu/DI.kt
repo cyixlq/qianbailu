@@ -5,9 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import com.test.qianbailu.model.ApiService
 import com.test.qianbailu.module.catalog.*
 import com.test.qianbailu.module.home.*
+import com.test.qianbailu.module.live.*
+import com.test.qianbailu.module.live.room.*
 import com.test.qianbailu.module.main.*
 import com.test.qianbailu.module.search.*
 import com.test.qianbailu.module.video.*
+import com.test.qianbailu.ui.adapter.LivePlatformAdapter
+import com.test.qianbailu.ui.adapter.LiveRoomAdapter
+import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import com.test.qianbailu.ui.adapter.ViewPagerFragmentAdapter
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -26,6 +31,10 @@ val httpModule = module {
 }
 
 val mvvmModule = module {
+
+    // Common Adapter
+    factory { VideoCoverAdapter() }
+
     // Main
     scope<MainActivity> {
         factory { MainRemoteDataSource(get()) }
@@ -34,7 +43,10 @@ val mvvmModule = module {
         scoped { (activity: FragmentActivity) ->
             ViewPagerFragmentAdapter(
                 activity,
-                arrayListOf(HomeFragment.instance(), CatalogFragment.instance())
+                arrayListOf(
+                    HomeFragment.instance(),
+                    CatalogFragment.instance(),
+                    AllPlatformFragment.instance())
             )
         }
         viewModel { MainViewModel(get(), get()) }
@@ -70,5 +82,23 @@ val mvvmModule = module {
         factory { VideoDataSourceRepository(get()) }
         factory { MutableLiveData<VideoViewState>() }
         viewModel { VideoViewModel(get(), get()) }
+    }
+
+    // Platforms
+    scope<AllPlatformFragment> {
+        factory { AllPlatformRemoteDataSource(get()) }
+        factory { AllPlatformDataSourceRepository(get()) }
+        factory { MutableLiveData<AllPlatformViewState>() }
+        factory { LivePlatformAdapter() }
+        viewModel { AllPlatformViewModel(get(), get()) }
+    }
+
+    // LiveRooms
+    scope<LiveRoomsActivity> {
+        factory { LiveRoomsRemoteDataSource(get()) }
+        factory { LiveRoomsDataSourceRepository(get()) }
+        factory { MutableLiveData<LiveRoomsViewState>() }
+        factory { LiveRoomAdapter() }
+        viewModel { LiveRoomsViewModel(get(), get()) }
     }
 }

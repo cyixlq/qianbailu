@@ -82,7 +82,7 @@ class CatalogFragment : CommonFragment() {
     }
 
     private fun binds() {
-        mViewModel.mViewState.observe(this, Observer {
+        mViewModel.mViewState.observe(viewLifecycleOwner, Observer {
             srl.isRefreshing = it.isLoading
             if (it.allCatalog != null) {
                 it.allCatalog.catalogs[0].isChecked = true

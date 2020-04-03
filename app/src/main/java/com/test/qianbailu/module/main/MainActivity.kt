@@ -48,13 +48,13 @@ class MainActivity : CommonActivity() {
         vpMain.adapter = lifecycleScope.get<ViewPagerFragmentAdapter> { parametersOf(this) }
         vpMain.isUserInputEnabled = false
         btmNav.setOnNavigationItemSelectedListener {
-            return@setOnNavigationItemSelectedListener if (it.itemId == R.id.menuHome) {
-                vpMain.currentItem = 0
-                true
-            } else {
-                vpMain.currentItem = 1
-                true
+            val index = when(it.itemId) {
+                R.id.menuCatalog -> 1
+                R.id.menuLive -> 2
+                else -> 0
             }
+            vpMain.setCurrentItem(index, false)
+            return@setOnNavigationItemSelectedListener true
         }
     }
 

@@ -22,9 +22,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".module.search.SearchActivity" />
+        <activity android:name=".module.live.room.LiveRoomsActivity" />
         <activity
             android:name=".SplashActivity"
+            android:screenOrientation="fullSensor"
             android:theme="@style/LunchTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,11 +36,14 @@
         <activity
             android:name=".module.main.MainActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".module.video.VideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".module.search.SearchActivity"
+            android:screenOrientation="fullSensor" />
     </application>
 
 </manifest>

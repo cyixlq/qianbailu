@@ -10,6 +10,7 @@ import com.test.qianbailu.R
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.scope.lifecycleScope
 import org.koin.androidx.viewmodel.scope.viewModel
 import top.cyixlq.core.common.fragment.CommonFragment
@@ -20,9 +21,9 @@ class HomeFragment : CommonFragment() {
 
     override val layoutId: Int = R.layout.fragment_home
 
-    private lateinit var infoText: TextView
-    private lateinit var videoCoverAdapter: VideoCoverAdapter
     private lateinit var emptyView: View
+    private lateinit var infoText: TextView
+    private val videoCoverAdapter: VideoCoverAdapter by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,7 +34,7 @@ class HomeFragment : CommonFragment() {
 
     @SuppressLint("SetTextI18n")
     private fun binds() {
-        mViewModel.viewState.observe(this, Observer {
+        mViewModel.viewState.observe(viewLifecycleOwner, Observer {
             srl.isRefreshing = it.isLoading
             if (it.list != null) {
                 if (it.list.isEmpty()) {
@@ -51,11 +52,8 @@ class HomeFragment : CommonFragment() {
     }
 
     private fun initView() {
-        context?.let {
-            srl.setColorSchemeColors(it.getColor(R.color.colorPrimary))
-        }
+        srl.setColorSchemeResources(R.color.colorPrimary)
         srl.setOnRefreshListener { refresh() }
-        videoCoverAdapter = VideoCoverAdapter()
         videoCoverAdapter.setOnItemClickListener { _, _, position ->
             videoCoverAdapter.getItem(position)?.let {
                 val parent = activity

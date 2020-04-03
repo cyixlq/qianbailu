@@ -1,9 +1,12 @@
 package com.test.qianbailu.model
 
+import com.test.qianbailu.model.bean.LiveRooms
+import com.test.qianbailu.model.bean.Platforms
 import com.test.qianbailu.model.bean.UpdateAppBean
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
 
@@ -26,4 +29,10 @@ interface ApiService {
 
     @GET("https://raw.githubusercontent.com/cyixlq/qianbailu/develop/version.json")
     fun getVersionInfo(): Observable<UpdateAppBean>
+
+    @GET("http://www.xiongmaoapp.net:81/mf/json.txt")
+    fun getAllLivePlatforms(): Observable<Platforms>
+
+    @GET("http://www.xiongmaoapp.net:81/mf/{platformPath}")
+    fun getLiveRooms(@Path("platformPath") platformPath: String): Observable<LiveRooms>
 }
