@@ -49,7 +49,7 @@ android {
             //获取当前模式debug或release
             def buildType = variant.buildType.name
             if (buildType == "release") {
-                variant.getPackageApplicationProvider().get().outputDirectory = new File("./${project.getName()}/${buildType}")
+                variant.getPackageApplicationProvider().get().outputDirectory = new File("./${buildType}")
                 outputFileName = "aiqiyi_${buildType}_v${defaultConfig.versionName}.apk"
             }
         }
