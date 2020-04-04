@@ -2,6 +2,8 @@ package com.test.qianbailu
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
+import cn.leancloud.AVObject
+import cn.leancloud.AVQuery
 import com.test.qianbailu.model.ApiService
 import com.test.qianbailu.module.catalog.*
 import com.test.qianbailu.module.home.*
@@ -37,6 +39,7 @@ val mvvmModule = module {
 
     // Main
     scope<MainActivity> {
+        factory { AVQuery<AVObject>("Version") }
         factory { MainRemoteDataSource(get()) }
         factory { MainDataSourceRepository(get()) }
         factory { MutableLiveData<MainViewState>() }

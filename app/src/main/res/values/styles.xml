@@ -23,4 +23,8 @@
         <item name="android:windowExitAnimation">@anim/update_app_window_out</item>
     </style>
 
+    <style name="LivePlayTheme" parent="AppTheme">
+        <item name="colorPrimaryDark">@android:color/black</item>
+    </style>
+
 </resources>

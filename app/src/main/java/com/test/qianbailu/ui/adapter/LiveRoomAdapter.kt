@@ -12,6 +12,7 @@ class LiveRoomAdapter :
     override fun convert(helper: BaseViewHolder, item: LiveRoom?) {
         if (item == null) return
         helper.setText(R.id.tvPlatformName, item.title)
+            .setGone(R.id.tvOnlineCount, true)
         GlideApp.with(context).load(item.img).placeholder(R.mipmap.ic_launcher)
             .into(helper.getView(R.id.ivPlatformIcon))
     }

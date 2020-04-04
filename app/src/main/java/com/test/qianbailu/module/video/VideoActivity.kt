@@ -11,6 +11,7 @@ import cn.jzvd.JzvdStd
 import com.test.qianbailu.GlideApp
 import com.test.qianbailu.R
 import com.test.qianbailu.model.bean.VideoCover
+import com.test.qianbailu.ui.widget.JZMediaIjk
 import kotlinx.android.synthetic.main.activity_video.*
 import org.koin.androidx.scope.lifecycleScope
 import org.koin.androidx.viewmodel.scope.viewModel

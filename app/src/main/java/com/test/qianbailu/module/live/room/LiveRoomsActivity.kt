@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.test.qianbailu.R
+import com.test.qianbailu.module.live.play.LivePlayActivity
 import com.test.qianbailu.ui.adapter.LiveRoomAdapter
 import kotlinx.android.synthetic.main.activity_live_rooms.*
 import kotlinx.android.synthetic.main.activity_live_rooms.topBar
@@ -40,6 +41,12 @@ class LiveRoomsActivity : CommonActivity() {
         topBar.setTitle(intent.getStringExtra("platformTitle") ?: "未知平台")
         slRefresh.setColorSchemeResources(R.color.colorPrimary)
         slRefresh.setOnRefreshListener { refresh() }
+        mAdapter.setOnItemClickListener { _, _, position ->
+            val liveRoom = mAdapter.getItem(position)
+            if (liveRoom != null) {
+                LivePlayActivity.launch(this, liveRoom.title, liveRoom.address)
+            }
+        }
         rvLiveRooms.layoutManager = GridLayoutManager(this, 3)
         rvLiveRooms.adapter = mAdapter
         emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, rvVideoCover, false)

@@ -38,6 +38,9 @@ class UpdateDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        dialog?.let {
+            it.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        }
         return inflater.inflate(R.layout.dialog_app_update, container)
     }
 
