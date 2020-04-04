@@ -3,8 +3,6 @@ package com.test.qianbailu.module.catalog
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import top.cyixlq.core.common.fragment.CommonFragment
 import com.test.qianbailu.R
 import com.test.qianbailu.model.ALL_CATALOG_URL
 import com.test.qianbailu.model.bean.Catalog
@@ -13,15 +11,15 @@ import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.MenuAdapter
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import kotlinx.android.synthetic.main.fragment_catalog.*
+import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.viewmodel.scope.viewModel
+import top.cyixlq.core.common.fragment.CommonFragment
 import top.cyixlq.core.utils.CLog
 import top.cyixlq.core.utils.toastLong
 
 class CatalogFragment : CommonFragment() {
 
-    private val mViewModel by lazy {
-        ViewModelProviders.of(this, CatalogViewModelFactory(CatalogDataSourceRepository()))
-            .get(CatalogViewModel::class.java)
-    }
+    private val mViewModel by lifecycleScope.viewModel<CatalogViewModel>(this)
 
     override val layoutId: Int = R.layout.fragment_catalog
     private var page = 1
@@ -68,7 +66,7 @@ class CatalogFragment : CommonFragment() {
         }
         rvMenu.adapter = menuAdapter
         videoCoverAdapter = VideoCoverAdapter()
-        videoCoverAdapter.loadMoreModule?.isEnableLoadMoreIfNotFullPage = false
+        //videoCoverAdapter.loadMoreModule?.isEnableLoadMoreIfNotFullPage = false
         videoCoverAdapter.loadMoreModule?.setOnLoadMoreListener {
             page++
             mViewModel.getCatalogContent(catalogUrl, page)
@@ -84,7 +82,7 @@ class CatalogFragment : CommonFragment() {
     }
 
     private fun binds() {
-        mViewModel.mViewState.observe(this, Observer {
+        mViewModel.mViewState.observe(viewLifecycleOwner, Observer {
             srl.isRefreshing = it.isLoading
             if (it.allCatalog != null) {
                 it.allCatalog.catalogs[0].isChecked = true
@@ -92,9 +90,13 @@ class CatalogFragment : CommonFragment() {
                 videoCoverAdapter.setNewData(it.allCatalog.videocCovers)
             }
             if (it.videoCovers != null) {
-                if (page == 1) {
+                if (page <= 1) {
                     rvContent.scrollToPosition(0)
                     videoCoverAdapter.setNewData(it.videoCovers.list)
+                    // 防止一页就加载完全部数据，而网站传下一页的话仍然会返回数据，所以在第一页的时候就判断是否超过总数，超过就要加载所有完成
+                    if (videoCoverAdapter.itemCount >= it.videoCovers.count) {
+                        videoCoverAdapter.loadMoreModule?.loadMoreEnd()
+                    }
                 } else {
                     videoCoverAdapter.addData(it.videoCovers.list)
                     if (videoCoverAdapter.itemCount >= it.videoCovers.count) {

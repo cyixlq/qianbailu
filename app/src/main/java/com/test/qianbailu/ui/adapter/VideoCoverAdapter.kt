@@ -7,8 +7,7 @@ import com.test.qianbailu.GlideApp
 import com.test.qianbailu.R
 import com.test.qianbailu.model.bean.VideoCover
 
-class VideoCoverAdapter :
-    BaseQuickAdapter<VideoCover, BaseViewHolder>(R.layout.item_video_cover),
+class VideoCoverAdapter : BaseQuickAdapter<VideoCover, BaseViewHolder>(R.layout.item_video_cover),
     LoadMoreModule {
 
     override fun convert(helper: BaseViewHolder, item: VideoCover?) {

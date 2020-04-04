@@ -1,15 +1,14 @@
 package com.test.qianbailu.module.catalog
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.uber.autodispose.autoDisposable
 import top.cyixlq.core.common.viewmodel.CommonViewModel
 import top.cyixlq.core.utils.RxSchedulers
 
-class CatalogViewModel(private val repo: CatalogDataSourceRepository) : CommonViewModel() {
-
-    val mViewState = MutableLiveData<CatalogViewState>()
+class CatalogViewModel(
+    private val repo: CatalogDataSourceRepository,
+    val mViewState: MutableLiveData<CatalogViewState>
+) : CommonViewModel() {
 
     fun getAllCatalog() {
         repo.getAllCatalog()
@@ -35,13 +34,5 @@ class CatalogViewModel(private val repo: CatalogDataSourceRepository) : CommonVi
             }, {
                 mViewState.postValue(CatalogViewState(isLoading = false, throwable = it))
             })
-    }
-}
-
-@Suppress("UNCHECKED_CAST")
-class CatalogViewModelFactory(private val repo: CatalogDataSourceRepository) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return CatalogViewModel(repo) as T
     }
 }

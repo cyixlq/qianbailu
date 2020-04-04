@@ -64,8 +64,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#666"
-                android:textSize="14sp"
-                tools:text="1，xxxxxxxx\n2，ooooooooo" />
+                android:textSize="14dp"
+                tools:text="1，xxxxxxxx\n2，ooooooooo"
+                tools:ignore="SpUsage" />
         </androidx.core.widget.NestedScrollView>
 
         <Button

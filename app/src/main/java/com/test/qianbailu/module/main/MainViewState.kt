@@ -1,7 +1,6 @@
 package com.test.qianbailu.module.main
 
 import com.test.qianbailu.model.bean.UpdateAppBean
-import com.test.qianbailu.model.bean.VideoCover
 
 data class MainViewState(
     val isLoading: Boolean = false,

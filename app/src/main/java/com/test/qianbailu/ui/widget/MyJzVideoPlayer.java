@@ -1,6 +1,7 @@
 package com.test.qianbailu.ui.widget;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -10,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.test.qianbailu.R;
 
@@ -22,6 +24,9 @@ public class MyJzVideoPlayer extends JzvdStd {
     protected TextView tvSpeed;
     private int currentSpeedIndex = 1;
     private AlertDialog speedDialog;
+    private boolean showTvSpeed = true;
+    private boolean showNormalTitle = false;
+    private boolean showNormalBack = false;
 
     public MyJzVideoPlayer(Context context) {
         super(context);
@@ -41,14 +46,30 @@ public class MyJzVideoPlayer extends JzvdStd {
     @Override
     public void setScreenNormal() {
         super.setScreenNormal();
-        //tvSpeed.setVisibility(View.GONE);
-        titleTextView.setVisibility(View.INVISIBLE);
+        if (!showTvSpeed) {
+            tvSpeed.setVisibility(View.GONE);
+        }
+        if (!showNormalTitle) {
+            titleTextView.setVisibility(View.INVISIBLE);
+        }
+        if (showNormalBack) {
+            backButton.setVisibility(VISIBLE);
+            backButton.setOnClickListener(v -> {
+                if (!JzvdStd.backPress()) {
+                    if (getContext() instanceof Activity) {
+                        ((Activity)getContext()).finish();
+                    }
+                }
+            });
+        }
     }
 
     @Override
     public void setScreenFullscreen() {
         super.setScreenFullscreen();
-        tvSpeed.setVisibility(View.VISIBLE);
+        if (showTvSpeed) {
+            tvSpeed.setVisibility(View.VISIBLE);
+        }
         titleTextView.setVisibility(VISIBLE);
     }
 
@@ -77,6 +98,18 @@ public class MyJzVideoPlayer extends JzvdStd {
             window.getAttributes().height = WindowManager.LayoutParams.WRAP_CONTENT;
             window.setGravity(Gravity.BOTTOM);
         }
+    }
+
+    public void showSpeed(final boolean show) {
+        this.showTvSpeed = show;
+    }
+
+    public void setShowNormalTitle(final boolean show) {
+        this.showNormalTitle = show;
+    }
+
+    public void setShowNormalBack(final  boolean show) {
+        this.showNormalBack = show;
     }
 
 
