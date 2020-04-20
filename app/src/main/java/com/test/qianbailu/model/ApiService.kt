@@ -12,23 +12,24 @@ import retrofit2.http.Url
 
 interface ApiService {
 
-    @GET("/")
-    fun getIndexHtml(): Observable<ResponseBody>
+    @GET("/host/henhenlu.com")
+    fun getHost(): Observable<ResponseBody>
 
     @GET
-    fun getVideoHtml(@Url videoId: String): Observable<ResponseBody>
+    fun getIndexHtml(@Url indexUrl: String): Observable<ResponseBody>
 
-    @GET(ALL_CATALOG_URL)
-    fun getAllCatalogHtml(): Observable<ResponseBody>
+    @GET
+    fun getVideoHtml(@Url videoPath: String): Observable<ResponseBody>
+
+    @GET
+    fun getAllCatalogHtml(@Url allCatalogUrl: String): Observable<ResponseBody>
 
     @GET
     fun getCatalogHtml(@Url catalogUrl: String, @Query("page") page: Int): Observable<ResponseBody>
 
-    @GET("/search$ALL_CATALOG_URL")
-    fun searchVideo(@Query("search_query") keyword: String, @Query("page") page: Int): Observable<ResponseBody>
-
-    @GET("https://raw.githubusercontent.com/cyixlq/qianbailu/develop/version.json")
-    fun getVersionInfo(): Observable<UpdateAppBean>
+    @GET
+    fun searchVideo(@Url searchUrl: String, @Query("search_query") keyword: String,
+                    @Query("page") page: Int): Observable<ResponseBody>
 
     @GET("http://www.xiongmaoapp.net:81/mf/json.txt")
     fun getAllLivePlatforms(): Observable<Platforms>

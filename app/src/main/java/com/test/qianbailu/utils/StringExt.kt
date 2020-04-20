@@ -71,3 +71,9 @@ fun String.html2Video(): Video {
         .attr("href")*/
     return Video("", url, "", "")
 }
+
+fun String.html2Host(): String {
+    val document = Jsoup.parse(this)
+    return document.selectFirst("div.h5ui-msg.h5ui-msg_success > div.h5ui-msg_content > a.h5ui-btn.h5ui-btn_primary")
+        .attr("href")
+}

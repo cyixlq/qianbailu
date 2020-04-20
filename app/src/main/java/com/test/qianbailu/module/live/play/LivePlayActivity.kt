@@ -1,15 +1,12 @@
 package com.test.qianbailu.module.live.play
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import android.content.Intent
-import androidx.lifecycle.ViewModelProviders
-import cn.jzvd.JZMediaInterface
 import cn.jzvd.Jzvd
 import com.test.qianbailu.R
 import com.test.qianbailu.ui.widget.JZMediaIjk
 import kotlinx.android.synthetic.main.activity_live_play.*
-import org.koin.android.ext.android.inject
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.CLog
 import top.cyixlq.core.utils.toastShort

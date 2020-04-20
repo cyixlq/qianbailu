@@ -1,10 +1,11 @@
 package com.test.qianbailu.module.search
 
-import com.test.qianbailu.model.ApiService
+import com.test.qianbailu.model.*
 import com.test.qianbailu.model.bean.Counts
 import com.test.qianbailu.model.bean.VideoCover
 import com.test.qianbailu.utils.html2VideoCoverCounts
 import io.reactivex.Observable
+import top.cyixlq.core.utils.CLog
 
 class SearchDataSourceRepository(
     private val remote: SearchRemoteDataSource
@@ -16,10 +17,12 @@ class SearchDataSourceRepository(
 
 class SearchRemoteDataSource(private val api: ApiService) {
     fun searchVideo(keyword: String, page: Int): Observable<Counts<VideoCover>> {
-        return api.searchVideo(keyword, page)
-            .map { it.string() }
+        return Observable.just(HOST)
+            .flatMap(FlatmapOrError(api.searchVideo(HOST + BASE_SEARCH_URL, keyword, page)))
+            .retryWhen(NoHostRetry(api, api.searchVideo(HOST + BASE_SEARCH_URL, keyword, page)))
             .map {
-                it.html2VideoCoverCounts()
+                val html = it.string()
+                html.html2VideoCoverCounts()
             }
     }
 }

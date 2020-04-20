@@ -1,6 +1,6 @@
 package com.test.qianbailu.module.catalog
 
-import com.test.qianbailu.model.ApiService
+import com.test.qianbailu.model.*
 import com.test.qianbailu.model.bean.AllCatalog
 import com.test.qianbailu.model.bean.Counts
 import com.test.qianbailu.model.bean.VideoCover
@@ -24,20 +24,24 @@ class CatalogDataSourceRepository(
 class CatalogRemoteDataSource(private val api: ApiService) {
 
     fun getAllCatalog(): Observable<AllCatalog> {
-        return api.getAllCatalogHtml()
-            .map { it.string() }
+        return Observable.just(HOST)
+            .flatMap(FlatmapOrError(api.getAllCatalogHtml(HOST + ALL_CATALOG_URL)))
+            .retryWhen(NoHostRetry(api, api.getAllCatalogHtml(HOST + ALL_CATALOG_URL)))
             .map {
-                val videoCovers = it.html2VideoCoverList()
-                val catalogs = it.html2CatalogList()
+                val html = it.string()
+                val videoCovers = html.html2VideoCoverList()
+                val catalogs = html.html2CatalogList()
                 AllCatalog(catalogs, videoCovers)
             }
     }
 
     fun getCatalogContent(catalogUrl: String, page: Int): Observable<Counts<VideoCover>> {
-        return api.getCatalogHtml(catalogUrl, page)
-            .map { it.string() }
+        return Observable.just(HOST)
+            .flatMap(FlatmapOrError(api.getCatalogHtml(HOST + catalogUrl, page)))
+            .retryWhen(NoHostRetry(api, api.getCatalogHtml(HOST + catalogUrl, page)))
             .map {
-                it.html2VideoCoverCounts()
+                val html = it.string()
+                html.html2VideoCoverCounts()
             }
     }
 
