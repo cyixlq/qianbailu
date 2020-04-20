@@ -9,7 +9,7 @@ import android.os.Parcelable
 data class VideoCover(
     var name: String,
     var image: String,
-    var videoId: String,
+    var videoId: String, // 例如：/video/4418/
     var duration: String,
     var viewCount: String
 ): Parcelable {
