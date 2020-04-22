@@ -22,6 +22,7 @@ object VersionUtil {
     fun getVersionCode(): Int {
         val packageManager = CoreManager.getApplication().packageManager
         val packageInfo = packageManager.getPackageInfo(CoreManager.getApplication().packageName, 0)
+        @Suppress("DEPRECATION")
         return packageInfo.versionCode
     }
 
