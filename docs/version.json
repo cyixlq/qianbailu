@@ -1,7 +1,7 @@
 {
-  "code": 112,
-  "version": "1.1.2",
-  "desc": "1. 修复视频播放选择的倍速与实际倍速不对的问题",
-  "url": "https://www.lanzous.com/i8x8isf",
+  "code": 120,
+  "version": "1.2.0",
+  "desc": "1. 修复片源失效的问题",
+  "url": "https://github.com/cyixlq/qianbailu/releases",
   "must": false
 }
