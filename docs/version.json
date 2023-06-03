@@ -1,7 +1,7 @@
 {
-  "code": 121,
-  "version": "1.2.1",
-  "desc": "1. 修复片源失效的问题\n2. 修复自动检查更新功能",
+  "code": 122,
+  "version": "1.2.2",
+  "desc": "1. 修复安卓11以上的崩溃问题",
   "url": "https://github.com/cyixlq/qianbailu/releases",
   "must": true
 }
