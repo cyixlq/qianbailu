@@ -9,11 +9,10 @@ import com.test.qianbailu.model.bean.LiveRoom
 class LiveRoomAdapter :
     BaseQuickAdapter<LiveRoom, BaseViewHolder>(R.layout.item_live_platform) {
 
-    override fun convert(helper: BaseViewHolder, item: LiveRoom?) {
-        if (item == null) return
-        helper.setText(R.id.tvPlatformName, item.title)
+    override fun convert(holder: BaseViewHolder, item: LiveRoom) {
+        holder.setText(R.id.tvPlatformName, item.title)
             .setGone(R.id.tvOnlineCount, true)
         GlideApp.with(context).load(item.img).placeholder(R.mipmap.ic_launcher)
-            .into(helper.getView(R.id.ivPlatformIcon))
+            .into(holder.getView(R.id.ivPlatformIcon))
     }
 }

@@ -7,8 +7,8 @@ import android.view.*
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import com.test.qianbailu.R
+import com.test.qianbailu.databinding.DialogAppUpdateBinding
 import com.test.qianbailu.model.bean.UpdateAppBean
-import kotlinx.android.synthetic.main.dialog_app_update.*
 import top.cyixlq.core.utils.toastShort
 
 
@@ -27,6 +27,8 @@ class UpdateDialogFragment : DialogFragment() {
         }
     }
 
+    private lateinit var mBinding: DialogAppUpdateBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.UpdateAppDialog)
@@ -37,11 +39,10 @@ class UpdateDialogFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        dialog?.let {
-            it.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        }
-        return inflater.inflate(R.layout.dialog_app_update, container)
+    ): View {
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        mBinding = DialogAppUpdateBinding.inflate(inflater, container, false)
+        return mBinding.root
     }
 
     override fun onStart() {
@@ -59,22 +60,24 @@ class UpdateDialogFragment : DialogFragment() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
     @SuppressLint("SetTextI18n")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
             val updateAppBean: UpdateAppBean = it.getParcelable("bean") ?: UpdateAppBean()
-            tv_title.text = "是否升级到${updateAppBean.version}版本？"
-            tv_update_info.text = updateAppBean.desc
+            mBinding.tvTitle.text = "是否升级到${updateAppBean.version}版本？"
+            mBinding.tvUpdateInfo.text = updateAppBean.desc
             if (updateAppBean.must) {
-                line.visibility = View.GONE
-                iv_close.visibility = View.GONE
+                mBinding.line.visibility = View.GONE
+                mBinding.ivClose.visibility = View.GONE
             } else {
-                iv_close.setOnClickListener {
+                mBinding.ivClose.setOnClickListener {
                     dismiss()
                 }
             }
-            btn_ok.setOnClickListener {
+            mBinding.btnOk.setOnClickListener {
                 if (updateAppBean.url.startsWith("http")) {
                     startActivity(Intent(Intent.ACTION_VIEW, updateAppBean.url.toUri()))
                     "正在跳转到浏览器下载".toastShort()

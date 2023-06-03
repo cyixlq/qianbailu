@@ -1,12 +1,9 @@
 package com.test.qianbailu.module.video
 
-import com.test.qianbailu.model.ApiService
-import com.test.qianbailu.model.FlatmapOrError
-import com.test.qianbailu.model.HOST
-import com.test.qianbailu.model.NoHostRetry
+import com.test.qianbailu.model.bean.IHtmlConverter
 import com.test.qianbailu.model.bean.Video
-import com.test.qianbailu.utils.html2Video
 import io.reactivex.Observable
+import top.cyixlq.core.utils.RxSchedulers
 
 class VideoDataSourceRepository(
     private val remote: VideoRemoteDataSource
@@ -16,16 +13,13 @@ class VideoDataSourceRepository(
     }
 }
 
-class VideoRemoteDataSource(private val api: ApiService) {
+class VideoRemoteDataSource(private val converter: IHtmlConverter) {
 
     fun getVideo(videoId: String): Observable<Video> {
-        return Observable.just(HOST)
-            .flatMap(FlatmapOrError(api.getVideoHtml(HOST + videoId)))
-            .retryWhen(NoHostRetry(api, api.getVideoHtml(HOST + videoId)))
-            .map {
-                val html = it.string()
-                html.html2Video()
-            }
+        return Observable.create {
+            it.onNext(converter.getVideo(videoId))
+            it.onComplete()
+        }.subscribeOn(RxSchedulers.io)
     }
 
 }

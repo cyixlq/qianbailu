@@ -36,6 +36,7 @@ class TopBar @JvmOverloads constructor(
         initView()
     }
 
+    @Suppress("DEPRECATION")
     private fun initView() {
         LayoutInflater.from(context).inflate(R.layout.layout_top_bar, this)
         tvTitle = findViewById(R.id.tvTitle)
@@ -53,8 +54,6 @@ class TopBar @JvmOverloads constructor(
             ivBack.setOnClickListener {
                 if (mContext is Activity) {
                     mContext.onBackPressed()
-                } else if (mContext is Fragment) {
-                    mContext.activity?.onBackPressed()
                 }
             }
         }

@@ -1,7 +1,6 @@
 package com.test.qianbailu.module.main
 
-import cn.leancloud.AVObject
-import cn.leancloud.AVQuery
+import com.test.qianbailu.model.ApiService
 import com.test.qianbailu.model.bean.UpdateAppBean
 import io.reactivex.Observable
 
@@ -13,17 +12,14 @@ class MainDataSourceRepository(
     }
 }
 
-class MainRemoteDataSource(private val avQuery: AVQuery<AVObject>) {
+class MainRemoteDataSource(private val api: ApiService) {
     fun getVersionInfo(): Observable<UpdateAppBean> {
-        return avQuery.getInBackground("5e8808a6a5a0f500089dd349")
-            .map {
-                UpdateAppBean(
-                    version = it.getString("name"),
-                    code = it.getInt("code"),
-                    url = it.getString("url"),
-                    desc = it.getString("desc"),
-                    must = it.getBoolean("must")
-                )
-            }
+        return Observable.just(UpdateAppBean(
+            version = "1.2.0",
+            code = 120,
+            url = "",
+            desc = "",
+            must = false
+        ))
     }
 }

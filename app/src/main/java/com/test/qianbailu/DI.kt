@@ -2,8 +2,6 @@ package com.test.qianbailu
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
-import cn.leancloud.AVObject
-import cn.leancloud.AVQuery
 import com.test.qianbailu.model.ApiService
 import com.test.qianbailu.module.catalog.*
 import com.test.qianbailu.module.home.*
@@ -16,6 +14,7 @@ import com.test.qianbailu.ui.adapter.LivePlatformAdapter
 import com.test.qianbailu.ui.adapter.LiveRoomAdapter
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import com.test.qianbailu.ui.adapter.ViewPagerFragmentAdapter
+import com.test.qianbailu.utils.HtmlConverterFactory
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import top.cyixlq.core.net.RetrofitManager
@@ -30,6 +29,10 @@ val httpModule = module {
     single {
         FormatUtil.getGson()
     }
+
+    single {
+        HtmlConverterFactory.get(get())
+    }
 }
 
 val mvvmModule = module {
@@ -39,7 +42,6 @@ val mvvmModule = module {
 
     // Main
     scope<MainActivity> {
-        factory { AVQuery<AVObject>("Version") }
         factory { MainRemoteDataSource(get()) }
         factory { MainDataSourceRepository(get()) }
         factory { MutableLiveData<MainViewState>() }
@@ -65,7 +67,7 @@ val mvvmModule = module {
 
     // Catalog
     scope<CatalogFragment> {
-        factory { CatalogRemoteDataSource(get()) }
+        factory { CatalogRemoteDataSource(get(), get()) }
         factory { CatalogDataSourceRepository(get()) }
         factory { MutableLiveData<CatalogViewState>() }
         viewModel { CatalogViewModel(get(), get()) }

@@ -42,7 +42,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/tv_title"
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
@@ -60,7 +60,7 @@
             android:scrollbars="none">
 
             <TextView
-                android:id="@+id/tv_update_info"
+                android:id="@+id/tvUpdateInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#666"
@@ -70,7 +70,7 @@
         </androidx.core.widget.NestedScrollView>
 
         <Button
-            android:id="@+id/btn_ok"
+            android:id="@+id/btnOk"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#EF4340"

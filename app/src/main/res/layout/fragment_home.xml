@@ -21,7 +21,9 @@
             android:id="@+id/rvVideoCover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="6dp"
             tools:listitem="@layout/item_video_cover"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:spanCount="3"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

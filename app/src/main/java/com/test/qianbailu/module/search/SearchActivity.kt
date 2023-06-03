@@ -12,19 +12,17 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import com.test.qianbailu.R
+import com.test.qianbailu.databinding.ActivitySearchBinding
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
-import kotlinx.android.synthetic.main.activity_search.*
-import org.koin.androidx.scope.lifecycleScope
-import org.koin.androidx.viewmodel.scope.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.toastShort
 
-class SearchActivity : CommonActivity() {
+class SearchActivity : CommonActivity<ActivitySearchBinding>() {
 
-    private val mViewModel by lifecycleScope.viewModel<SearchViewModel>(this)
+    private val mViewModel by viewModel<SearchViewModel>()
 
-    override val layoutId: Int = R.layout.activity_search
     private var keyword = ""
     private var page = 1
     private lateinit var videoCoverAdapter: VideoCoverAdapter
@@ -38,13 +36,13 @@ class SearchActivity : CommonActivity() {
     }
 
     private fun initView() {
-        edtSearch.setOnEditorActionListener { _, actionId, _ ->
+        mBinding.edtSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val inputMethodManager = applicationContext
                     .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager
                     .hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-                keyword = edtSearch.text.trim().toString()
+                keyword = mBinding.edtSearch.text.trim().toString()
                 page = 1
                 doSearch()
                 return@setOnEditorActionListener true
@@ -52,22 +50,22 @@ class SearchActivity : CommonActivity() {
             return@setOnEditorActionListener false
         }
         videoCoverAdapter = VideoCoverAdapter()
-        videoCoverAdapter.loadMoreModule?.setOnLoadMoreListener {
+        videoCoverAdapter.loadMoreModule.setOnLoadMoreListener {
             page++
             doSearch()
         }
         videoCoverAdapter.setOnItemClickListener { _, _, position ->
-            videoCoverAdapter.getItem(position)?.let {
+            videoCoverAdapter.getItem(position).let {
                 VideoActivity.launch(this, it)
             }
         }
-        rvVideoCover.adapter = videoCoverAdapter
-        srl.setColorSchemeColors(getColor(R.color.colorPrimary))
-        srl.setOnRefreshListener {
+        mBinding.rvVideoCover.adapter = videoCoverAdapter
+        mBinding.srl.setColorSchemeColors(getColor(R.color.colorPrimary))
+        mBinding.srl.setOnRefreshListener {
             page = 1
             doSearch()
         }
-        emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, rvVideoCover, false)
+        emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, mBinding.rvVideoCover, false)
         emptyView.setOnClickListener { doSearch() }
         infoText = emptyView.findViewById(R.id.tvInfo)
         infoText.text = "空空如也"
@@ -85,20 +83,20 @@ class SearchActivity : CommonActivity() {
     @SuppressLint("SetTextI18n")
     private fun binds() {
         mViewModel.mViewState.observe(this, Observer {
-            srl.isRefreshing = it.isLoading
+            mBinding.srl.isRefreshing = it.isLoading
             if (it.counts != null) {
                 if (page <= 1) {
-                    videoCoverAdapter.setNewData(it.counts.list)
+                    videoCoverAdapter.setNewInstance(it.counts.children)
                     // 防止一页就加载完全部数据，而网站传下一页的话仍然会返回数据，所以在第一页的时候就判断是否超过总数，超过就要加载所有完成
                     if (videoCoverAdapter.itemCount >= it.counts.count) {
-                        videoCoverAdapter.loadMoreModule?.loadMoreEnd()
+                        videoCoverAdapter.loadMoreModule.loadMoreEnd()
                     }
                 } else {
-                    videoCoverAdapter.addData(it.counts.list)
+                    videoCoverAdapter.addData(it.counts.children)
                     if (videoCoverAdapter.itemCount >= it.counts.count) {
-                        videoCoverAdapter.loadMoreModule?.loadMoreEnd()
+                        videoCoverAdapter.loadMoreModule.loadMoreEnd()
                     } else {
-                        videoCoverAdapter.loadMoreModule?.loadMoreComplete()
+                        videoCoverAdapter.loadMoreModule.loadMoreComplete()
                     }
                 }
                 if (videoCoverAdapter.itemCount - (if (videoCoverAdapter.hasEmptyView()) 1 else 0) <= 0) {
@@ -109,7 +107,7 @@ class SearchActivity : CommonActivity() {
             if (it.throwable != null) {
                 infoText.text = "发生错误：${it.throwable.localizedMessage}\n点击重试"
                 videoCoverAdapter.setEmptyView(emptyView)
-                videoCoverAdapter.setNewData(null)
+                videoCoverAdapter.setNewInstance(null)
             }
         })
     }
@@ -119,4 +117,7 @@ class SearchActivity : CommonActivity() {
             activity.startActivity(Intent(activity, SearchActivity::class.java))
         }
     }
+
+    override val mViewBindingInflater: (inflater: LayoutInflater) -> ActivitySearchBinding
+        get() = ActivitySearchBinding::inflate
 }

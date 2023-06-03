@@ -3,24 +3,25 @@ package com.test.qianbailu.module.main
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
+import com.test.qianbailu.BuildConfig
 import com.test.qianbailu.R
+import com.test.qianbailu.databinding.ActivityMainBinding
 import com.test.qianbailu.ui.adapter.ViewPagerFragmentAdapter
 import com.test.qianbailu.ui.widget.UpdateDialogFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.get
 import org.koin.androidx.scope.lifecycleScope
-import org.koin.androidx.viewmodel.scope.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.VersionUtil
 import top.cyixlq.core.utils.toastShort
 
-class MainActivity : CommonActivity() {
+class MainActivity : CommonActivity<ActivityMainBinding>() {
 
-    private val mViewModel by lifecycleScope.viewModel<MainViewModel>(this)
-
-    override val layoutId: Int = R.layout.activity_main
+    private val mViewModel by viewModel<MainViewModel>()
 
     private var lastTime = 0L
     private val duration = 2000
@@ -35,35 +36,38 @@ class MainActivity : CommonActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun binds() {
-        mViewModel.viewState.observe(this, Observer {
-            if (it.updateAppBean != null && VersionUtil.getVersionCode() < it.updateAppBean.code) {
+        mViewModel.viewState.observe(this) {
+            if (it.updateAppBean != null && BuildConfig.VERSION_CODE < it.updateAppBean.code) {
                 UpdateDialogFragment
                     .newInstance(it.updateAppBean)
                     .show(supportFragmentManager, "tag")
             }
-        })
+        }
     }
 
     private fun initView() {
-        vpMain.adapter = lifecycleScope.get<ViewPagerFragmentAdapter> { parametersOf(this) }
-        vpMain.isUserInputEnabled = false
-        btmNav.setOnNavigationItemSelectedListener {
+        val adapter: ViewPagerFragmentAdapter = get { parametersOf(this) }
+        mBinding.vpMain.adapter = adapter
+        mBinding.vpMain.isUserInputEnabled = false
+        mBinding.btmNav.setOnNavigationItemSelectedListener {
             val index = when(it.itemId) {
                 R.id.menuCatalog -> 1
                 R.id.menuLive -> 2
                 else -> 0
             }
-            vpMain.setCurrentItem(index, false)
+            mBinding.vpMain.setCurrentItem(index, false)
             return@setOnNavigationItemSelectedListener true
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val currentTime = System.currentTimeMillis()
         if ((currentTime - lastTime) > duration) {
             "再按一次退出".toastShort()
             lastTime = currentTime
         } else {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }
@@ -73,4 +77,7 @@ class MainActivity : CommonActivity() {
             activity.startActivity(Intent(activity, MainActivity::class.java))
         }
     }
+
+    override val mViewBindingInflater: (inflater: LayoutInflater) -> ActivityMainBinding
+        get() = ActivityMainBinding::inflate
 }

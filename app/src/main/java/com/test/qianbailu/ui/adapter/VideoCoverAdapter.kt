@@ -10,15 +10,11 @@ import com.test.qianbailu.model.bean.VideoCover
 class VideoCoverAdapter : BaseQuickAdapter<VideoCover, BaseViewHolder>(R.layout.item_video_cover),
     LoadMoreModule {
 
-    override fun convert(helper: BaseViewHolder, item: VideoCover?) {
-        item?.let {
-            helper.setText(R.id.tvName, it.name)
-                .setText(R.id.tvViewCount, it.viewCount)
-                .setText(R.id.tvDuration, it.duration)
+    override fun convert(holder: BaseViewHolder, item: VideoCover) {
+            holder.setText(R.id.tvName, item.name)
             GlideApp.with(context)
                 .load(item.image)
                 .placeholder(R.drawable.ic_loading)
-                .into(helper.getView(R.id.ivCover))
-        }
+                .into(holder.getView(R.id.ivCover))
     }
 }

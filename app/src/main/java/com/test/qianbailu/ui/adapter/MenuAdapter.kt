@@ -10,12 +10,14 @@ import com.test.qianbailu.model.bean.Catalog
 
 class MenuAdapter : BaseQuickAdapter<Catalog, BaseViewHolder>(R.layout.item_menu) {
 
-    override fun convert(helper: BaseViewHolder, item: Catalog?) {
-        if (item == null) return
-        val flParent: FrameLayout = helper.getView(R.id.flParent)
-        val tvName: TextView = helper.getView(R.id.tvName)
-        val line: View = helper.getView(R.id.line)
-        if (item.isChecked) {
+    private var mSelect = 0
+    private var mLastSelect = mSelect
+
+    override fun convert(holder: BaseViewHolder, item: Catalog) {
+        val flParent: FrameLayout = holder.getView(R.id.flParent)
+        val tvName: TextView = holder.getView(R.id.tvName)
+        val line: View = holder.getView(R.id.line)
+        if (holder.absoluteAdapterPosition == mSelect) {
             flParent.setBackgroundColor(0xfff3f3f3.toInt())
             tvName.setTextColor(context.getColor(R.color.colorPrimary))
             line.visibility = View.VISIBLE
@@ -25,5 +27,13 @@ class MenuAdapter : BaseQuickAdapter<Catalog, BaseViewHolder>(R.layout.item_menu
             line.visibility = View.INVISIBLE
         }
         tvName.text = item.name
+    }
+
+    fun setSelect(index: Int) {
+        if (index == mSelect) return
+        mSelect = index
+        notifyItemChanged(mSelect)
+        notifyItemChanged(mLastSelect)
+        mLastSelect = mSelect
     }
 }

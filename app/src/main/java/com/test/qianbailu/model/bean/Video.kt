@@ -4,5 +4,6 @@ data class Video(
     var name: String,
     var url: String,
     var cover: String,
-    var downloadUrl: String
+    var downloadUrl: String,
+    var parseType: Int
 )

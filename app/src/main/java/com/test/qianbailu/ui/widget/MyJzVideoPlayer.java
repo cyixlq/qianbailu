@@ -3,6 +3,7 @@ package com.test.qianbailu.ui.widget;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -13,14 +14,17 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import com.test.qianbailu.R;
+import com.test.qianbailu.model.ConstKt;
 
 import cn.jzvd.JZDataSource;
+import cn.jzvd.JZUtils;
 import cn.jzvd.JzvdStd;
 import top.cyixlq.core.utils.DisplayUtil;
 
 public class MyJzVideoPlayer extends JzvdStd {
 
     protected TextView tvSpeed;
+    protected TextView tvTip;
     private int currentSpeedIndex = 1;
     private AlertDialog speedDialog;
     private boolean showTvSpeed = true;
@@ -40,6 +44,7 @@ public class MyJzVideoPlayer extends JzvdStd {
         super.init(context);
         tvSpeed = findViewById(R.id.tv_speed);
         tvSpeed.setOnClickListener(this);
+        tvTip = findViewById(R.id.tv_tip);
     }
 
     @Override
@@ -120,7 +125,7 @@ public class MyJzVideoPlayer extends JzvdStd {
         if (id == R.id.tv_speed) {//0.5 1.0 1.25 1.5 2.0
             if (speedDialog == null) {
                 final String[] speed = new String[]{"0.5倍", "1.0倍", "1.25倍", "1.5倍", "2.0倍"};
-                speedDialog = new AlertDialog.Builder(getContext())
+                speedDialog = new AlertDialog.Builder(getContext(), R.style.SpeedDialog)
                         .setTitle("倍速选择")
                         .setSingleChoiceItems(speed, currentSpeedIndex, (dialog, which) -> {
                             currentSpeedIndex = which;
@@ -134,10 +139,26 @@ public class MyJzVideoPlayer extends JzvdStd {
                     decorView.setPadding(0, 0, 0, 0);
                     speedDialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_speed_dialog);
                 }
+                speedDialog.setOnDismissListener(dialog -> {
+                    if (screen == SCREEN_FULLSCREEN)
+                        JZUtils.hideSystemUI(getContext());
+                });
             }
             setWindow(screen == SCREEN_FULLSCREEN);
             speedDialog.show();
         }
+    }
+
+    public void setTip(String tip) {
+        if (tvTip != null) {
+            tvTip.setText(tip);
+        }
+    }
+
+    @Override
+    public long getDuration() {
+        final long superDuration = super.getDuration();
+        return superDuration > ConstKt.TEN_MINUTE ? ConstKt.TEN_MINUTE : superDuration;
     }
 
     @Override

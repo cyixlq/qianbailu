@@ -20,7 +20,7 @@ class HomeViewModel(
             .autoDisposable(this)
             .subscribe(
                 {
-                    viewState.postValue(HomeViewState(isLoading = false, list = it))
+                    viewState.postValue(HomeViewState(isLoading = false, list = it.children))
                 },
                 {
                     viewState.postValue(HomeViewState(isLoading = false, throwable = it))

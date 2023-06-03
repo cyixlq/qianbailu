@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.Surface;
 
+import com.orhanobut.logger.Logger;
+
 import java.io.IOException;
 
 import cn.jzvd.JZMediaInterface;
@@ -16,6 +18,8 @@ import tv.danmaku.ijk.media.player.IjkTimedText;
 
 public class JZMediaIjk extends JZMediaInterface implements IMediaPlayer.OnPreparedListener, IMediaPlayer.OnVideoSizeChangedListener, IMediaPlayer.OnCompletionListener, IMediaPlayer.OnErrorListener, IMediaPlayer.OnInfoListener, IMediaPlayer.OnBufferingUpdateListener, IMediaPlayer.OnSeekCompleteListener, IMediaPlayer.OnTimedTextListener {
 
+    private static final String TAG = "JZMediaIjk";
+
     IjkMediaPlayer ijkMediaPlayer;
 
     public JZMediaIjk(Jzvd jzvd) {
@@ -24,22 +28,19 @@ public class JZMediaIjk extends JZMediaInterface implements IMediaPlayer.OnPrepa
 
     @Override
     public void start() {
-        if (ijkMediaPlayer != null) ijkMediaPlayer.start();
+        if (ijkMediaPlayer != null)
+            ijkMediaPlayer.start();
     }
 
     @Override
     public void prepare() {
-
         release();
         mMediaHandlerThread = new HandlerThread("JZVD");
         mMediaHandlerThread.start();
         mMediaHandler = new Handler(mMediaHandlerThread.getLooper());//主线程还是非主线程，就在这里
         handler = new Handler();
-
         mMediaHandler.post(() -> {
-
             ijkMediaPlayer = new IjkMediaPlayer();
-
             ijkMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             ////1为硬解 0为软解
             ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
@@ -69,8 +70,7 @@ public class JZMediaIjk extends JZMediaInterface implements IMediaPlayer.OnPrepa
             ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "fflags", "fastseek");
             //播放前的探测Size，默认是1M, 改小一点会出画面更快
             ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "probesize", 1024 * 10);
-
-
+            //initHeadersOption();
             ijkMediaPlayer.setOnPreparedListener(JZMediaIjk.this);
             ijkMediaPlayer.setOnVideoSizeChangedListener(JZMediaIjk.this);
             ijkMediaPlayer.setOnCompletionListener(JZMediaIjk.this);
@@ -79,19 +79,16 @@ public class JZMediaIjk extends JZMediaInterface implements IMediaPlayer.OnPrepa
             ijkMediaPlayer.setOnBufferingUpdateListener(JZMediaIjk.this);
             ijkMediaPlayer.setOnSeekCompleteListener(JZMediaIjk.this);
             ijkMediaPlayer.setOnTimedTextListener(JZMediaIjk.this);
-
             try {
                 ijkMediaPlayer.setDataSource(jzvd.jzDataSource.getCurrentUrl().toString());
                 ijkMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 ijkMediaPlayer.setScreenOnWhilePlaying(true);
                 ijkMediaPlayer.prepareAsync();
-
                 ijkMediaPlayer.setSurface(new Surface(jzvd.textureView.getSurfaceTexture()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-
     }
 
     @Override
@@ -115,7 +112,6 @@ public class JZMediaIjk extends JZMediaInterface implements IMediaPlayer.OnPrepa
             HandlerThread tmpHandlerThread = mMediaHandlerThread;
             IjkMediaPlayer tmpMediaPlayer = ijkMediaPlayer;
             JZMediaInterface.SAVED_SURFACE = null;
-
             mMediaHandler.post(() -> {
                 tmpMediaPlayer.setSurface(null);
                 tmpMediaPlayer.release();
@@ -197,6 +193,17 @@ public class JZMediaIjk extends JZMediaInterface implements IMediaPlayer.OnPrepa
         } else {
             jzvd.textureView.setSurfaceTexture(SAVED_SURFACE);
         }
+    }
+
+    public void setOption(int category, String key, String value) {
+        Logger.t(TAG).d("setOption value: " + value);
+        if (ijkMediaPlayer != null)
+            ijkMediaPlayer.setOption(category, key, value);
+    }
+
+    public void setOption(int category, String key, int value) {
+        if (ijkMediaPlayer != null)
+            ijkMediaPlayer.setOption(category, key, value);
     }
 
     @Override

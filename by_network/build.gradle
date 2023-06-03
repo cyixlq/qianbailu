@@ -16,6 +16,3 @@ dependencies {
     implementation rootProject.ext.support.kotlin
     api project(path: ':core')
 }
-repositories {
-    mavenCentral()
-}

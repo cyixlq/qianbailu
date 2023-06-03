@@ -3,6 +3,7 @@ package com.test.qianbailu
 import org.junit.Test
 
 import org.junit.Assert.*
+import java.util.regex.Pattern
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,6 +13,13 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        val str = "/class/有码-384.html"
+        val p = Pattern.compile("[0-9]+(?=[^0-9]*$)")
+        val m = p.matcher(str)
+        if (m.find()) {
+            println(m.group())
+        } else {
+            println("Not Found")
+        }
     }
 }

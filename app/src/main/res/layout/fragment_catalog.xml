@@ -29,12 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:drawableStart="@drawable/ic_search"
             android:text="点击开始搜索"
+            app:drawableStartCompat="@drawable/ic_search"
             android:textColor="#ccc"
             android:gravity="center"
             android:drawablePadding="10dp"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"/>
     </FrameLayout>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srl"
@@ -55,7 +55,8 @@
                 android:id="@+id/rvContent"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
                 tools:listitem="@layout/item_video_cover"
                 android:background="#F3F3F3"
                 android:layout_weight="1"/>

@@ -2,24 +2,22 @@ package com.test.qianbailu.module.live.play
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.fragment.app.FragmentActivity
 import cn.jzvd.Jzvd
-import com.test.qianbailu.R
+import com.test.qianbailu.databinding.ActivityLivePlayBinding
 import com.test.qianbailu.ui.widget.JZMediaIjk
-import kotlinx.android.synthetic.main.activity_live_play.*
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.CLog
 import top.cyixlq.core.utils.toastShort
 
-class LivePlayActivity : CommonActivity() {
-
-    override val layoutId: Int = R.layout.activity_live_play
+class LivePlayActivity : CommonActivity<ActivityLivePlayBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        player.setShowNormalTitle(true)
-        player.setShowNormalBack(true)
-        player.showSpeed(false)
+        mBinding.player.setShowNormalTitle(true)
+        mBinding.player.setShowNormalBack(true)
+        mBinding.player.showSpeed(false)
         val url = intent.getStringExtra("address") ?: ""
         val title = intent.getStringExtra("title") ?: "未知主播名称"
         if (url.isEmpty()) {
@@ -27,8 +25,8 @@ class LivePlayActivity : CommonActivity() {
             return
         }
         CLog.d("live url ->$url")
-        player.setUp(url, title, Jzvd.SCREEN_NORMAL, JZMediaIjk::class.java)
-        player.startVideo()
+        mBinding.player.setUp(url, title, Jzvd.SCREEN_NORMAL, JZMediaIjk::class.java)
+        mBinding.player.startVideo()
     }
 
     override fun onDestroy() {
@@ -36,10 +34,12 @@ class LivePlayActivity : CommonActivity() {
         Jzvd.releaseAllVideos()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (Jzvd.backPress()) {
             return
         }
+        @Suppress("DEPRECATION")
         super.onBackPressed()
     }
 
@@ -50,4 +50,7 @@ class LivePlayActivity : CommonActivity() {
                 .putExtra("address", address))
         }
     }
+
+    override val mViewBindingInflater: (inflater: LayoutInflater) -> ActivityLivePlayBinding
+        get() = ActivityLivePlayBinding::inflate
 }
