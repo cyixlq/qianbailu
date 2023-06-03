@@ -18,7 +18,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
-        CrashReport.initCrashReport(applicationContext, "6059853783", BuildConfig.DEBUG)
+        CrashReport.initCrashReport(applicationContext, "0efb702d9f", BuildConfig.DEBUG)
         CoreManager.configNetWork(baseUrl = BASE_URL)
             .configCLog(isEnableLog = BuildConfig.DEBUG)
             .init(this)
