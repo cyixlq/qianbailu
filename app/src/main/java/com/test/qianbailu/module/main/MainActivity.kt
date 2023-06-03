@@ -5,18 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import com.test.qianbailu.BuildConfig
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.ActivityMainBinding
 import com.test.qianbailu.ui.adapter.ViewPagerFragmentAdapter
 import com.test.qianbailu.ui.widget.UpdateDialogFragment
 import org.koin.android.ext.android.get
-import org.koin.androidx.scope.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import top.cyixlq.core.common.activity.CommonActivity
-import top.cyixlq.core.utils.VersionUtil
 import top.cyixlq.core.utils.toastShort
 
 class MainActivity : CommonActivity<ActivityMainBinding>() {
