@@ -5,8 +5,8 @@ ext {
             "applicationId"    : "com.test.qianbailu",
             "minSdkVersion"    : 23,
             "targetSdkVersion" : 33,
-            "versionCode"      : 120,
-            "versionName"      : "1.2.0",
+            "versionCode"      : 121,
+            "versionName"      : "1.2.1",
     ]
     //version(通用依赖版本)配置
     versions = [
@@ -48,14 +48,11 @@ ext {
             'brvah'                : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.10',
             'glide'                : 'com.github.bumptech.glide:glide:4.11.0',
             'glideCompiler'        : 'com.github.bumptech.glide:compiler:4.11.0',
-            'recyclerview'         : 'androidx.recyclerview:recyclerview:1.1.0',
             'jzVideoPlayer'        : 'cn.jzvd:jiaozivideoplayer:7.1.0',
             'bugly'                : 'com.tencent.bugly:crashreport:latest.release',
             koinAndroid            : "io.insert-koin:koin-android:3.4.0",
-            leakcanary             : 'com.squareup.leakcanary:leakcanary-android:2.2',
-            ijkJava                : 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8',
-            fastJson               : 'com.alibaba:fastjson:1.1.71.android',
-            fastJsonConvert        : 'org.ligboy.retrofit2:converter-fastjson-android:2.1.0'
+            leakcanary             : 'com.squareup.leakcanary:leakcanary-android:2.11',
+            ijkJava                : 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     ]
 }
 

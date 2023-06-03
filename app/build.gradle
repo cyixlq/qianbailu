@@ -70,15 +70,12 @@ dependencies {
     implementation rootProject.ext.dependencies.jsoup
     implementation rootProject.ext.dependencies.brvah
     implementation rootProject.ext.dependencies.jzVideoPlayer
-    implementation rootProject.ext.dependencies.recyclerview
     implementation rootProject.ext.dependencies.bugly
     implementation rootProject.ext.dependencies.ijkJava
     debugImplementation rootProject.ext.dependencies.leakcanary
     implementation(rootProject.ext.dependencies.glide) {
         exclude group: "com.android.support"
     }
-    implementation rootProject.ext.dependencies.fastJson
-    implementation rootProject.ext.dependencies.fastJsonConvert
     kapt rootProject.ext.dependencies.glideCompiler
     implementation project(path: ':core')
 
