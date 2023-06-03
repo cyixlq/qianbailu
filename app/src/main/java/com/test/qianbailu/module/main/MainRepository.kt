@@ -14,12 +14,6 @@ class MainDataSourceRepository(
 
 class MainRemoteDataSource(private val api: ApiService) {
     fun getVersionInfo(): Observable<UpdateAppBean> {
-        return Observable.just(UpdateAppBean(
-            version = "1.2.0",
-            code = 120,
-            url = "",
-            desc = "",
-            must = false
-        ))
+        return api.getUpdateInfo()
     }
 }
