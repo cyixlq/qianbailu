@@ -1,7 +1,7 @@
 {
-  "code": 122,
-  "version": "1.2.2",
-  "desc": "1. 修复安卓11以上的崩溃问题",
+  "code": 121,
+  "version": "1.2.1",
+  "desc": "1. 测试内容",
   "url": "https://github.com/cyixlq/qianbailu/releases",
-  "must": true
+  "must": false
 }
