@@ -3,7 +3,6 @@ package com.test.qianbailu.ui.widget;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import com.test.qianbailu.R;
-import com.test.qianbailu.model.ConstKt;
 
 import cn.jzvd.JZDataSource;
 import cn.jzvd.JZUtils;
@@ -153,12 +151,6 @@ public class MyJzVideoPlayer extends JzvdStd {
         if (tvTip != null) {
             tvTip.setText(tip);
         }
-    }
-
-    @Override
-    public long getDuration() {
-        final long superDuration = super.getDuration();
-        return superDuration > ConstKt.TEN_MINUTE ? ConstKt.TEN_MINUTE : superDuration;
     }
 
     @Override

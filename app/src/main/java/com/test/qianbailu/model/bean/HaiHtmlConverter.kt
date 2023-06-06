@@ -14,7 +14,7 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     }
 
     override fun getHomeVideoCovers(): Counter<VideoCover> {
-        val doc = Jsoup.parse(URL(getHost()), TIME_OUT)
+        val doc = Jsoup.parse(getHtml(getHost()))
         val coversE = doc.select("li.p2.m1")
         val list = mutableListOf<VideoCover>()
         for (item in coversE) {
@@ -31,7 +31,7 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     }
 
     override fun getVideo(videoId: String): Video {
-        val doc = Jsoup.parse(URL(BASE_URL + videoId), TIME_OUT)
+        val doc = Jsoup.parse(getHtml(getHost() + videoId))
         return Video(
             doc.selectFirst("h1#vod_name")?.text() ?: UNKNOWN_VOD_NAME,
             getHost() + doc.selectFirst("div.urlli.clearfix")
@@ -44,7 +44,7 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     }
 
     override fun getCatalogList(): Counter<Catalog> {
-        val doc = Jsoup.parse(URL(BASE_URL), TIME_OUT)
+        val doc = Jsoup.parse(getHtml(getHost()))
         val catalogs1 = doc.selectFirst("div#headers")
             ?.selectFirst("div.nav-down.clearfix")
             ?.selectFirst("ul")
@@ -78,7 +78,7 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     }
 
     override fun getVideoCoversByCatalog(catalogId: String, page: Int): Counter<VideoCover> {
-        val doc = Jsoup.parse(URL("$BASE_URL$catalogId$page.html"), TIME_OUT)
+        val doc = Jsoup.parse(getHtml("${getHost()}$catalogId$page.html"))
         val videos = doc.selectFirst("div.index-area.clearfix")
             ?.selectFirst("ul")?.select("li")
         val list = mutableListOf<VideoCover>()
@@ -111,7 +111,7 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     }
 
     override fun search(keyword: String, page: Int): Counter<VideoCover> {
-        val doc = Jsoup.parse(URL("$BASE_URL/search/$keyword-$page.html"), TIME_OUT)
+        val doc = Jsoup.parse(getHtml("${getHost()}/search/$keyword-$page.html"))
         val videos = doc.selectFirst("div.index-area.clearfix")
             ?.selectFirst("ul")?.select("li")
         val list = mutableListOf<VideoCover>()
@@ -135,4 +135,8 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     }
 
     override fun getPlayHeaders(): MutableMap<String, String>? = null
+
+    private fun getHtml(url: String): String {
+        return api.getHtmlResponse(url).execute().body()?.string() ?: ""
+    }
 }

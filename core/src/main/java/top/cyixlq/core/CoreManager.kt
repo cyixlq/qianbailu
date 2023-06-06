@@ -2,9 +2,11 @@ package top.cyixlq.core
 
 import android.app.Application
 import top.cyixlq.core.net.RetrofitManager
+import top.cyixlq.core.net.bean.DnsConfig
 import top.cyixlq.core.net.bean.NetWorkConfig
 import top.cyixlq.core.utils.CLog
-import java.lang.RuntimeException
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.X509TrustManager
 
 object CoreManager {
 
@@ -19,14 +21,20 @@ object CoreManager {
         readTimeOut: Long = 10,
         connectTimeOut: Long = 10,
         writeTimeOut: Long = 10,
-        baseUrl: String
+        baseUrl: String,
+        trustManager: X509TrustManager? = null,
+        hostnameVerifier: HostnameVerifier? = null,
+        dnsConfig: DnsConfig? = null
     ): CoreManager {
         RetrofitManager.config(
             NetWorkConfig(
                 readTimeOut,
                 connectTimeOut,
                 writeTimeOut,
-                baseUrl
+                baseUrl,
+                trustManager,
+                hostnameVerifier,
+                dnsConfig,
             )
         )
         return this
