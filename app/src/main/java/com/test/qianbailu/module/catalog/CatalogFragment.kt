@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.FragmentCatalogBinding
 import com.test.qianbailu.model.bean.Catalog
-import com.test.qianbailu.module.search.SearchActivity
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.MenuAdapter
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
@@ -37,15 +35,11 @@ class CatalogFragment : CommonFragment<FragmentCatalogBinding>() {
     private fun initView() {
         val context = activity
         if (context != null) {
-            mBinding.flSearchBar.setOnClickListener {
-                SearchActivity.launch(context)
-            }
             mBinding.srl.setColorSchemeColors(context.getColor(R.color.colorPrimary))
         }
         mBinding.srl.setOnRefreshListener {
-            menuAdapter.setSelect(0)
             page = 1
-            mViewModel.getAllCatalog()
+            mViewModel.getCatalogContent(mCatalogId, page)
         }
         menuAdapter = MenuAdapter()
         menuAdapter.setOnItemClickListener { _, _, position ->
@@ -54,6 +48,7 @@ class CatalogFragment : CommonFragment<FragmentCatalogBinding>() {
             val catalog: Catalog = menuAdapter.getItem(position)
             mCatalogId = catalog.catalogUrl
             mViewModel.getCatalogContent(mCatalogId, page)
+            videoCoverAdapter.setNewInstance(ArrayList())
             menuAdapter.setSelect(position)
             lastSelectIndex = position
         }
@@ -74,7 +69,7 @@ class CatalogFragment : CommonFragment<FragmentCatalogBinding>() {
     }
 
     private fun binds() {
-        mViewModel.mViewState.observe(viewLifecycleOwner, Observer {
+        mViewModel.mViewState.observe(viewLifecycleOwner) {
             mBinding.srl.isRefreshing = it.isLoading
             if (it.allCatalog != null) {
                 mCatalogId = it.allCatalog.children[0].catalogUrl
@@ -98,14 +93,14 @@ class CatalogFragment : CommonFragment<FragmentCatalogBinding>() {
                 }
             }
             if (it.throwable != null) {
-                "加载出了点小问题：${it.throwable.localizedMessage}".toastLong()
+                getString(R.string.load_error_pull_down_retry, it.throwable.localizedMessage).toastLong()
                 CLog.e("" + it.throwable.localizedMessage)
                 if (page > 1) {
                     videoCoverAdapter.loadMoreModule.loadMoreFail()
                     page--
                 }
             }
-        })
+        }
     }
 
     companion object {

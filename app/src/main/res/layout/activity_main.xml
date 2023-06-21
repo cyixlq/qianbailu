@@ -4,6 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <com.test.qianbailu.ui.widget.TopBar
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:rightImg="@drawable/ic_search"
+        app:showBack="false"/>
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vpMain"
         android:layout_width="match_parent"

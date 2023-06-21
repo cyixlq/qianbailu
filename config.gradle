@@ -11,7 +11,8 @@ ext {
     //version(通用依赖版本)配置
     versions = [
             kotlinVersion: "1.7.20",
-            okhttp: "4.11.0"
+            okhttp: "4.11.0",
+            room: "2.5.1"
     ]
     //support(兼容包)配置
     support = [
@@ -26,7 +27,8 @@ ext {
             'ktx'                : "androidx.core:core-ktx:1.7.0",
             "lifecycleExtensions": "androidx.lifecycle:lifecycle-extensions:2.0.0",
             "material"           : "com.google.android.material:material:1.2.0-alpha04",
-            'swipeRefreshLayout' : "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+            'swipeRefreshLayout' : "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0",
+            'preference'         : "androidx.preference:preference:1.2.0"
     ]
     //依赖第三方配置
     dependencies = [
@@ -54,7 +56,10 @@ ext {
             koinAndroid            : "io.insert-koin:koin-android:3.4.0",
             leakcanary             : 'com.squareup.leakcanary:leakcanary-android:2.11',
             ijkJava                : 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8',
-            dnsOverHttps           : "com.squareup.okhttp3:okhttp-dnsoverhttps:${versions.okhttp}"
+            dnsOverHttps           : "com.squareup.okhttp3:okhttp-dnsoverhttps:${versions.okhttp}",
+            roomRuntime            : "androidx.room:room-runtime:${versions.room}",
+            roomCompiler           : "androidx.room:room-compiler:${versions.room}",
+            roomRxJava             : "androidx.room:room-rxjava2:${versions.room}",
     ]
 }
 

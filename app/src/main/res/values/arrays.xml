@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dns_names">
+        <item>@string/disable</item>
+        <item>@string/ali</item>
+        <item>@string/qi_hoo</item>
+        <item>@string/tencent</item>
+        <item>@string/ad_guard</item>
+        <item>@string/google</item>
+    </string-array>
+    <string-array name="dns_urls">
+        <item />
+        <item>https://dns.alidns.com/dns-query</item>
+        <item>https://doh.360.cn/dns-query</item>
+        <item>https://doh.pub/dns-query</item>
+        <item>https://dns.adguard-dns.com/dns-query</item>
+        <item>https://dns.google/dns-query</item>
+    </string-array>
+</resources>

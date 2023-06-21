@@ -77,6 +77,9 @@ dependencies {
         exclude group: "com.android.support"
     }
     kapt rootProject.ext.dependencies.glideCompiler
+    implementation rootProject.ext.dependencies.roomRuntime
+    kapt rootProject.ext.dependencies.roomCompiler
+    implementation rootProject.ext.support.preference
     implementation project(path: ':core')
 
     // 测试用包

@@ -41,7 +41,7 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
         }
         if (videoCover == null || TextUtils.isEmpty(videoCover?.videoId)) {
             mBinding.videoPlayer.changeUiToError()
-            "视频id有误".toastShort()
+            getString(R.string.video_id_error).toastShort()
             return
         }
         binds()
@@ -89,14 +89,14 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
                 if (it.video.parseType == PARSE_TYPE_NONE) {
                     startVideo(it.video.url, videoCover?.name, null)
                 } else if (it.video.parseType == PARSE_TYPE_WEB_VIEW_SCAN) {
-                    mBinding.videoPlayer.setTip("资源扫描中(扫描完成自动播放)...")
+                    mBinding.videoPlayer.setTip(getString(R.string.resource_scanning_tips))
                     if (mScanWebView == null) {
                         mScanWebView = ScanWebView(this)
                         mScanWebView?.setScanListener(object : ScanWebView.ScanListener {
                             override fun onScanResult(videoUrl: String, headers: HashMap<String, String>?) {
                                 mBinding.videoPlayer.setTip("")
-                                "视频解析成功".toastShort()
-                                Logger.t(TAG).d("播放视频地址：$videoUrl")
+                                getString(R.string.video_parse_success).toastShort()
+                                Logger.t(TAG).d("video url：$videoUrl")
                                 startVideo(videoUrl, videoCover?.name, headers)
                             }
                             override fun onError(msg: String) {

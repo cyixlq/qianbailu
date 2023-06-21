@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/play_history">
+        <com.test.qianbailu.ui.widget.PlayHistoryPreference
+            app:key="@string/play_history"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings">
+        <ListPreference
+            app:defaultValue=""
+            app:entries="@array/dns_names"
+            app:entryValues="@array/dns_urls"
+            app:key="@string/key_dns_url"
+            app:title="@string/safe_dns"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">爱骑艺</string>
+    <string name="home_page">首页</string>
+    <string name="category">分类</string>
+    <string name="settings">设置</string>
+    <string name="play_history">播放历史</string>
+    <string name="safe_dns">安全DNS</string>
+    <string name="disable">关闭</string>
+    <string name="ali">阿里</string>
+    <string name="qi_hoo">360</string>
+    <string name="tencent">腾讯</string>
+    <string name="ad_guard">ADGuard</string>
+    <string name="google">谷歌</string>
+    <string name="key_dns_url">dns_url</string>
+    <string name="load_error_pull_down_retry">加载出问题了：%s，下拉重试</string>
+    <string name="press_again_to_exit">再按一次退出</string>
+    <string name="empty_and_click_retry">空空如也，点击重试</string>
+    <string name="no_result_and_click_retry">没有结果，点击重试</string>
+    <string name="error_and_click_retry">发生错误：%s\n点击重试</string>
+    <string name="check_update_error">版本更新检查出错</string>
+    <string name="empty">空空如也</string>
+    <string name="keyword_not_empty">关键词不能为空</string>
+    <string name="video_id_error">视频ID有误</string>
+    <string name="resource_scanning_tips">资源扫描中(扫描完成自动播放)…</string>
+    <string name="video_parse_success">视频解析成功</string>
+    <string name="set_success_restart_takes_effect">设置成功，重启应用后生效</string>
 </resources>

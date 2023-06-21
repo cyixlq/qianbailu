@@ -1,9 +1,10 @@
 package com.test.qianbailu.model.bean
 
 data class Video(
-    var name: String,
-    var url: String,
-    var cover: String,
-    var downloadUrl: String,
-    var parseType: Int
+    val name: String,
+    val url: String,
+    val cover: String,
+    val downloadUrl: String,
+    val parseType: Int,
+    val position: Long = -1
 )

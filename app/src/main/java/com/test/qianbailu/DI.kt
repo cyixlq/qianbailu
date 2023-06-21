@@ -9,6 +9,7 @@ import com.test.qianbailu.module.live.*
 import com.test.qianbailu.module.live.room.*
 import com.test.qianbailu.module.main.*
 import com.test.qianbailu.module.search.*
+import com.test.qianbailu.module.settings.SettingsFragment
 import com.test.qianbailu.module.video.*
 import com.test.qianbailu.ui.adapter.LivePlatformAdapter
 import com.test.qianbailu.ui.adapter.LiveRoomAdapter
@@ -51,7 +52,7 @@ val mvvmModule = module {
                 arrayListOf(
                     HomeFragment.instance(),
                     CatalogFragment.instance(),
-                    AllPlatformFragment.instance())
+                    SettingsFragment.instance())
             )
         }
         viewModel { MainViewModel(get(), get()) }
