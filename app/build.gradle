@@ -16,6 +16,11 @@ android {
         ndk {
             abiFilters 'arm64-v8a'
         }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
     signingConfigs {
         release {
@@ -78,6 +83,9 @@ dependencies {
     }
     kapt rootProject.ext.dependencies.glideCompiler
     implementation rootProject.ext.dependencies.roomRuntime
+    implementation(rootProject.ext.dependencies.roomRxJava) {
+        exclude group: "io.reactivex.rxjava2"
+    }
     kapt rootProject.ext.dependencies.roomCompiler
     implementation rootProject.ext.support.preference
     implementation project(path: ':core')

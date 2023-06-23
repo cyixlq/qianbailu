@@ -24,4 +24,12 @@
     <string name="resource_scanning_tips">资源扫描中(扫描完成自动播放)…</string>
     <string name="video_parse_success">视频解析成功</string>
     <string name="set_success_restart_takes_effect">设置成功，重启应用后生效</string>
+    <string name="video_warning">请不要相信视频中的任何广告！</string>
+    <string name="search">搜索</string>
+    <string name="input_keyword_to_search">输入关键字开始搜索</string>
+    <string name="already_seek_to_last_position">已经跳转到上次播放的位置</string>
+    <string name="no_history">暂无历史记录</string>
+    <string name="cancel">取消</string>
+    <string name="seek_to">播放至：%s</string>
+    <string name="portrait">竖屏</string>
 </resources>

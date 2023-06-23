@@ -93,10 +93,35 @@
             android:textColor="#ffffffff"
             tools:ignore="HardcodedText" />
 
+        <FrameLayout
+            android:id="@+id/portraitFull"
+            android:layout_width="52.5dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivPortraitFull"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/jz_enlarge"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvPortrait"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="4dp"
+                android:gravity="end"
+                android:textSize="12dp"
+                android:text="@string/portrait"
+                tools:ignore="SpUsage" />
+        </FrameLayout>
+
         <ImageView
             android:id="@+id/fullscreen"
             android:layout_width="52.5dp"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:paddingLeft="14dp"
             android:paddingRight="14dp"
             android:scaleType="centerInside"

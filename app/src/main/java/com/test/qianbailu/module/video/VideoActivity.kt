@@ -7,11 +7,9 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import cn.jzvd.JZDataSource
 import cn.jzvd.Jzvd
 import cn.jzvd.JzvdStd
-import com.orhanobut.logger.Logger
 import com.test.qianbailu.GlideApp
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.ActivityVideoBinding
@@ -21,6 +19,7 @@ import com.test.qianbailu.model.bean.VideoCover
 import com.test.qianbailu.ui.widget.ScanWebView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.activity.CommonActivity
+import top.cyixlq.core.utils.CLog
 import top.cyixlq.core.utils.toastLong
 import top.cyixlq.core.utils.toastShort
 
@@ -51,15 +50,26 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
                 .fitCenter()
                 .into(mBinding.videoPlayer.thumbImageView)
             mBinding.tvName.text = it.name
-            mBinding.tvDuration.text = it.duration
-            mBinding.tvViewCount.text = it.viewCount
-            mViewModel.getVideo(it.videoId)
+            if (it.position > 1000) mViewModel.getVideo(it.videoId)
+            else mViewModel.getVideoHistory(it.videoId)
         }
     }
 
     override fun onPause() {
         super.onPause()
         JzvdStd.goOnPlayOnPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val position = mBinding.videoPlayer.currentPositionWhenPlaying
+        if (position >= 1000) {
+            mViewModel.saveProgress(
+                videoCover?.copy(
+                    position = position
+                )
+            )
+        }
     }
 
     override fun onResume() {
@@ -83,7 +93,7 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
     }
 
     private fun binds() {
-        mViewModel.viewState.observe(this, Observer {
+        mViewModel.viewState.observe(this) {
             mBinding.progressBar.visibility = if (it.isLoading) View.VISIBLE else View.INVISIBLE
             if (it.video != null) {
                 if (it.video.parseType == PARSE_TYPE_NONE) {
@@ -93,10 +103,13 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
                     if (mScanWebView == null) {
                         mScanWebView = ScanWebView(this)
                         mScanWebView?.setScanListener(object : ScanWebView.ScanListener {
-                            override fun onScanResult(videoUrl: String, headers: HashMap<String, String>?) {
+                            override fun onScanResult(
+                                videoUrl: String,
+                                headers: HashMap<String, String>?
+                            ) {
                                 mBinding.videoPlayer.setTip("")
                                 getString(R.string.video_parse_success).toastShort()
-                                Logger.t(TAG).d("video url：$videoUrl")
+                                CLog.d("video url：$videoUrl")
                                 startVideo(videoUrl, videoCover?.name, headers)
                             }
                             override fun onError(msg: String) {
@@ -111,17 +124,28 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
             if (it.throwable != null) {
                 it.throwable.localizedMessage?.toastLong()
             }
-        })
+        }
+        mViewModel.videoHistory.observe(this) {
+            if (it != null) {
+                videoCover = it
+            }
+            mViewModel.getVideo(videoCover?.videoId)
+        }
     }
 
     private fun startVideo(url: String, name: String?, headers: HashMap<String, String>?) {
-        Logger.t(TAG).d("startVideo -> headers: $headers")
+        CLog.d("startVideo -> headers: $headers")
         val jzDataSource = JZDataSource(url, name)
         if (headers != null) {
             jzDataSource.headerMap = headers
         }
         mBinding.videoPlayer.setUp(jzDataSource, JzvdStd.SCREEN_NORMAL)
         mBinding.videoPlayer.startVideo()
+        videoCover?.let {
+            if (it.position > 1000) {
+                mBinding.videoPlayer.seekToInAdvance = it.position
+            }
+        }
     }
 
     companion object {
@@ -130,7 +154,6 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
                 putExtra("videoCover", videoCover)
             })
         }
-        const val TAG = "VideoActivity"
     }
 
     override val mViewBindingInflater: (inflater: LayoutInflater) -> ActivityVideoBinding

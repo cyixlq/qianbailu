@@ -5,6 +5,5 @@ data class Video(
     val url: String,
     val cover: String,
     val downloadUrl: String,
-    val parseType: Int,
-    val position: Long = -1
+    val parseType: Int
 )

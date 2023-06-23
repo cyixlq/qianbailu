@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="100dp"
-    android:layout_height="30dp"
+    android:layout_height="40dp"
     android:id="@+id/flParent">
     <View
         android:id="@+id/line"
@@ -23,7 +23,7 @@
         android:paddingEnd="3dp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textSize="11dp"
+        android:textSize="16dp"
         android:textColor="@android:color/black"
         tools:text="分类名称"
         tools:ignore="SpUsage" />

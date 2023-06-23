@@ -2,20 +2,23 @@ package com.test.qianbailu
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.room.Room
 import com.test.qianbailu.model.ApiService
+import com.test.qianbailu.model.AppDatabase
 import com.test.qianbailu.module.catalog.*
 import com.test.qianbailu.module.home.*
 import com.test.qianbailu.module.live.*
 import com.test.qianbailu.module.live.room.*
 import com.test.qianbailu.module.main.*
 import com.test.qianbailu.module.search.*
-import com.test.qianbailu.module.settings.SettingsFragment
+import com.test.qianbailu.module.settings.*
 import com.test.qianbailu.module.video.*
 import com.test.qianbailu.ui.adapter.LivePlatformAdapter
 import com.test.qianbailu.ui.adapter.LiveRoomAdapter
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import com.test.qianbailu.ui.adapter.ViewPagerFragmentAdapter
 import com.test.qianbailu.utils.HtmlConverterFactory
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import top.cyixlq.core.net.RetrofitManager
@@ -33,6 +36,14 @@ val httpModule = module {
 
     single {
         HtmlConverterFactory.get(get())
+    }
+
+    single {
+        Room.databaseBuilder(
+            androidApplication(),
+            AppDatabase::class.java,
+            "app-database"
+        ).build()
     }
 }
 
@@ -85,7 +96,8 @@ val mvvmModule = module {
     // Video
     scope<VideoActivity> {
         factory { VideoRemoteDataSource(get()) }
-        factory { VideoDataSourceRepository(get()) }
+        factory { VideoLocalDataSource(get()) }
+        factory { VideoDataSourceRepository(get(), get()) }
         factory { MutableLiveData<VideoViewState>() }
         viewModel { VideoViewModel(get(), get()) }
     }
@@ -106,5 +118,13 @@ val mvvmModule = module {
         factory { MutableLiveData<LiveRoomsViewState>() }
         factory { LiveRoomAdapter() }
         viewModel { LiveRoomsViewModel(get(), get()) }
+    }
+
+    // Settings
+    scope<SettingsFragment> {
+        factory { SettingsLocalSource(get()) }
+        factory { SettingsRepository(get()) }
+        factory { MutableLiveData<SettingsViewState>() }
+        viewModel { SettingsViewModel(get(), get()) }
     }
 }

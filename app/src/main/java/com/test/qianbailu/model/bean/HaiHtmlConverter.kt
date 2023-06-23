@@ -16,17 +16,17 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     override fun getHomeVideoCovers(): Counter<VideoCover> {
         val doc = Jsoup.parse(getHtml(getHost()))
         val coversE = doc.select("li.p2.m1")
-        val list = mutableListOf<VideoCover>()
+        val map = HashMap<String, VideoCover>()
         for (item in coversE) {
             val videoCover = VideoCover(
                 item.select("span.lzbz > p.name").text(),
                 item.selectFirst("img")?.attr("src") ?: "",
-                item.select("a.link-hover").attr("href"),
-                "",
-                ""
+                item.select("a.link-hover").attr("href")
             )
-            list.add(videoCover)
+            map[videoCover.videoId] = videoCover
         }
+        val list = mutableListOf<VideoCover>()
+        list.addAll(map.values)
         return Counter(-1, list)
     }
 
@@ -86,7 +86,7 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
             val videoId = it.selectFirst("a.link-hover")?.attr("href") ?: ""
             val img = it.selectFirst("img#img_src")?.attr("src") ?: ""
             val name = it.selectFirst("p.name")?.text() ?: UNKNOWN_VOD_NAME
-            val videoCover = VideoCover(name, img, videoId, "","")
+            val videoCover = VideoCover(name, img, videoId)
             list.add(videoCover)
         }
         val lastPageElement = doc.selectFirst("div.born-page")?.select("a")?.last()
@@ -119,7 +119,7 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
             val videoId = it.selectFirst("a.link-hover")?.attr("href") ?: ""
             val img = it.selectFirst("img#img_src")?.attr("src") ?: ""
             val name = it.selectFirst("p.name")?.text() ?: UNKNOWN_VOD_NAME
-            val videoCover = VideoCover(name, img, videoId, "","")
+            val videoCover = VideoCover(name, img, videoId)
             list.add(videoCover)
         }
         val lastPageElement = doc.selectFirst("div.born-page")?.select("a")?.last()

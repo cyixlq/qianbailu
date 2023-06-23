@@ -4,10 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -18,16 +22,21 @@ import cn.jzvd.JZDataSource;
 import cn.jzvd.JZUtils;
 import cn.jzvd.JzvdStd;
 import top.cyixlq.core.utils.DisplayUtil;
+import top.cyixlq.core.utils.ToastUtil;
 
 public class MyJzVideoPlayer extends JzvdStd {
 
     protected TextView tvSpeed;
     protected TextView tvTip;
+    protected FrameLayout portraitButton;
+    protected ImageView ivPortraitFull;
+    protected TextView tvPortrait;
     private int currentSpeedIndex = 1;
     private AlertDialog speedDialog;
     private boolean showTvSpeed = true;
     private boolean showNormalTitle = false;
-    private boolean showNormalBack = false;
+    private boolean showNormalBack = true;
+    private boolean isPortraitFull;
 
     public MyJzVideoPlayer(Context context) {
         super(context);
@@ -43,11 +52,23 @@ public class MyJzVideoPlayer extends JzvdStd {
         tvSpeed = findViewById(R.id.tv_speed);
         tvSpeed.setOnClickListener(this);
         tvTip = findViewById(R.id.tv_tip);
+        portraitButton = findViewById(R.id.portraitFull);
+        ivPortraitFull = findViewById(R.id.ivPortraitFull);
+        tvPortrait = findViewById(R.id.tvPortrait);
+        portraitButton.setOnClickListener(this);
+        if (!showNormalTitle) {
+            titleTextView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public void setScreenNormal() {
         super.setScreenNormal();
+        isPortraitFull = false;
+        fullscreenButton.setVisibility(VISIBLE);
+        portraitButton.setVisibility(VISIBLE);
+        tvPortrait.setVisibility(VISIBLE);
+        ivPortraitFull.setImageResource(R.drawable.jz_enlarge);
         if (!showTvSpeed) {
             tvSpeed.setVisibility(View.GONE);
         }
@@ -72,6 +93,11 @@ public class MyJzVideoPlayer extends JzvdStd {
         if (showTvSpeed) {
             tvSpeed.setVisibility(View.VISIBLE);
         }
+        if (isPortraitFull) fullscreenButton.setVisibility(GONE);
+        else portraitButton.setVisibility(GONE);
+        ivPortraitFull.setImageResource(R.drawable.jz_shrink);
+        tvPortrait.setVisibility(GONE);
+        backButton.setVisibility(VISIBLE);
         titleTextView.setVisibility(VISIBLE);
     }
 
@@ -144,12 +170,45 @@ public class MyJzVideoPlayer extends JzvdStd {
             }
             setWindow(screen == SCREEN_FULLSCREEN);
             speedDialog.show();
+        } else if (id == R.id.portraitFull) {
+            if (state == STATE_AUTO_COMPLETE) return;
+            if (screen == SCREEN_FULLSCREEN) {
+                //quit fullscreen
+                backPress();
+            } else {
+                Log.d(TAG, "toFullscreenActivity [" + this.hashCode() + "] ");
+                gotoPortraitScreenFullscreen();
+            }
         }
     }
+    public void gotoPortraitScreenFullscreen() {
+        isPortraitFull = true;
+        ViewGroup vg = (ViewGroup) getParent();
+        vg.removeView(this);
+        cloneAJzvd(vg);
+        CONTAINER_LIST.add(vg);
+        vg = (ViewGroup) (JZUtils.scanForActivity(getContext())).getWindow().getDecorView();//和他也没有关系
+        vg.addView(this, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        setScreenFullscreen();
+        JZUtils.hideStatusBar(getContext());
+        JZUtils.setRequestedOrientation(getContext(), NORMAL_ORIENTATION);
+        JZUtils.hideSystemUI(getContext());//华为手机和有虚拟键的手机全屏时可隐藏虚拟键 issue:1326
+
+    }
+
 
     public void setTip(String tip) {
         if (tvTip != null) {
             tvTip.setText(tip);
+        }
+    }
+
+    @Override
+    public void onPrepared() {
+        super.onPrepared();
+        if (seekToInAdvance >= 1000) {
+            ToastUtil.INSTANCE.showShort(R.string.already_seek_to_last_position);
         }
     }
 

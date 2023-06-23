@@ -57,7 +57,7 @@ class RetrofitManager private constructor() {
         val okhttpBuilder = OkHttpClient.Builder()
             .addNetworkInterceptor(
                 HttpLoggingInterceptor(InterceptorLogger()).apply {
-                    HttpLoggingInterceptor.Level.BODY
+                    level = HttpLoggingInterceptor.Level.BODY
                 }
             )
             .cache(appCache)

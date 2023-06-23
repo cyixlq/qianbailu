@@ -14,9 +14,9 @@
         tools:listitem="@layout/item_menu"
         android:background="#FFFFFF"/>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/srl">
+        android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvContent"
             android:layout_width="0dp"

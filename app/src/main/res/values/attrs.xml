@@ -7,4 +7,9 @@
         <attr name="titleColor" format="color"/>
         <attr name="showBack" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="SettingsItem">
+        <attr name="endIcon" format="reference"/>
+        <attr name="primaryTitle" format="string"/>
+        <attr name="subtitle" format="string"/>
+    </declare-styleable>
 </resources>

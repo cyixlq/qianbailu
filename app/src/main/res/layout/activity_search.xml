@@ -9,7 +9,7 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="搜索"
+        app:title="@string/search"
         android:background="@color/colorPrimary"/>
     <FrameLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:background="@null"
-            android:hint="输入关键字开始搜索"
+            android:hint="@string/input_keyword_to_search"
             android:singleLine="true"
             android:imeOptions="actionSearch"
             android:drawablePadding="10dp"
