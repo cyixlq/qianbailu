@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceManager
+import com.test.qianbailu.BuildConfig
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.FragmentSettingsBinding
 import com.test.qianbailu.module.history.VideoHistoryActivity
+import com.test.qianbailu.module.main.MainActivity
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoHistoryAdapter
 import com.test.qianbailu.ui.widget.SpaceDecoration
@@ -57,6 +59,19 @@ class SettingsFragment : CommonFragment<FragmentSettingsBinding>() {
                 }.setNegativeButton(R.string.cancel) { dialog, _ ->
                     dialog?.dismiss()
                 }.show()
+        }
+        mBinding.versionCheck.setSubTitle(BuildConfig.VERSION_NAME)
+        mBinding.versionCheck.setOnClickListener {
+            val lastTime = it.tag as Long? ?: 0L
+            val now = System.currentTimeMillis()
+            if (now - lastTime < 2000) {
+                return@setOnClickListener
+            }
+            val activity = requireActivity()
+            if (activity is MainActivity) {
+                activity.checkUpdate(true)
+            }
+            it.tag = now
         }
     }
 

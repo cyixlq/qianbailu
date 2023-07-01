@@ -22,21 +22,33 @@ class MainActivity : CommonActivity<ActivityMainBinding>() {
 
     private var lastTime = 0L
     private val duration = 2000
+    private var mShowTip = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         initView()
         binds()
+        checkUpdate(false)
+    }
+
+    fun checkUpdate(showTip: Boolean) {
+        if (mShowTip != showTip) {
+            mShowTip = showTip
+        }
         mViewModel.getVersionInfo()
     }
 
     private fun binds() {
         mViewModel.viewState.observe(this) {
-            if (it.updateAppBean != null && BuildConfig.VERSION_CODE < it.updateAppBean.code) {
-                UpdateDialogFragment
-                    .newInstance(it.updateAppBean)
-                    .show(supportFragmentManager, "tag")
+            if (it.updateAppBean != null) {
+                if (BuildConfig.VERSION_CODE < it.updateAppBean.code) {
+                    UpdateDialogFragment
+                        .newInstance(it.updateAppBean)
+                        .show(supportFragmentManager, "tag")
+                } else if (mShowTip) {
+                    getString(R.string.no_updated_version).toastShort()
+                }
             }
         }
     }

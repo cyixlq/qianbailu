@@ -11,5 +11,6 @@
         <attr name="endIcon" format="reference"/>
         <attr name="primaryTitle" format="string"/>
         <attr name="subtitle" format="string"/>
+        <attr name="tips" format="string" />
     </declare-styleable>
 </resources>

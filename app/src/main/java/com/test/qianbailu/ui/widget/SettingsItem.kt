@@ -15,6 +15,7 @@ class SettingsItem @JvmOverloads constructor(
     private val imgEnd: ImageView
     private val tvTitle: TextView
     private val tvSubTitle: TextView
+    private val tvTips: TextView
 
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_settings_item, this)
@@ -28,17 +29,24 @@ class SettingsItem @JvmOverloads constructor(
         val endIconRes = attr.getResourceId(R.styleable.SettingsItem_endIcon, -1)
         val title = attr.getString(R.styleable.SettingsItem_primaryTitle) ?: ""
         val subTitle = attr.getString(R.styleable.SettingsItem_subtitle) ?: ""
+        val tips = attr.getString(R.styleable.SettingsItem_tips) ?: ""
         attr.recycle()
 
         imgEnd = findViewById(R.id.ivEndIcon)
         tvTitle = findViewById(R.id.tvTitle)
         tvSubTitle = findViewById(R.id.tvSubTitle)
+        tvTips = findViewById(R.id.tvTip)
 
         if (endIconRes != -1) {
             imgEnd.setImageResource(endIconRes)
         }
         tvTitle.text = title
         tvSubTitle.text = subTitle
+        tvTips.text = tips
+    }
+
+    fun setTips(tips: String) {
+        tvTips.text = tips
     }
 
     fun setSubTitle(subTitle: String) {

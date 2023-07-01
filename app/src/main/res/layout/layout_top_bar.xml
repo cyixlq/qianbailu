@@ -5,7 +5,7 @@
     tools:layout_height="?attr/actionBarSize"
     android:orientation="horizontal"
     tools:parentTag="androidx.appcompat.widget.LinearLayoutCompat"
-    tools:viewBindingIgnore="false">
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/ivBack"

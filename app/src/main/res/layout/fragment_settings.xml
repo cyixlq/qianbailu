@@ -48,5 +48,14 @@
         android:id="@+id/dnsSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/ripple_gray"
         app:primaryTitle="@string/safe_dns" />
+    <com.test.qianbailu.ui.widget.SettingsItem
+        android:id="@+id/versionCheck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:primaryTitle="@string/current_version"
+        app:endIcon="@drawable/ic_arrow_forward"
+        android:background="@drawable/ripple_gray"
+        app:tips="@string/check_update"/>
 </androidx.appcompat.widget.LinearLayoutCompat>
