@@ -25,10 +25,14 @@ object DisplayUtil {
         return statusBarHeight
     }
 
+    fun getScreenWidth(context: Context): Int {
+        return context.resources.displayMetrics.widthPixels
+    }
+
     /**
      *  获取除去状态栏后屏幕的高度
      */
-    fun getScreenHeightExcludeStatusbar(context: Context): Int {
+    fun getScreenHeightExcludeStatusBar(context: Context): Int {
         return context.resources.displayMetrics.heightPixels - getStatusBarHeight()
     }
 

@@ -16,12 +16,15 @@ data class VideoCover(
     @PrimaryKey
     @ColumnInfo(name = "video_id")
     val videoId: String, // 例如：/video/4418/
-    val position: Long = 0
+    val position: Long = 0,
+    val duration: Long = Long.MAX_VALUE
 ): Parcelable {
+
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
+        parcel.readLong(),
         parcel.readLong()
     )
 
@@ -30,6 +33,7 @@ data class VideoCover(
         parcel.writeString(image)
         parcel.writeString(videoId)
         parcel.writeLong(position)
+        parcel.writeLong(duration)
     }
 
     override fun describeContents(): Int {

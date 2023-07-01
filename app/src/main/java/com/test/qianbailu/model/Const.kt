@@ -9,3 +9,5 @@ const val PARSE_TYPE_WEB_VIEW_SCAN = 1 // 需要WebView嗅探
 
 const val  UNKNOWN_VOD_NAME = "未获取到影片名称"
 const val UNKNOWN_CAT_NAME = "未获取到分类名称"
+
+const val PAGE_COUNT = 12

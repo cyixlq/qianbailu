@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.test.qianbailu.model.ApiService
 import com.test.qianbailu.model.AppDatabase
 import com.test.qianbailu.module.catalog.*
+import com.test.qianbailu.module.history.VideoHistoryActivity
 import com.test.qianbailu.module.home.*
 import com.test.qianbailu.module.live.*
 import com.test.qianbailu.module.live.room.*
@@ -120,11 +121,9 @@ val mvvmModule = module {
         viewModel { LiveRoomsViewModel(get(), get()) }
     }
 
-    // Settings
-    scope<SettingsFragment> {
-        factory { SettingsLocalSource(get()) }
-        factory { SettingsRepository(get()) }
-        factory { MutableLiveData<SettingsViewState>() }
-        viewModel { SettingsViewModel(get(), get()) }
-    }
+    // Settings VideoHistory
+    factory { SettingsLocalSource(get()) }
+    factory { SettingsRepository(get()) }
+    factory { MutableLiveData<SettingsViewState>() }
+    viewModel { SettingsViewModel(get(), get()) }
 }

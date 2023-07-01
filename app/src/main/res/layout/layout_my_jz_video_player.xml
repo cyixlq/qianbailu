@@ -10,9 +10,7 @@
     <FrameLayout
         android:id="@+id/surface_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
+        android:layout_height="match_parent"/>
 
     <ImageView
         android:id="@+id/thumb"
@@ -23,6 +21,12 @@
         android:background="#000000"
         android:scaleType="fitCenter"
         tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/anchorView"
+        android:layout_width="100dp"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"/>
 
     <LinearLayout
         android:id="@+id/layout_bottom"

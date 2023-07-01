@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -57,6 +58,10 @@ class TopBar @JvmOverloads constructor(
 
     fun setRightImgClickListener(listener: OnClickListener) {
         tvRight.setOnClickListener(listener)
+    }
+
+    fun setRightText(@StringRes strRes: Int) {
+        tvRight.setText(strRes)
     }
 
     fun showBack(isShow: Boolean) {

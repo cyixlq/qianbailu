@@ -33,6 +33,13 @@
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
             tools:ignore="SpUsage" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="4dp"
+            android:visibility="gone"/>
     </androidx.cardview.widget.CardView>
 
     <TextView

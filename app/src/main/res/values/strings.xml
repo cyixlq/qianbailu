@@ -32,4 +32,9 @@
     <string name="cancel">取消</string>
     <string name="seek_to">播放至：%s</string>
     <string name="portrait">竖屏</string>
+    <string name="finished_reading">已看完</string>
+    <string name="view_all">查看全部</string>
+    <string name="check_all">全选</string>
+    <string name="ok">确定</string>
+    <string name="delete">删除</string>
 </resources>

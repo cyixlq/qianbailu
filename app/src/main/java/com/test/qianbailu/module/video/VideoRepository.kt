@@ -27,8 +27,12 @@ class VideoRemoteDataSource(private val converter: IHtmlConverter) {
 
     fun getVideo(videoId: String): Observable<Video> {
         return Observable.create {
-            it.onNext(converter.getVideo(videoId))
-            it.onComplete()
+            try {
+                it.onNext(converter.getVideo(videoId))
+                it.onComplete()
+            } catch (e: Exception) {
+                it.onError(e)
+            }
         }
     }
 

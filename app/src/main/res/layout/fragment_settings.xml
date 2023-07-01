@@ -6,13 +6,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:paddingTop="20dp">
-    <TextView
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:text="@string/play_history"
-        android:textSize="16sp"
-        android:layout_marginStart="12dp"/>
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/play_history"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/tvViewAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#CCCCCC"
+            android:text="@string/view_all"
+            android:textSize="12sp"
+            android:layout_gravity="center_vertical|end"
+            app:drawableEndCompat="@drawable/ic_arrow_forward" />
+    </FrameLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"
         android:layout_width="match_parent"

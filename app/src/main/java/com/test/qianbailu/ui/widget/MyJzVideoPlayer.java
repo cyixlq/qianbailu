@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.test.qianbailu.R;
 
 import cn.jzvd.JZDataSource;
@@ -208,7 +210,10 @@ public class MyJzVideoPlayer extends JzvdStd {
     public void onPrepared() {
         super.onPrepared();
         if (seekToInAdvance >= 1000) {
-            ToastUtil.INSTANCE.showShort(R.string.already_seek_to_last_position);
+            Snackbar.make(this, R.string.already_seek_to_last_position, BaseTransientBottomBar.LENGTH_SHORT)
+                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                    .setAnchorView(R.id.anchorView)
+                    .show();
         }
     }
 

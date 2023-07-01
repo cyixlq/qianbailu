@@ -66,7 +66,8 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
         if (position >= 1000) {
             mViewModel.saveProgress(
                 videoCover?.copy(
-                    position = position
+                    position = position,
+                    duration = mBinding.videoPlayer.duration
                 )
             )
         }

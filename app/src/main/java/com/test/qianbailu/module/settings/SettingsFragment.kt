@@ -8,9 +8,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceManager
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.FragmentSettingsBinding
+import com.test.qianbailu.module.history.VideoHistoryActivity
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoHistoryAdapter
-import com.test.qianbailu.ui.widget.LinearSpaceDecoration
+import com.test.qianbailu.ui.widget.SpaceDecoration
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.fragment.CommonFragment
 import top.cyixlq.core.utils.toastShort
@@ -26,16 +27,20 @@ class SettingsFragment : CommonFragment<FragmentSettingsBinding>() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         bind()
-        mViewModel.getAllHistory()
+        mViewModel.observeVideoHistoryFirstPage()
     }
 
     private fun initView() {
         mHistoryAdapter = VideoHistoryAdapter()
         mHistoryAdapter.setOnItemClickListener { _, _, position ->
-            VideoActivity.launch(requireActivity(), mHistoryAdapter.getItem(position))
+            val item = mHistoryAdapter.getItem(position)
+            VideoActivity.launch(requireActivity(), item)
         }
         mBinding.rvHistory.adapter = mHistoryAdapter
-        mBinding.rvHistory.addItemDecoration(LinearSpaceDecoration(resources.getDimensionPixelSize(R.dimen.dp_12)))
+        mBinding.rvHistory.addItemDecoration(SpaceDecoration(resources.getDimensionPixelSize(R.dimen.dp_12)))
+        mBinding.tvViewAll.setOnClickListener {
+            VideoHistoryActivity.launch(requireActivity())
+        }
         mDnsNameArray = resources.getStringArray(R.array.dns_names)
         mDnsUrlArray = resources.getStringArray(R.array.dns_urls)
         mBinding.dnsSettings.setSubTitle(mDnsNameArray[getDnsIndex()])
@@ -58,10 +63,9 @@ class SettingsFragment : CommonFragment<FragmentSettingsBinding>() {
     private fun bind() {
         mViewModel.mViewState.observe(viewLifecycleOwner) {
             if (it.videoHistory != null) {
+                mHistoryAdapter.setNewInstance(it.videoHistory)
                 if (it.videoHistory.isEmpty()) {
                     mHistoryAdapter.setEmptyView(R.layout.layout_no_history)
-                } else {
-                    mHistoryAdapter.setNewInstance(it.videoHistory)
                 }
             }
         }
