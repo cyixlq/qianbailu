@@ -24,7 +24,6 @@ import cn.jzvd.JZDataSource;
 import cn.jzvd.JZUtils;
 import cn.jzvd.JzvdStd;
 import top.cyixlq.core.utils.DisplayUtil;
-import top.cyixlq.core.utils.ToastUtil;
 
 public class MyJzVideoPlayer extends JzvdStd {
 
@@ -39,6 +38,7 @@ public class MyJzVideoPlayer extends JzvdStd {
     private boolean showNormalTitle = false;
     private boolean showNormalBack = true;
     private boolean isPortraitFull;
+    private boolean isSeekLastPosition = false;
 
     public MyJzVideoPlayer(Context context) {
         super(context);
@@ -170,7 +170,7 @@ public class MyJzVideoPlayer extends JzvdStd {
                         JZUtils.hideSystemUI(getContext());
                 });
             }
-            setWindow(screen == SCREEN_FULLSCREEN);
+            setWindow(screen == SCREEN_FULLSCREEN && !isPortraitFull);
             speedDialog.show();
         } else if (id == R.id.portraitFull) {
             if (state == STATE_AUTO_COMPLETE) return;
@@ -207,14 +207,24 @@ public class MyJzVideoPlayer extends JzvdStd {
     }
 
     @Override
-    public void onPrepared() {
-        super.onPrepared();
-        if (seekToInAdvance >= 1000) {
+    public void onStatePlaying() {
+        super.onStatePlaying();
+        if (isSeekLastPosition) {
             Snackbar.make(this, R.string.already_seek_to_last_position, BaseTransientBottomBar.LENGTH_SHORT)
                     .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
                     .setAnchorView(R.id.anchorView)
                     .show();
+            isSeekLastPosition = false;
         }
+    }
+
+    /**
+     * 跳转至上次播放的位置
+     * @param lastPosition 上一次播放位置
+     */
+    public void seekToLsatPosition(long lastPosition) {
+        seekToInAdvance = lastPosition;
+        isSeekLastPosition = true;
     }
 
     @Override
