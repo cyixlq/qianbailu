@@ -17,9 +17,10 @@ class SpaceDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
         val layoutManager = parent.layoutManager
         if (layoutManager is GridLayoutManager) {
             val position = parent.getChildAdapterPosition(view)
-            val columnIndex = position / layoutManager.spanCount
-            val totalColumn = layoutManager.itemCount / layoutManager.spanCount +
-                    if (layoutManager.itemCount % layoutManager.spanCount > 0) 1 else 0
+            val spanCount = layoutManager.spanCount
+            val itemCount = layoutManager.itemCount
+            val columnIndex = position / spanCount
+            val totalColumn = itemCount / spanCount + if (itemCount % spanCount > 0) 1 else 0
             if (columnIndex >= totalColumn - 1) {
                 // 最后一行
                 outRect.top = space
@@ -28,8 +29,8 @@ class SpaceDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
                 outRect.top = space
                 outRect.bottom = 0
             }
-            outRect.left = space
-            outRect.right = 0
+            outRect.left = ((spanCount - position % spanCount) / spanCount.toFloat() * space).toInt()
+            outRect.right = space - outRect.left
         } else if (layoutManager is LinearLayoutManager) {
             val position = parent.getChildAdapterPosition(view)
             // 是否是最后一个

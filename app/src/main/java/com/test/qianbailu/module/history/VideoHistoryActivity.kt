@@ -70,7 +70,8 @@ class VideoHistoryActivity : CommonActivity<ActivityVideoHistoryBinding>() {
         if (layoutManager is GridLayoutManager) {
             val spanCount = layoutManager.spanCount
             val screenWidth = DisplayUtil.getScreenWidth(this)
-            val space = (screenWidth - DisplayUtil.dp2px(120F) * spanCount) / (spanCount + 1).toFloat()
+            val itemWidth = resources.getDimensionPixelSize(R.dimen.item_video_history_width)
+            val space = (screenWidth - itemWidth * spanCount) / (spanCount + 1).toFloat()
             mBinding.rvHistory.addItemDecoration(SpaceDecoration(space.toInt()))
         }
         mBinding.topBar.setRightImgClickListener {

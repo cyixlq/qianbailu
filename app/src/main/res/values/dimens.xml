@@ -4,4 +4,5 @@
     <dimen name="settings_item_padding_start">24dp</dimen>
     <dimen name="settings_item_padding_end">24dp</dimen>
     <dimen name="dp_12">12dp</dimen>
+    <dimen name="item_video_history_width">120dp</dimen>
 </resources>
