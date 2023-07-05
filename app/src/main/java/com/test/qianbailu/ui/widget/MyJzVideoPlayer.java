@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -39,6 +42,8 @@ public class MyJzVideoPlayer extends JzvdStd {
     private boolean showNormalBack = true;
     private boolean isPortraitFull;
     private boolean isSeekLastPosition = false;
+    private long realDuration = -1L;
+    private final MutableLiveData<Integer> stateChangedListener = new MutableLiveData<>();
 
     public MyJzVideoPlayer(Context context) {
         super(context);
@@ -209,6 +214,9 @@ public class MyJzVideoPlayer extends JzvdStd {
     @Override
     public void onStatePlaying() {
         super.onStatePlaying();
+        if (realDuration < 0) {
+            realDuration = getDuration();
+        }
         if (isSeekLastPosition) {
             Snackbar.make(this, R.string.already_seek_to_last_position, BaseTransientBottomBar.LENGTH_SHORT)
                     .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
@@ -216,6 +224,20 @@ public class MyJzVideoPlayer extends JzvdStd {
                     .show();
             isSeekLastPosition = false;
         }
+    }
+
+    public long getRealDuration() {
+        return realDuration < 0 ? 0 : realDuration;
+    }
+
+    @Override
+    public void onAutoCompletion() {
+        super.onAutoCompletion();
+        stateChangedListener.setValue(STATE_AUTO_COMPLETE);
+    }
+
+    public void addStateChangedListener(LifecycleOwner owner, final Observer<Integer> listener) {
+        this.stateChangedListener.observe(owner, listener);
     }
 
     /**

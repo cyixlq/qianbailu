@@ -11,8 +11,6 @@ import androidx.fragment.app.FragmentActivity
 import cn.jzvd.JZDataSource
 import cn.jzvd.Jzvd
 import cn.jzvd.JzvdStd
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.test.qianbailu.GlideApp
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.ActivityVideoBinding
@@ -72,6 +70,12 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
         }
         mEmptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, mBinding.rvLikes, false)
         mEmptyView.findViewById<TextView>(R.id.tvInfo).setText(R.string.empty)
+        mBinding.videoPlayer.addStateChangedListener(this) {
+            if (it == Jzvd.STATE_AUTO_COMPLETE) {
+                val duration = mBinding.videoPlayer.realDuration
+                mViewModel.saveProgress(videoCover?.copy(position = duration, duration = duration))
+            }
+        }
     }
 
     override fun onPause() {
@@ -83,12 +87,8 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
         super.onStop()
         val position = mBinding.videoPlayer.currentPositionWhenPlaying
         if (position >= 1000) {
-            mViewModel.saveProgress(
-                videoCover?.copy(
-                    position = position,
-                    duration = mBinding.videoPlayer.duration
-                )
-            )
+            val duration = mBinding.videoPlayer.duration
+            mViewModel.saveProgress(videoCover?.copy(position = position, duration = duration))
         }
     }
 
@@ -132,6 +132,7 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
                                 CLog.d("video url：$videoUrl")
                                 startVideo(videoUrl, videoCover?.name, headers)
                             }
+
                             override fun onError(msg: String) {
                                 msg.toastShort()
                             }

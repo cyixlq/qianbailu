@@ -32,8 +32,8 @@
             android:hint="@string/input_keyword_to_search"
             android:singleLine="true"
             android:imeOptions="actionSearch"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/ic_search"
+            android:drawableTint="#cccccc"
             tools:ignore="Autofill,HardcodedText,LabelFor" />
     </FrameLayout>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

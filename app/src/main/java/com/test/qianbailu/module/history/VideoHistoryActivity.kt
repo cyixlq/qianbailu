@@ -122,9 +122,9 @@ class VideoHistoryActivity : CommonActivity<ActivityVideoHistoryBinding>() {
                 if (mHistoryAdapter.data.size < it.count)
                     mHistoryAdapter.loadMoreModule.loadMoreComplete()
                 else
-                mHistoryAdapter.loadMoreModule.loadMoreEnd(true)
+                mHistoryAdapter.loadMoreModule.loadMoreEnd()
             } else {
-                mHistoryAdapter.loadMoreModule.loadMoreEnd(true)
+                mHistoryAdapter.loadMoreModule.loadMoreEnd()
             }
         }
     }
