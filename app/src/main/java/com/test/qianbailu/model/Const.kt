@@ -1,5 +1,6 @@
 package com.test.qianbailu.model
 
+const val PREF_NAME = "aiqiyi"
 const val BASE_URL = "https://www.haikouyo.com"
 const val CHROME_AGENT = "User-Agent: Mozilla/5.0 " +
         "(Macintosh; Intel Mac OS X 10_15_7) " +

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.preference.PreferenceManager
 import com.test.qianbailu.BuildConfig
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.FragmentSettingsBinding
@@ -14,6 +13,7 @@ import com.test.qianbailu.module.main.MainActivity
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoHistoryAdapter
 import com.test.qianbailu.ui.widget.SpaceDecoration
+import com.test.qianbailu.utils.PreferenceManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.fragment.CommonFragment
 import top.cyixlq.core.utils.toastShort
@@ -51,8 +51,7 @@ class SettingsFragment : CommonFragment<FragmentSettingsBinding>() {
                 .setTitle(R.string.safe_dns)
                 .setSingleChoiceItems(mDnsNameArray, getDnsIndex()) { dialog, which ->
                     val url = mDnsUrlArray[which]
-                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit()
-                        .putString(getString(R.string.key_dns_url), url).apply()
+                    PreferenceManager.setDnsUrl(url)
                     mBinding.dnsSettings.setSubTitle(mDnsNameArray[which])
                     getString(R.string.set_success_restart_takes_effect).toastShort()
                     dialog?.dismiss()
@@ -87,10 +86,7 @@ class SettingsFragment : CommonFragment<FragmentSettingsBinding>() {
     }
 
     private fun getDnsIndex(): Int {
-        val currentUrl = PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(
-            getString(R.string.key_dns_url),
-            ""
-        )
+        val currentUrl = PreferenceManager.getDnsUrl()
         if (currentUrl.isNullOrEmpty()) return 0
         mDnsUrlArray.forEachIndexed { index, url ->
             if (currentUrl == url) return index

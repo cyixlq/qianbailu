@@ -88,7 +88,6 @@ dependencies {
         exclude group: "io.reactivex.rxjava2"
     }
     kapt rootProject.ext.dependencies.roomCompiler
-    implementation rootProject.ext.support.preference
     implementation project(path: ':core')
 
     // 测试用包
