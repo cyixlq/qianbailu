@@ -5,5 +5,7 @@ data class Video(
     val url: String,
     val cover: String,
     val downloadUrl: String,
-    val parseType: Int
+    val parseType: Int,
+    // 猜你喜欢
+    val likes: MutableList<VideoCover>?
 )

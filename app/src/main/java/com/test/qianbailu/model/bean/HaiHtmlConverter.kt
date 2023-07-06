@@ -32,6 +32,16 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
 
     override fun getVideo(videoId: String): Video {
         val doc = Jsoup.parse(getHtml(getHost() + videoId))
+        val likes = mutableListOf<VideoCover>()
+        val vodListE = doc.selectFirst("div#vods_list")?.select("li.p1.m1")
+        vodListE?.forEach { item ->
+            val videoCover = VideoCover(
+                item.select("span.lzbz > p.name").text(),
+                item.selectFirst("img")?.attr("src") ?: "",
+                item.select("a.link-hover").attr("href")
+            )
+            likes.add(videoCover)
+        }
         return Video(
             doc.selectFirst("h1#vod_name")?.text() ?: UNKNOWN_VOD_NAME,
             getHost() + doc.selectFirst("div.urlli.clearfix")
@@ -39,7 +49,8 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
                 ?.attr("href"),
             doc.selectFirst("img#img_src")?.attr("src") ?: "",
             "",
-            PARSE_TYPE_WEB_VIEW_SCAN
+            PARSE_TYPE_WEB_VIEW_SCAN,
+            likes
         )
     }
 

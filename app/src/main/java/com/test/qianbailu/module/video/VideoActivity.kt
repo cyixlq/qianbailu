@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import cn.jzvd.JZDataSource
 import cn.jzvd.Jzvd
@@ -16,6 +17,7 @@ import com.test.qianbailu.databinding.ActivityVideoBinding
 import com.test.qianbailu.model.PARSE_TYPE_NONE
 import com.test.qianbailu.model.PARSE_TYPE_WEB_VIEW_SCAN
 import com.test.qianbailu.model.bean.VideoCover
+import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import com.test.qianbailu.ui.widget.ScanWebView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.activity.CommonActivity
@@ -27,6 +29,9 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
 
     private val mViewModel by viewModel<VideoViewModel>()
 
+    private lateinit var mHeaderView: View
+    private lateinit var mAdapter: VideoCoverAdapter
+    private lateinit var mEmptyView: View
     private var videoCover: VideoCover? = null
     private var mScanWebView: ScanWebView? = null
 
@@ -49,9 +54,27 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
                 .placeholder(R.drawable.ic_loading)
                 .fitCenter()
                 .into(mBinding.videoPlayer.thumbImageView)
-            mBinding.tvName.text = it.name
+            mAdapter = VideoCoverAdapter()
+            mAdapter.headerWithEmptyEnable = true
+            mHeaderView = LayoutInflater.from(this).inflate(R.layout.layout_video_play_header, mBinding.rvLikes, false)
+            mHeaderView.findViewById<TextView>(R.id.tvName).text = it.name
+            mAdapter.setHeaderView(mHeaderView)
+            mAdapter.setOnItemClickListener { _, _, position ->
+                val videoCover = mAdapter.getItem(position)
+                launch(this@VideoActivity, videoCover)
+                finish()
+            }
+            mBinding.rvLikes.adapter = mAdapter
             if (it.position > 1000) mViewModel.getVideo(it.videoId)
             else mViewModel.getVideoHistory(it.videoId)
+        }
+        mEmptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, mBinding.rvLikes, false)
+        mEmptyView.findViewById<TextView>(R.id.tvInfo).setText(R.string.empty)
+        mBinding.videoPlayer.addStateChangedListener(this) {
+            if (it == Jzvd.STATE_AUTO_COMPLETE) {
+                val duration = mBinding.videoPlayer.realDuration
+                mViewModel.saveProgress(videoCover?.copy(position = duration, duration = duration))
+            }
         }
     }
 
@@ -64,12 +87,8 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
         super.onStop()
         val position = mBinding.videoPlayer.currentPositionWhenPlaying
         if (position >= 1000) {
-            mViewModel.saveProgress(
-                videoCover?.copy(
-                    position = position,
-                    duration = mBinding.videoPlayer.duration
-                )
-            )
+            val duration = mBinding.videoPlayer.duration
+            mViewModel.saveProgress(videoCover?.copy(position = position, duration = duration))
         }
     }
 
@@ -113,6 +132,7 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
                                 CLog.d("video url：$videoUrl")
                                 startVideo(videoUrl, videoCover?.name, headers)
                             }
+
                             override fun onError(msg: String) {
                                 msg.toastShort()
                             }
@@ -120,6 +140,11 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
                         })
                     }
                     mScanWebView?.loadUrl(it.video.url)
+                }
+                if (it.video.likes.isNullOrEmpty()) {
+                    mAdapter.setEmptyView(mEmptyView)
+                } else {
+                    mAdapter.setNewInstance(it.video.likes)
                 }
             }
             if (it.throwable != null) {
@@ -144,7 +169,7 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
         mBinding.videoPlayer.startVideo()
         videoCover?.let {
             if (it.position > 1000) {
-                mBinding.videoPlayer.seekToInAdvance = it.position
+                mBinding.videoPlayer.seekToLsatPosition(it.position)
             }
         }
     }

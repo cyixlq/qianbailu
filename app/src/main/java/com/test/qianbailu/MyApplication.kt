@@ -1,9 +1,9 @@
 package com.test.qianbailu
 
 import android.app.Application
-import androidx.preference.PreferenceManager
 import com.tencent.bugly.crashreport.CrashReport
 import com.test.qianbailu.model.BASE_URL
+import com.test.qianbailu.utils.PreferenceManager
 import com.test.qianbailu.utils.TrustAllManager
 import com.test.qianbailu.utils.UnSafeHostnameVerifier
 import org.koin.android.ext.koin.androidContext
@@ -32,14 +32,15 @@ class MyApplication : Application() {
     }
 
     private fun initCore() {
-        val keyDnsUrl = getString(R.string.key_dns_url)
-        val dnsUrl = PreferenceManager.getDefaultSharedPreferences(this).getString(keyDnsUrl, "")
+        val dnsUrl = PreferenceManager.getDnsUrl()
         val dnsConfig = if (dnsUrl.isNullOrEmpty()) null else DnsConfig(dnsUrl, null)
         CoreManager.configNetWork(
             baseUrl = BASE_URL,
             dnsConfig = dnsConfig,
             trustManager = TrustAllManager(),
             hostnameVerifier = UnSafeHostnameVerifier()
-        ).configCLog(isEnableLog = BuildConfig.DEBUG).init(this)
+        )
+        .configCLog(isEnableLog = BuildConfig.DEBUG)
+        .init(this)
     }
 }
