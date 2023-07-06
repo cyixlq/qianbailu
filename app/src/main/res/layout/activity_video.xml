@@ -1,76 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-    <com.test.qianbailu.ui.widget.TopBar
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:title="视频播放"
-        android:background="@color/colorPrimary"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <FrameLayout
         android:id="@+id/flPlayer"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_below="@id/topBar">
+        android:layout_height="220dp">
         <com.test.qianbailu.ui.widget.MyJzVideoPlayer
             android:id="@+id/videoPlayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </FrameLayout>
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        android:textSize="16dp"
-        tools:text="电影名称"
-        android:layout_below="@id/flPlayer"
-        android:textColor="@color/colorPrimary"
-        tools:ignore="SpUsage" />
-    <TextView
-        android:id="@+id/tvDurationText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:layout_alignStart="@id/tvName"
-        android:layout_marginTop="6dp"
-        android:textSize="12dp"
-        android:layout_below="@id/tvName"
-        android:text="时长"
-        android:layout_marginEnd="6dp"
-        android:textColor="@color/colorPrimary"
-        tools:ignore="HardcodedText,SpUsage" />
-    <TextView
-        android:id="@+id/tvDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:layout_marginTop="6dp"
-        android:textSize="12dp"
-        android:layout_alignBaseline="@id/tvDurationText"
-        android:layout_toEndOf="@id/tvDurationText"
-        tools:text="1:03:00"
-        tools:ignore="SpUsage" />
-    <TextView
-        android:id="@+id/tvViewCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="12dp"
-        android:layout_alignBaseline="@id/tvDuration"
-        android:textSize="12dp"
-        tools:text="2000人观看"
-        tools:ignore="SpUsage" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvLikes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/item_video_cover"
+        android:layout_below="@id/flPlayer"/>
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

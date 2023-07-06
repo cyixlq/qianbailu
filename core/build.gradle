@@ -42,6 +42,7 @@ dependencies {
     api rootProject.ext.dependencies.rxjava
     api rootProject.ext.dependencies.rxandroid
     api rootProject.ext.dependencies.rxkotlin
+    api rootProject.ext.dependencies.dnsOverHttps // dns
 
     api rootProject.ext.dependencies.logger // 日志打印工具
 

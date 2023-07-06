@@ -3,18 +3,25 @@ package com.test.qianbailu.ui.widget;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.test.qianbailu.R;
-import com.test.qianbailu.model.ConstKt;
 
 import cn.jzvd.JZDataSource;
 import cn.jzvd.JZUtils;
@@ -25,11 +32,18 @@ public class MyJzVideoPlayer extends JzvdStd {
 
     protected TextView tvSpeed;
     protected TextView tvTip;
+    protected FrameLayout portraitButton;
+    protected ImageView ivPortraitFull;
+    protected TextView tvPortrait;
     private int currentSpeedIndex = 1;
     private AlertDialog speedDialog;
     private boolean showTvSpeed = true;
     private boolean showNormalTitle = false;
-    private boolean showNormalBack = false;
+    private boolean showNormalBack = true;
+    private boolean isPortraitFull;
+    private boolean isSeekLastPosition = false;
+    private long realDuration = -1L;
+    private final MutableLiveData<Integer> stateChangedListener = new MutableLiveData<>();
 
     public MyJzVideoPlayer(Context context) {
         super(context);
@@ -45,11 +59,23 @@ public class MyJzVideoPlayer extends JzvdStd {
         tvSpeed = findViewById(R.id.tv_speed);
         tvSpeed.setOnClickListener(this);
         tvTip = findViewById(R.id.tv_tip);
+        portraitButton = findViewById(R.id.portraitFull);
+        ivPortraitFull = findViewById(R.id.ivPortraitFull);
+        tvPortrait = findViewById(R.id.tvPortrait);
+        portraitButton.setOnClickListener(this);
+        if (!showNormalTitle) {
+            titleTextView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public void setScreenNormal() {
         super.setScreenNormal();
+        isPortraitFull = false;
+        fullscreenButton.setVisibility(VISIBLE);
+        portraitButton.setVisibility(VISIBLE);
+        tvPortrait.setVisibility(VISIBLE);
+        ivPortraitFull.setImageResource(R.drawable.jz_enlarge);
         if (!showTvSpeed) {
             tvSpeed.setVisibility(View.GONE);
         }
@@ -74,6 +100,11 @@ public class MyJzVideoPlayer extends JzvdStd {
         if (showTvSpeed) {
             tvSpeed.setVisibility(View.VISIBLE);
         }
+        if (isPortraitFull) fullscreenButton.setVisibility(GONE);
+        else portraitButton.setVisibility(GONE);
+        ivPortraitFull.setImageResource(R.drawable.jz_shrink);
+        tvPortrait.setVisibility(GONE);
+        backButton.setVisibility(VISIBLE);
         titleTextView.setVisibility(VISIBLE);
     }
 
@@ -144,10 +175,35 @@ public class MyJzVideoPlayer extends JzvdStd {
                         JZUtils.hideSystemUI(getContext());
                 });
             }
-            setWindow(screen == SCREEN_FULLSCREEN);
+            setWindow(screen == SCREEN_FULLSCREEN && !isPortraitFull);
             speedDialog.show();
+        } else if (id == R.id.portraitFull) {
+            if (state == STATE_AUTO_COMPLETE) return;
+            if (screen == SCREEN_FULLSCREEN) {
+                //quit fullscreen
+                backPress();
+            } else {
+                Log.d(TAG, "toFullscreenActivity [" + this.hashCode() + "] ");
+                gotoPortraitScreenFullscreen();
+            }
         }
     }
+    public void gotoPortraitScreenFullscreen() {
+        isPortraitFull = true;
+        ViewGroup vg = (ViewGroup) getParent();
+        vg.removeView(this);
+        cloneAJzvd(vg);
+        CONTAINER_LIST.add(vg);
+        vg = (ViewGroup) (JZUtils.scanForActivity(getContext())).getWindow().getDecorView();//和他也没有关系
+        vg.addView(this, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        setScreenFullscreen();
+        JZUtils.hideStatusBar(getContext());
+        JZUtils.setRequestedOrientation(getContext(), NORMAL_ORIENTATION);
+        JZUtils.hideSystemUI(getContext());//华为手机和有虚拟键的手机全屏时可隐藏虚拟键 issue:1326
+
+    }
+
 
     public void setTip(String tip) {
         if (tvTip != null) {
@@ -156,9 +212,41 @@ public class MyJzVideoPlayer extends JzvdStd {
     }
 
     @Override
-    public long getDuration() {
-        final long superDuration = super.getDuration();
-        return superDuration > ConstKt.TEN_MINUTE ? ConstKt.TEN_MINUTE : superDuration;
+    public void onStatePlaying() {
+        super.onStatePlaying();
+        if (realDuration < 0) {
+            realDuration = getDuration();
+        }
+        if (isSeekLastPosition) {
+            Snackbar.make(this, R.string.already_seek_to_last_position, BaseTransientBottomBar.LENGTH_SHORT)
+                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                    .setAnchorView(R.id.anchorView)
+                    .show();
+            isSeekLastPosition = false;
+        }
+    }
+
+    public long getRealDuration() {
+        return realDuration < 0 ? 0 : realDuration;
+    }
+
+    @Override
+    public void onAutoCompletion() {
+        super.onAutoCompletion();
+        stateChangedListener.setValue(STATE_AUTO_COMPLETE);
+    }
+
+    public void addStateChangedListener(LifecycleOwner owner, final Observer<Integer> listener) {
+        this.stateChangedListener.observe(owner, listener);
+    }
+
+    /**
+     * 跳转至上次播放的位置
+     * @param lastPosition 上一次播放位置
+     */
+    public void seekToLsatPosition(long lastPosition) {
+        seekToInAdvance = lastPosition;
+        isSeekLastPosition = true;
     }
 
     @Override

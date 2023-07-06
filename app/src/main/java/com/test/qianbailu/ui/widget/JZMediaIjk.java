@@ -6,8 +6,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.Surface;
 
-import com.orhanobut.logger.Logger;
-
 import java.io.IOException;
 
 import cn.jzvd.JZMediaInterface;
@@ -17,8 +15,6 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkTimedText;
 
 public class JZMediaIjk extends JZMediaInterface implements IMediaPlayer.OnPreparedListener, IMediaPlayer.OnVideoSizeChangedListener, IMediaPlayer.OnCompletionListener, IMediaPlayer.OnErrorListener, IMediaPlayer.OnInfoListener, IMediaPlayer.OnBufferingUpdateListener, IMediaPlayer.OnSeekCompleteListener, IMediaPlayer.OnTimedTextListener {
-
-    private static final String TAG = "JZMediaIjk";
 
     IjkMediaPlayer ijkMediaPlayer;
 
@@ -193,17 +189,6 @@ public class JZMediaIjk extends JZMediaInterface implements IMediaPlayer.OnPrepa
         } else {
             jzvd.textureView.setSurfaceTexture(SAVED_SURFACE);
         }
-    }
-
-    public void setOption(int category, String key, String value) {
-        Logger.t(TAG).d("setOption value: " + value);
-        if (ijkMediaPlayer != null)
-            ijkMediaPlayer.setOption(category, key, value);
-    }
-
-    public void setOption(int category, String key, int value) {
-        if (ijkMediaPlayer != null)
-            ijkMediaPlayer.setOption(category, key, value);
     }
 
     @Override

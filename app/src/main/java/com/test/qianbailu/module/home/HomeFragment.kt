@@ -1,6 +1,5 @@
 package com.test.qianbailu.module.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,19 +29,18 @@ class HomeFragment : CommonFragment<FragmentHomeBinding>() {
         refresh()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun binds() {
         mViewModel.viewState.observe(viewLifecycleOwner, Observer {
             mBinding.srl.isRefreshing = it.isLoading
             if (it.list != null) {
                 if (it.list.isEmpty()) {
-                    infoText.text = "空空如也，点击重试"
+                    infoText.setText(R.string.empty_and_click_retry)
                     videoCoverAdapter.setEmptyView(emptyView)
                 }
                 videoCoverAdapter.setNewInstance(it.list)
             }
             if (it.throwable != null) {
-                infoText.text = "发生错误：${it.throwable.localizedMessage}\n点击重试"
+                infoText.text = getString(R.string.error_and_click_retry, it.throwable.localizedMessage)
                 videoCoverAdapter.setEmptyView(emptyView)
                 videoCoverAdapter.setNewInstance(null)
             }

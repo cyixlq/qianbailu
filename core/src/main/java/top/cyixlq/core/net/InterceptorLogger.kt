@@ -22,7 +22,7 @@ class InterceptorLogger: HttpLoggingInterceptor.Logger {
             mMessage.append(message + "\n")
         }
         if (message.startsWith("<-- END HTTP")) {
-            Logger.d(mMessage.toString())
+            Logger.t("NetWork").d(mMessage.toString())
             mMessage.clear()
         }
     }

@@ -1,6 +1,5 @@
 package com.test.qianbailu.module.search
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -68,19 +67,18 @@ class SearchActivity : CommonActivity<ActivitySearchBinding>() {
         emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, mBinding.rvVideoCover, false)
         emptyView.setOnClickListener { doSearch() }
         infoText = emptyView.findViewById(R.id.tvInfo)
-        infoText.text = "空空如也"
+        infoText.setText(R.string.empty)
         videoCoverAdapter.setEmptyView(emptyView)
     }
 
     private fun doSearch() {
         if (keyword.isEmpty()) {
-            "关键字不能为空".toastShort()
+            getString(R.string.keyword_not_empty).toastShort()
             return
         }
         mViewModel.searchVideo(keyword, page)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun binds() {
         mViewModel.mViewState.observe(this, Observer {
             mBinding.srl.isRefreshing = it.isLoading
@@ -100,12 +98,12 @@ class SearchActivity : CommonActivity<ActivitySearchBinding>() {
                     }
                 }
                 if (videoCoverAdapter.itemCount - (if (videoCoverAdapter.hasEmptyView()) 1 else 0) <= 0) {
-                    infoText.text = "没有结果，点击重试"
+                    infoText.setText(R.string.no_result_and_click_retry)
                     videoCoverAdapter.setEmptyView(emptyView)
                 }
             }
             if (it.throwable != null) {
-                infoText.text = "发生错误：${it.throwable.localizedMessage}\n点击重试"
+                infoText.text = getString(R.string.error_and_click_retry, it.throwable.localizedMessage)
                 videoCoverAdapter.setEmptyView(emptyView)
                 videoCoverAdapter.setNewInstance(null)
             }

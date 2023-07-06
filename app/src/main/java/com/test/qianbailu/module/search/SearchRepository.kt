@@ -19,6 +19,6 @@ class SearchRemoteDataSource(private val converter: IHtmlConverter) {
         return Observable.create {
             it.onNext(converter.search(keyword, page))
             it.onComplete()
-        }.subscribeOn(RxSchedulers.io)
+        }
     }
 }

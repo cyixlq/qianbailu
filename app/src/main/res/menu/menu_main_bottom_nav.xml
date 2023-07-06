@@ -4,16 +4,14 @@
     <item
         android:id="@+id/menuHome"
         android:icon="@drawable/ic_home"
-        android:title="首页"
+        android:title="@string/home_page"
         tools:ignore="HardcodedText" />
     <item
         android:id="@+id/menuCatalog"
         android:icon="@drawable/ic_menu"
-        android:title="分类"
-        tools:ignore="HardcodedText" />
+        android:title="@string/category"/>
     <item
-        android:id="@+id/menuLive"
-        android:icon="@drawable/ic_live_tv"
-        android:title="直播"
-        tools:ignore="HardcodedText" />
+        android:id="@+id/menuSettings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings"/>
 </menu>

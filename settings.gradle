@@ -17,4 +17,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "爱骑艺"
-include ':by_network', ':core', ':app'
+include ':core', ':app'

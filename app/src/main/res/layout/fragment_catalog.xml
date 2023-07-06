@@ -1,65 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <com.test.qianbailu.ui.widget.TopBar
-        android:id="@+id/topBar"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="分类"
-        android:background="@color/colorPrimary"
-        app:showBack="false"/>
-    <FrameLayout
-        android:id="@+id/flSearchBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:background="@drawable/bg_search_bar">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="点击开始搜索"
-            app:drawableStartCompat="@drawable/ic_search"
-            android:textColor="#ccc"
-            android:gravity="center"
-            android:drawablePadding="10dp"
-            tools:ignore="HardcodedText"/>
-    </FrameLayout>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"
+        tools:listitem="@layout/item_menu"
+        android:background="#FFFFFF"/>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvContent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvMenu"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_menu"
-                android:background="#FFFFFF"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvContent"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="2"
-                tools:listitem="@layout/item_video_cover"
-                android:background="#F3F3F3"
-                android:layout_weight="1"/>
-        </LinearLayout>
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            tools:listitem="@layout/item_video_cover"
+            android:background="#F3F3F3"
+            android:layout_weight="1"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

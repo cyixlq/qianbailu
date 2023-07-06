@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -14,7 +15,12 @@ android {
         versionName rootProject.ext.android.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters  'armeabi-v7a', 'arm64-v8a'
+            abiFilters 'arm64-v8a'
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
         }
     }
     signingConfigs {
@@ -77,6 +83,11 @@ dependencies {
         exclude group: "com.android.support"
     }
     kapt rootProject.ext.dependencies.glideCompiler
+    implementation rootProject.ext.dependencies.roomRuntime
+    implementation(rootProject.ext.dependencies.roomRxJava) {
+        exclude group: "io.reactivex.rxjava2"
+    }
+    kapt rootProject.ext.dependencies.roomCompiler
     implementation project(path: ':core')
 
     // 测试用包

@@ -48,9 +48,14 @@
             android:name=".module.video.VideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
+            android:theme="@style/VideoPlayTheme"
             tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".module.search.SearchActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+        <activity
+            android:name=".module.history.VideoHistoryActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
         <activity android:name=".module.live.room.LiveRoomsActivity"

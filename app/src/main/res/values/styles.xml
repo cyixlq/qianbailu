@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@android:color/white</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
 
     <style name="LunchTheme" parent="AppTheme">
@@ -29,6 +31,10 @@
 
     <style name="LivePlayTheme" parent="AppTheme">
         <item name="colorPrimaryDark">@android:color/black</item>
+    </style>
+
+    <style name="VideoPlayTheme" parent="AppTheme">
+        <item name="android:statusBarColor">@android:color/black</item>
     </style>
 
 </resources>
