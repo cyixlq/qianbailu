@@ -55,6 +55,10 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
         <activity
+            android:name=".module.search.SearchResultActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+        <activity
             android:name=".module.history.VideoHistoryActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>

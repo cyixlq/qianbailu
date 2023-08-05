@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.ActivitySearchBinding
-import com.test.qianbailu.module.video.VideoActivity
-import com.test.qianbailu.ui.adapter.VideoCoverAdapter
+import com.test.qianbailu.model.bean.SearchHistory
+import com.test.qianbailu.ui.adapter.SearchHistoryAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.toastShort
@@ -22,11 +22,9 @@ class SearchActivity : CommonActivity<ActivitySearchBinding>() {
 
     private val mViewModel by viewModel<SearchViewModel>()
 
-    private var keyword = ""
-    private var page = 1
-    private lateinit var videoCoverAdapter: VideoCoverAdapter
-    private lateinit var emptyView: View
-    private lateinit var infoText: TextView
+    // 搜索记录
+    private lateinit var historyAdapter: SearchHistoryAdapter
+    private lateinit var historyEmptyView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,73 +39,109 @@ class SearchActivity : CommonActivity<ActivitySearchBinding>() {
                     .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager
                     .hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-                keyword = mBinding.edtSearch.text.trim().toString()
-                page = 1
-                doSearch()
+                val keyword = mBinding.edtSearch.text.trim().toString()
+                startSearchResult(keyword)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
         }
-        videoCoverAdapter = VideoCoverAdapter()
-        videoCoverAdapter.loadMoreModule.setOnLoadMoreListener {
-            page++
-            doSearch()
-        }
-        videoCoverAdapter.setOnItemClickListener { _, _, position ->
-            videoCoverAdapter.getItem(position).let {
-                VideoActivity.launch(this, it)
+        historyAdapter = SearchHistoryAdapter()
+        historyAdapter.addChildClickViewIds(R.id.ivClear)
+        historyAdapter.setOnItemChildClickListener { _, view, position ->
+            if (view.id == R.id.ivClear) {
+                val history = historyAdapter.getItem(position)
+                mViewModel.deleteHistory(mutableListOf(history))
             }
         }
-        mBinding.rvVideoCover.adapter = videoCoverAdapter
-        mBinding.srl.setColorSchemeColors(getColor(R.color.colorPrimary))
-        mBinding.srl.setOnRefreshListener {
-            page = 1
-            doSearch()
+        historyAdapter.setOnItemClickListener { _, _, position ->
+            val history = historyAdapter.getItem(position)
+            val keyword = history.keyword
+            mBinding.edtSearch.setText(keyword)
+            startSearchResult(keyword)
         }
-        emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, mBinding.rvVideoCover, false)
-        emptyView.setOnClickListener { doSearch() }
-        infoText = emptyView.findViewById(R.id.tvInfo)
-        infoText.setText(R.string.empty)
-        videoCoverAdapter.setEmptyView(emptyView)
+        historyEmptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, mBinding.rvSearchHistory, false)
+        historyEmptyView.findViewById<TextView>(R.id.tvInfo).setText(R.string.no_history)
+        val historyHeader = LayoutInflater.from(this).inflate(R.layout.layout_search_history_header, mBinding.rvSearchHistory, false)
+        val ivDelete: ImageView = historyHeader.findViewById(R.id.ivDel)
+        val tvDelAll: TextView = historyHeader.findViewById(R.id.tvDelAll)
+        val tvDone: TextView = historyHeader.findViewById(R.id.tvDone)
+        ivDelete.setOnClickListener {
+            historyAdapter.showDeleteIcon(true)
+            it.visibility = View.GONE
+            tvDelAll.visibility = View.VISIBLE
+            tvDone.visibility = View.VISIBLE
+        }
+        tvDone.setOnClickListener {
+            historyAdapter.showDeleteIcon(false)
+            it.visibility = View.GONE
+            ivDelete.visibility = View.VISIBLE
+            tvDelAll.visibility = View.GONE
+        }
+        tvDelAll.setOnClickListener {
+            mViewModel.deleteHistory(historyAdapter.data)
+            it.visibility = View.GONE
+            ivDelete.visibility = View.VISIBLE
+            tvDone.visibility = View.GONE
+        }
+        historyAdapter.setHeaderView(historyHeader)
+        historyAdapter.headerWithEmptyEnable = true
+        mBinding.rvSearchHistory.adapter = historyAdapter
+        mBinding.ivBack.setOnClickListener { finish() }
+        mBinding.tvAction.setOnClickListener {
+            val keyword = mBinding.edtSearch.text.trim().toString()
+            startSearchResult(keyword)
+        }
     }
 
-    private fun doSearch() {
+    private fun startSearchResult(keyword: String) {
         if (keyword.isEmpty()) {
             getString(R.string.keyword_not_empty).toastShort()
             return
         }
-        mViewModel.searchVideo(keyword, page)
+        val realHistory: SearchHistory = findSameSearchHistory(keyword) ?: SearchHistory(keyword)
+        mViewModel.insertHistory(realHistory)
+        SearchResultActivity.launchForResult(this, keyword)
+    }
+
+    // 从SearchHistoryAdapter中找到相同关键词的搜索记录
+    private fun findSameSearchHistory(keyword: String): SearchHistory? {
+        for (item in historyAdapter.data) {
+            if (item.keyword == keyword) return item
+        }
+        return null
     }
 
     private fun binds() {
-        mViewModel.mViewState.observe(this, Observer {
-            mBinding.srl.isRefreshing = it.isLoading
-            if (it.counts != null) {
-                if (page <= 1) {
-                    videoCoverAdapter.setNewInstance(it.counts.children)
-                    // 防止一页就加载完全部数据，而网站传下一页的话仍然会返回数据，所以在第一页的时候就判断是否超过总数，超过就要加载所有完成
-                    if (videoCoverAdapter.itemCount >= it.counts.count) {
-                        videoCoverAdapter.loadMoreModule.loadMoreEnd()
-                    }
+        mViewModel.observeAllHistory()
+        mViewModel.mSearchHistoryViewState.observe(this) {
+            if (it.histories != null) {
+                if (it.histories.isEmpty()) historyAdapter.setEmptyView(historyEmptyView)
+                historyAdapter.setNewInstance(it.histories)
+            }
+        }
+    }
+
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == SearchResultActivity.REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                data ?: return
+                val isNeedClear = data.getBooleanExtra(SearchResultActivity.RESULT_KEY_NEED_CLEAR, true)
+                if (isNeedClear) {
+                    mBinding.edtSearch.setText("")
                 } else {
-                    videoCoverAdapter.addData(it.counts.children)
-                    if (videoCoverAdapter.itemCount >= it.counts.count) {
-                        videoCoverAdapter.loadMoreModule.loadMoreEnd()
-                    } else {
-                        videoCoverAdapter.loadMoreModule.loadMoreComplete()
-                    }
-                }
-                if (videoCoverAdapter.itemCount - (if (videoCoverAdapter.hasEmptyView()) 1 else 0) <= 0) {
-                    infoText.setText(R.string.no_result_and_click_retry)
-                    videoCoverAdapter.setEmptyView(emptyView)
+                    mBinding.edtSearch.requestFocus()
+                    val keyword = mBinding.edtSearch.text
+                    mBinding.edtSearch.setSelection(keyword.length)
+                    mBinding.edtSearch.postDelayed({
+                        val inputMethodManager = applicationContext
+                            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        inputMethodManager.showSoftInput(mBinding.edtSearch, InputMethodManager.SHOW_IMPLICIT)
+                    }, 300)
                 }
             }
-            if (it.throwable != null) {
-                infoText.text = getString(R.string.error_and_click_retry, it.throwable.localizedMessage)
-                videoCoverAdapter.setEmptyView(emptyView)
-                videoCoverAdapter.setNewInstance(null)
-            }
-        })
+        }
     }
 
     companion object {

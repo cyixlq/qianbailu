@@ -3,6 +3,8 @@ package com.test.qianbailu
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.test.qianbailu.model.ApiService
 import com.test.qianbailu.model.AppDatabase
 import com.test.qianbailu.module.catalog.*
@@ -40,11 +42,16 @@ val httpModule = module {
     }
 
     single {
+        val migration1To2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE `search_history` (`keyword` TEXT NOT NULL, PRIMARY KEY(`keyword`))")
+            }
+        }
         Room.databaseBuilder(
             androidApplication(),
             AppDatabase::class.java,
             "app-database"
-        ).build()
+        ).addMigrations(migration1To2).fallbackToDestructiveMigration().build()
     }
 }
 
@@ -88,10 +95,22 @@ val mvvmModule = module {
 
     // Search
     scope<SearchActivity> {
+        factory { SearchLocalDataSource(get()) }
         factory { SearchRemoteDataSource(get()) }
-        factory { SearchDataSourceRepository(get()) }
+        factory { SearchDataSourceRepository(get(), get()) }
         factory { MutableLiveData<SearchViewState>() }
-        viewModel { SearchViewModel(get(), get()) }
+        factory { MutableLiveData<SearchResultViewState>() }
+        viewModel { SearchViewModel(get(), get(), get()) }
+    }
+
+    // Search Result
+    scope<SearchResultActivity> {
+        factory { SearchLocalDataSource(get()) }
+        factory { SearchRemoteDataSource(get()) }
+        factory { SearchDataSourceRepository(get(), get()) }
+        factory { MutableLiveData<SearchViewState>() }
+        factory { MutableLiveData<SearchResultViewState>() }
+        viewModel { SearchViewModel(get(), get(), get()) }
     }
 
     // Video
