@@ -10,4 +10,6 @@ object TaskExecutor {
     fun executeMain(runnable: Runnable) {
         mMainHandler.post(runnable)
     }
+
+    fun getMainHandler() = mMainHandler
 }

@@ -44,4 +44,5 @@
     <string name="search_history">搜索记录</string>
     <string name="delete_all">全部删除</string>
     <string name="done">完成</string>
+    <string name="speed_play">倍速播放</string>
 </resources>

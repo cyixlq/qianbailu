@@ -12,3 +12,6 @@ const val  UNKNOWN_VOD_NAME = "未获取到影片名称"
 const val UNKNOWN_CAT_NAME = "未获取到分类名称"
 
 const val PAGE_COUNT = 12
+
+// 屏幕滑动快进到底最多只有15分钟
+const val MAX_STEP_DURATION = 15 * 60000L
