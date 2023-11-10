@@ -507,8 +507,7 @@ public class MyJzVideoPlayer extends JzvdStd {
     // 获取滑动最大快进档位时长
     private long getMaxStepDuration() {
         final long totalDuration = getDuration();
-        final long nowPosition = getCurrentPositionWhenPlaying();
-        long result = nowPosition + ConstKt.MAX_STEP_DURATION;
+        long result = mGestureDownPosition + ConstKt.MAX_STEP_DURATION;
         return Math.min(result, totalDuration);
     }
 }

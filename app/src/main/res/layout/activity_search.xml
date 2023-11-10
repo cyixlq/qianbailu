@@ -41,8 +41,18 @@
                 android:focusableInTouchMode="true"
                 android:imeOptions="actionSearch"
                 android:drawableStart="@drawable/ic_search"
+                android:layout_marginEnd="20dp"
                 android:drawableTint="#cccccc"
                 tools:ignore="Autofill,HardcodedText,LabelFor" />
+            <ImageView
+                android:id="@+id/ivClear"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_clear"
+                android:layout_gravity="end|center_vertical"
+                android:background="@drawable/bg_clear"
+                android:visibility="invisible"
+                tools:ignore="ContentDescription" />
         </FrameLayout>
         <TextView
             android:id="@+id/tvAction"

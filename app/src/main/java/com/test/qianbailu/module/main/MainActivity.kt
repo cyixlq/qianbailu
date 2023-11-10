@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
+import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.test.qianbailu.BuildConfig
@@ -33,7 +34,7 @@ class MainActivity : CommonActivity<ActivityMainBinding>() {
     private var mJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         initView()
@@ -44,7 +45,8 @@ class MainActivity : CommonActivity<ActivityMainBinding>() {
             mIsReady = true
             CLog.t(TAG).d("lifecycleScope ready......")
         }
-        // Set up an OnPreDrawListener to the root view.
+        splashScreen.setKeepOnScreenCondition { !mIsReady }
+        /*// Set up an OnPreDrawListener to the root view.
         val content: View = findViewById(android.R.id.content)
         content.viewTreeObserver.addOnPreDrawListener(
             object : ViewTreeObserver.OnPreDrawListener {
@@ -60,7 +62,7 @@ class MainActivity : CommonActivity<ActivityMainBinding>() {
                     }
                 }
             }
-        )
+        )*/
     }
 
     fun isReady() = mIsReady
