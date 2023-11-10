@@ -8,11 +8,13 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.FragmentHomeBinding
+import com.test.qianbailu.module.main.MainActivity
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.fragment.CommonFragment
+import top.cyixlq.core.utils.CLog
 
 class HomeFragment : CommonFragment<FragmentHomeBinding>() {
 
@@ -38,13 +40,23 @@ class HomeFragment : CommonFragment<FragmentHomeBinding>() {
                     videoCoverAdapter.setEmptyView(emptyView)
                 }
                 videoCoverAdapter.setNewInstance(it.list)
+                ready()
             }
             if (it.throwable != null) {
                 infoText.text = getString(R.string.error_and_click_retry, it.throwable.localizedMessage)
                 videoCoverAdapter.setEmptyView(emptyView)
                 videoCoverAdapter.setNewInstance(null)
+                ready()
             }
         })
+    }
+
+    private fun ready() {
+        val activity = requireActivity()
+        if (activity is MainActivity && !activity.isReady()) {
+            activity.ready()
+            CLog.t(TAG).d("ready......")
+        }
     }
 
     private fun initView() {
@@ -69,6 +81,7 @@ class HomeFragment : CommonFragment<FragmentHomeBinding>() {
 
     companion object {
         fun instance(): HomeFragment = HomeFragment()
+        private const val TAG = "HomeFragment"
     }
 
     override val mViewBindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHomeBinding
