@@ -1,7 +1,7 @@
 {
-  "code": 10300,
-  "version": "1.3.0",
-  "desc": "1.去除32位手机芯片的支持，仅支持64位手机芯片，体积更小\n2.UI调整更合理\n3.新增设置界面\n4.新增安全DNS功能\n5.新增观看历史功能\n6.新增竖屏全屏播放功能\n7.视频播放界面新增猜你喜欢的相关视频推荐\n8.新增手动检查更新设置项",
-  "url": "https://github.com/cyixlq/qianbailu/releases/tag/1.3.0Beta",
+  "code": 10301,
+  "version": "1.3.1",
+  "desc": "1.新增搜索记录\n2.优化滑动调整进度的细粒度\n3.添加长按视频临时加速播放\n4.适配Android官方推荐启动画面",
+  "url": "https://github.com/cyixlq/qianbailu/releases/tag/1.3.1",
   "must": false
 }
