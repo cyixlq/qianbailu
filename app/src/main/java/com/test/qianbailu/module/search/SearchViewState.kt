@@ -1,10 +1,7 @@
 package com.test.qianbailu.module.search
 
-import com.test.qianbailu.model.bean.Counter
-import com.test.qianbailu.model.bean.VideoCover
+import com.test.qianbailu.model.bean.SearchHistory
 
 data class SearchViewState(
-    val isLoading: Boolean = false,
-    val throwable: Throwable? = null,
-    val counts: Counter<VideoCover>? = null
+    val histories: MutableList<SearchHistory>? = null
 )

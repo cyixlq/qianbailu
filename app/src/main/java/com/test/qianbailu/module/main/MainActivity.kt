@@ -1,19 +1,25 @@
 package com.test.qianbailu.module.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.fragment.app.FragmentActivity
+import android.view.View
+import android.view.ViewTreeObserver
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import com.test.qianbailu.BuildConfig
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.ActivityMainBinding
 import com.test.qianbailu.module.search.SearchActivity
 import com.test.qianbailu.ui.adapter.ViewPagerFragmentAdapter
 import com.test.qianbailu.ui.widget.UpdateDialogFragment
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import top.cyixlq.core.common.activity.CommonActivity
+import top.cyixlq.core.utils.CLog
 import top.cyixlq.core.utils.toastShort
 
 class MainActivity : CommonActivity<ActivityMainBinding>() {
@@ -23,13 +29,45 @@ class MainActivity : CommonActivity<ActivityMainBinding>() {
     private var lastTime = 0L
     private val duration = 2000
     private var mShowTip = false
+    private var mIsReady = false
+    private var mJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         initView()
         binds()
         checkUpdate(false)
+        mJob = lifecycleScope.launch {
+            delay(2000)
+            mIsReady = true
+            CLog.t(TAG).d("lifecycleScope ready......")
+        }
+        // Set up an OnPreDrawListener to the root view.
+        val content: View = findViewById(android.R.id.content)
+        content.viewTreeObserver.addOnPreDrawListener(
+            object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    // Check whether the initial data is ready.
+                    return if (mIsReady) {
+                        // The content is ready. Start drawing.
+                        content.viewTreeObserver.removeOnPreDrawListener(this)
+                        true
+                    } else {
+                        // The content isn't ready. Suspend.
+                        false
+                    }
+                }
+            }
+        )
+    }
+
+    fun isReady() = mIsReady
+
+    fun ready() {
+        mIsReady = true
+        mJob?.cancel()
     }
 
     fun checkUpdate(showTip: Boolean) {
@@ -93,9 +131,7 @@ class MainActivity : CommonActivity<ActivityMainBinding>() {
     }
 
     companion object {
-        fun launch(activity: FragmentActivity) {
-            activity.startActivity(Intent(activity, MainActivity::class.java))
-        }
+        private const val TAG = "MainActivity"
     }
 
     override val mViewBindingInflater: (inflater: LayoutInflater) -> ActivityMainBinding

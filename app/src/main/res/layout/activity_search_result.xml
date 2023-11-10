@@ -33,22 +33,32 @@
                 android:id="@+id/edtSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="none"
                 android:background="@null"
                 android:hint="@string/input_keyword_to_search"
-                android:maxLines="1"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
+                android:singleLine="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:imeOptions="actionSearch"
                 android:drawableStart="@drawable/ic_search"
                 android:drawableTint="#cccccc"
+                android:layout_marginEnd="20dp"
                 tools:ignore="Autofill,HardcodedText,LabelFor" />
+            <ImageView
+                android:id="@+id/ivClear"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_clear"
+                android:layout_gravity="end|center_vertical"
+                android:background="@drawable/bg_clear"
+                tools:ignore="ContentDescription" />
         </FrameLayout>
         <TextView
             android:id="@+id/tvAction"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:text="@string/search"
+            android:text="@string/cancel"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -56,10 +66,21 @@
             android:background="@drawable/bg_default_ripple"
             android:ellipsize="end"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSearchHistory"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_search_history"/>
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvVideoCover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            tools:listitem="@layout/item_video_cover"/>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 </LinearLayout>

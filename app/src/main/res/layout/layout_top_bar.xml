@@ -4,17 +4,17 @@
     tools:layout_width="match_parent"
     tools:layout_height="?attr/actionBarSize"
     android:orientation="horizontal"
+    tools:background="@color/colorPrimary"
     tools:parentTag="androidx.appcompat.widget.LinearLayoutCompat"
     tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/ivBack"
-        android:layout_width="50dp"
+        android:layout_width="?attr/actionBarSize"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:padding="13dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_left"
+        android:src="@drawable/jz_back_normal"
+        android:padding="16dp"
+        android:background="@drawable/bg_default_ripple"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -27,8 +27,7 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
         android:textColor="#fff"
-        android:textSize="16dp"
-        tools:ignore="SpUsage"
+        android:textSize="18sp"
         tools:text="标题" />
 
     <TextView
@@ -39,6 +38,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:textColor="#fff"
+        android:background="@drawable/bg_default_ripple"
         tools:text="更多" />
 
 </merge>
