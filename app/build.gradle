@@ -73,6 +73,7 @@ dependencies {
     implementation rootProject.ext.support.ktx
     implementation rootProject.ext.support.material
     implementation rootProject.ext.support.swipeRefreshLayout
+    implementation rootProject.ext.support.splashScreen
     implementation rootProject.ext.dependencies.jsoup
     implementation rootProject.ext.dependencies.brvah
     implementation rootProject.ext.dependencies.jzVideoPlayer
