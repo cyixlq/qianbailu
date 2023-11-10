@@ -5,8 +5,8 @@ ext {
             "applicationId"    : "com.test.qianbailu",
             "minSdkVersion"    : 23,
             "targetSdkVersion" : 34,
-            "versionCode"      : 10301,
-            "versionName"      : "1.3.1",
+            "versionCode"      : 10302,
+            "versionName"      : "1.3.2",
     ]
     //version(通用依赖版本)配置
     versions = [

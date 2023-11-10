@@ -3,12 +3,14 @@ package com.test.qianbailu.module.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.ActivitySearchBinding
@@ -44,6 +46,16 @@ class SearchActivity : CommonActivity<ActivitySearchBinding>() {
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
+        }
+        mBinding.edtSearch.addTextChangedListener(afterTextChanged = {
+            if (TextUtils.isEmpty(it?.toString())) {
+                mBinding.ivClear.visibility = View.INVISIBLE
+            } else {
+                mBinding.ivClear.visibility = View.VISIBLE
+            }
+        })
+        mBinding.ivClear.setOnClickListener {
+            mBinding.edtSearch.setText("")
         }
         historyAdapter = SearchHistoryAdapter()
         historyAdapter.addChildClickViewIds(R.id.ivClear)
