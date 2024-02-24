@@ -2,7 +2,6 @@ package com.test.qianbailu.model.bean
 
 import com.test.qianbailu.model.*
 import org.jsoup.Jsoup
-import java.net.URL
 import java.util.regex.Pattern
 
 /**
@@ -16,17 +15,21 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     override fun getHomeVideoCovers(): Counter<VideoCover> {
         val doc = Jsoup.parse(getHtml(getHost()))
         val coversE = doc.select("li.p2.m1")
-        val map = HashMap<String, VideoCover>()
+        val addedVideos = mutableListOf<String>()
+        val list = mutableListOf<VideoCover>()
         for (item in coversE) {
+            val videoId = item.select("a.link-hover").attr("href")
+            if (addedVideos.contains(videoId)) {
+                continue
+            }
             val videoCover = VideoCover(
                 item.select("span.lzbz > p.name").text(),
                 item.selectFirst("img")?.attr("src") ?: "",
-                item.select("a.link-hover").attr("href")
+                videoId
             )
-            map[videoCover.videoId] = videoCover
+            addedVideos.add(videoId)
+            list.add(videoCover)
         }
-        val list = mutableListOf<VideoCover>()
-        list.addAll(map.values)
         return Counter(-1, list)
     }
 

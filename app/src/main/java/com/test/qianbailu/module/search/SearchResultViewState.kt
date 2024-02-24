@@ -1,7 +1,6 @@
 package com.test.qianbailu.module.search
 
 import com.test.qianbailu.model.bean.Counter
-import com.test.qianbailu.model.bean.SearchHistory
 import com.test.qianbailu.model.bean.VideoCover
 
 data class SearchResultViewState(
