@@ -10,7 +10,7 @@
 <script>
     var data = getQueryString("data");
     if (data != null) {
-        var isSuccess = jumpToApp("aiqiyi://video.detail?data=" + data);
+        var isSuccess = jumpToApp("aiqiyi://com.test.qianbailu/videoDetail?data=" + data);
         if (!isSuccess) {
             window.location.href = "https://github.com/cyixlq/qianbailu/releases";
         }
