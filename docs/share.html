@@ -6,6 +6,7 @@
     <title>分享</title>
 </head>
 <body>
+    <h3>正在打开爱骑艺...</h3><br/>请确保您已经安装了爱骑艺，若未安装请在自动跳转到的下载页面自行下载安装后重新打开此链接！
 </body>
 <script>
     var data = getQueryString("data");
@@ -26,7 +27,7 @@
             console.log('跳转到APP超时，可能未安装');
             // 清除定时器，防止后续的跳转被认为是成功的
             clearTimeout(timer);
-        }, 2000); // 设置超时时间，根据需要调整
+        }, 5000); // 设置超时时间，根据需要调整
         
         // 尝试通过url直接打开APP
         window.location.href = url;
