@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分享</title>
+</head>
+<body>
+    <h3>正在打开爱骑艺...</h3><br/>请确保您已经安装了爱骑艺，若未安装请在自动跳转到的下载页面自行下载安装后重新打开此链接！
+</body>
+<script>
+    var data = getQueryString("data");
+    if (data != null) {
+        var isSuccess = jumpToApp("aiqiyi://com.test.qianbailu/videoDetail?data=" + data);
+        if (!isSuccess) {
+            window.location.href = "https://github.com/cyixlq/qianbailu/releases";
+        }
+    } else {
+        alert("参数获取失败，无法跳转");
+    }
+    function jumpToApp(url) {
+        var timer;
+        var success = false;
+        
+        // 设置定时器，在规定时间后认为跳转失败
+        timer = setTimeout(function() {
+            console.log('跳转到APP超时，可能未安装');
+            // 清除定时器，防止后续的跳转被认为是成功的
+            clearTimeout(timer);
+        }, 5000); // 设置超时时间，根据需要调整
+        
+        // 尝试通过url直接打开APP
+        window.location.href = url;
+        
+        // 监听页面的hash变化，如果发生变化，则认为是跳转成功
+        window.onhashchange = function() {
+            // 清除定时器
+            clearTimeout(timer);
+            // 设置跳转成功的标志
+            success = true;
+            console.log('成功跳转到APP');
+        };
+        
+        // 在定时器到期之前，如果发生了页面跳转，则不会执行以下代码
+        // 如果定时器到期了，还没有发生页面跳转，则执行以下代码
+        // 可以根据实际情况进行逻辑处理，例如提示用户安装APP等
+        return success;
+    }
+
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
+</script>
+</html>
