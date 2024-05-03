@@ -35,6 +35,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".module.share.ShareActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="aiqiyi"
+                    android:host="${applicationId}"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".module.video.VideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

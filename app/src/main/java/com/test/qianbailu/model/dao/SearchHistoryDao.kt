@@ -1,10 +1,13 @@
 package com.test.qianbailu.model.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.test.qianbailu.model.bean.SearchHistory
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 
 @Dao
 interface SearchHistoryDao {

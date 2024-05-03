@@ -19,11 +19,15 @@ import com.test.qianbailu.model.PARSE_TYPE_WEB_VIEW_SCAN
 import com.test.qianbailu.model.bean.VideoCover
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
 import com.test.qianbailu.ui.widget.ScanWebView
+import com.test.qianbailu.utils.DesUtil
+import com.test.qianbailu.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.CLog
+import top.cyixlq.core.utils.FormatUtil.toJson
 import top.cyixlq.core.utils.toastLong
 import top.cyixlq.core.utils.toastShort
+import java.net.URLEncoder
 
 class VideoActivity : CommonActivity<ActivityVideoBinding>() {
 
@@ -58,6 +62,21 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
             mAdapter.headerWithEmptyEnable = true
             mHeaderView = LayoutInflater.from(this).inflate(R.layout.layout_video_play_header, mBinding.rvLikes, false)
             mHeaderView.findViewById<TextView>(R.id.tvName).text = it.name
+            mHeaderView.findViewById<TextView>(R.id.tv_share).setOnClickListener {
+                val cover = videoCover
+                if (cover == null) {
+                    getString(R.string.share_failed).toastShort()
+                    return@setOnClickListener
+                }
+                val json = cover.toJson()
+                val data = DesUtil.encrypt(json)
+                if (data.isEmpty()) {
+                    getString(R.string.share_failed).toastShort()
+                    return@setOnClickListener
+                }
+                val shareContent = "https://cyixlq.github.io/qianbailu/share.html?data=${URLEncoder.encode(data, "utf-8")}"
+                Utils.shareText(this, shareContent)
+            }
             mAdapter.setHeaderView(mHeaderView)
             mAdapter.setOnItemClickListener { _, _, position ->
                 val videoCover = mAdapter.getItem(position)

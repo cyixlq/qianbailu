@@ -2,13 +2,10 @@ package com.test.qianbailu.module.settings
 
 import com.test.qianbailu.model.AppDatabase
 import com.test.qianbailu.model.PAGE_COUNT
-import com.test.qianbailu.model.bean.Counter
-import com.test.qianbailu.model.bean.IHtmlConverter
 import com.test.qianbailu.model.bean.VideoCover
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import top.cyixlq.core.utils.RxSchedulers
 
 class SettingsRepository(
     private val local: SettingsLocalSource

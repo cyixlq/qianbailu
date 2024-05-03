@@ -1,7 +1,6 @@
 package com.test.qianbailu.utils;
 
 import android.annotation.SuppressLint;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 

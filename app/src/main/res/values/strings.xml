@@ -25,6 +25,10 @@
     <string name="video_parse_success">视频解析成功</string>
     <string name="set_success_restart_takes_effect">设置成功，重启应用后生效</string>
     <string name="video_warning">请不要相信视频中的任何广告！</string>
+    <string name="click_to_share">点击分享</string>
+    <string name="share_failed">分享失败</string>
+    <string name="share_to">分享到</string>
+    <string name="no_apps_found_to_share">未找到可分享的应用</string>
     <string name="search">搜索</string>
     <string name="input_keyword_to_search">输入关键字开始搜索</string>
     <string name="already_seek_to_last_position">已经跳转到上次播放的位置</string>
@@ -45,4 +49,6 @@
     <string name="delete_all">全部删除</string>
     <string name="done">完成</string>
     <string name="speed_play">倍速播放</string>
+    <string name="video_detail_error">影片详情获取失败</string>
+    <string name="share_content_error">分享内容解析失败</string>
 </resources>

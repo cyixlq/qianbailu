@@ -5,9 +5,7 @@ import com.test.qianbailu.model.bean.Counter
 import com.test.qianbailu.model.bean.IHtmlConverter
 import com.test.qianbailu.model.bean.SearchHistory
 import com.test.qianbailu.model.bean.VideoCover
-import com.test.qianbailu.model.dao.SearchHistoryDao
 import io.reactivex.Observable
-import top.cyixlq.core.utils.RxSchedulers
 
 class SearchDataSourceRepository(
     private val remote: SearchRemoteDataSource,
