@@ -21,5 +21,15 @@ class ExampleUnitTest {
         } else {
             println("Not Found")
         }
+
+        val input = "\"id\": \"player-con\", \"source\": \"https://ccc3.ddn2024ddb6666.com/cdn2024/202407/06/6687b5b17327970b087ebb19/e9f0a4/index.m3u8\", \"width\": \"100%\","
+        val regex = "\"source\": \"(.*?)\", \""
+        val pattern = Pattern.compile(regex)
+        val matcher = pattern.matcher(input)
+        if (matcher.find()) {
+            println(matcher.group(1))
+        } else {
+            println("Not Found")
+        }
     }
 }

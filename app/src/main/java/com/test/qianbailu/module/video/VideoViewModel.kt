@@ -1,6 +1,7 @@
 package com.test.qianbailu.module.video
 
 import androidx.lifecycle.MutableLiveData
+import com.test.qianbailu.model.bean.Video
 import com.test.qianbailu.model.bean.VideoCover
 import com.uber.autodispose.autoDisposable
 import top.cyixlq.core.common.viewmodel.CommonViewModel
@@ -48,5 +49,7 @@ class VideoViewModel(
             .autoDisposable(this)
             .subscribe()
     }
+
+    fun getPlayHeader(video: Video): HashMap<String, String>? = repo.getPlayHeader(video)
 
 }
