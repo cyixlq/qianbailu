@@ -1,7 +1,7 @@
 {
-  "code": 10302,
-  "version": "1.3.2",
-  "desc": "1.3.2\n1.紧急修复1.3.1版本搜索界面、观看历史界面崩溃问题\n1.3.1\n1.新增搜索记录\n2.优化滑动调整进度的细粒度\n3.添加长按视频临时加速播放\n4.适配Android官方推荐启动画面",
-  "url": "https://github.com/cyixlq/qianbailu/releases/tag/1.3.2",
-  "must": true
+  "code": 10303,
+  "version": "1.3.3",
+  "desc": "1. 首页影片顺序不打乱\n2. 增加影片分享功能",
+  "url": "https://github.com/cyixlq/qianbailu/releases/tag/v1.3.3",
+  "must": false
 }

@@ -62,17 +62,6 @@ android {
     viewBinding {
         enabled = true
     }
-    //文件输出
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            //获取当前模式debug或release
-            def buildType = variant.buildType.name
-            if (buildType == "release") {
-                variant.getPackageApplicationProvider().get().outputDirectory = new File("./${buildType}")
-                outputFileName = "aiqiyi_${buildType}_v${defaultConfig.versionName}.apk"
-            }
-        }
-    }
 }
 
 dependencies {
