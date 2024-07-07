@@ -136,7 +136,7 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
             mBinding.progressBar.visibility = if (it.isLoading) View.VISIBLE else View.INVISIBLE
             if (it.video != null) {
                 if (it.video.parseType == PARSE_TYPE_NONE) {
-                    startVideo(it.video.url, videoCover?.name, null)
+                    startVideo(it.video.url, videoCover?.name, mViewModel.getPlayHeader(it.video))
                 } else if (it.video.parseType == PARSE_TYPE_WEB_VIEW_SCAN) {
                     mBinding.videoPlayer.setTip(getString(R.string.resource_scanning_tips))
                     if (mScanWebView == null) {

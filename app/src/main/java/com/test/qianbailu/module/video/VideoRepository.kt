@@ -21,6 +21,8 @@ class VideoDataSourceRepository(
 
     fun saveVideoHistory(videoCover: VideoCover) =
         local.saveVideoHistory(videoCover)
+
+    fun getPlayHeader(video: Video) = remote.getPlayHeader(video)
 }
 
 class VideoRemoteDataSource(private val converter: IHtmlConverter) {
@@ -36,6 +38,9 @@ class VideoRemoteDataSource(private val converter: IHtmlConverter) {
         }
     }
 
+    fun getPlayHeader(video: Video): HashMap<String, String>? {
+        return converter.getPlayHeaders(video)
+    }
 }
 
 class VideoLocalDataSource(private val appDatabase: AppDatabase) {

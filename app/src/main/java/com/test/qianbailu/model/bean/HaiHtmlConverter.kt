@@ -1,8 +1,14 @@
 package com.test.qianbailu.model.bean
 
-import com.test.qianbailu.model.*
+import com.test.qianbailu.model.ApiService
+import com.test.qianbailu.model.BASE_URL
+import com.test.qianbailu.model.PARSE_TYPE_NONE
+import com.test.qianbailu.model.PARSE_TYPE_WEB_VIEW_SCAN
+import com.test.qianbailu.model.UNKNOWN_CAT_NAME
+import com.test.qianbailu.model.UNKNOWN_VOD_NAME
 import org.jsoup.Jsoup
 import java.util.regex.Pattern
+
 
 /**
  *  还口哟网站Html转换器
@@ -45,16 +51,39 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
             )
             likes.add(videoCover)
         }
+        val url = getHost() + doc.selectFirst("div.urlli.clearfix")
+            ?.selectFirst("a")
+            ?.attr("href")
+        /*val playDoc = Jsoup.parse(getHtml(url))
+        val divPlayer = playDoc.selectFirst("div.player")
+        val scriptE = divPlayer?.selectFirst("script")
+        val scriptText = scriptE?.html()
+        val parsePlayUrl = parsePlayUrl(scriptText)*/
+        val playerHtml = getHtml(url)
+        val parsePlayUrl = parsePlayUrl(playerHtml)
+        val playUrl = parsePlayUrl.ifEmpty { url }
         return Video(
             doc.selectFirst("h1#vod_name")?.text() ?: UNKNOWN_VOD_NAME,
-            getHost() + doc.selectFirst("div.urlli.clearfix")
-                ?.selectFirst("a")
-                ?.attr("href"),
+            playUrl,
             doc.selectFirst("img#img_src")?.attr("src") ?: "",
             "",
-            PARSE_TYPE_WEB_VIEW_SCAN,
+            if (parsePlayUrl.isEmpty()) PARSE_TYPE_WEB_VIEW_SCAN else PARSE_TYPE_NONE,
             likes
         )
+    }
+
+    private fun parsePlayUrl(scriptText: String?): String {
+        if (scriptText.isNullOrEmpty())
+            return ""
+        else {
+            val regex = "\"source\": \"(.*?)\", \""
+            val pattern = Pattern.compile(regex)
+            val matcher = pattern.matcher(scriptText)
+            if (matcher.find()) {
+                return matcher.group(1) ?: ""
+            }
+        }
+        return ""
     }
 
     override fun getCatalogList(): Counter<Catalog> {
@@ -148,7 +177,11 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
         return Counter(count, list)
     }
 
-    override fun getPlayHeaders(): MutableMap<String, String>? = null
+    override fun getPlayHeaders(video: Video): HashMap<String, String> = hashMapOf(
+        "User-Agent" to "Mozilla/5.0 (Linux; Android 6.0.1; MuMu Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.158 Mobile Safari/537.36",
+        "Referer" to video.url,
+        "Origin" to getHost()
+    )
 
     private fun getHtml(url: String): String {
         return api.getHtmlResponse(url).execute().body()?.string() ?: ""
