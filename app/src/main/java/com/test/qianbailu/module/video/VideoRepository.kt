@@ -12,8 +12,8 @@ class VideoDataSourceRepository(
     private val remote: VideoRemoteDataSource,
     private val local: VideoLocalDataSource
 ) {
-    fun getVideo(videoId: String): Observable<Video> {
-        return remote.getVideo(videoId)
+    fun getVideo(videoCover: VideoCover): Observable<Video> {
+        return remote.getVideo(videoCover)
     }
 
     fun getVideoHistory(videoId: String) =
@@ -27,10 +27,10 @@ class VideoDataSourceRepository(
 
 class VideoRemoteDataSource(private val converter: IHtmlConverter) {
 
-    fun getVideo(videoId: String): Observable<Video> {
+    fun getVideo(videoCover: VideoCover): Observable<Video> {
         return Observable.create {
             try {
-                it.onNext(converter.getVideo(videoId))
+                it.onNext(converter.getVideo(videoCover))
                 it.onComplete()
             } catch (e: Exception) {
                 it.onError(e)

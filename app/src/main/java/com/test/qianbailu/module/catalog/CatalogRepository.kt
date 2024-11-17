@@ -14,12 +14,12 @@ class CatalogDataSourceRepository(
         return remote.getAllCatalog()
     }
 
-    fun getCatalogContent(catalogUrl: String, page: Int): Observable<Counter<VideoCover>> {
-        return remote.getCatalogContent(catalogUrl, page)
+    fun getCatalogContent(catalog: Catalog, page: Int): Observable<Counter<VideoCover>> {
+        return remote.getCatalogContent(catalog, page)
     }
 
-    fun getCatalogContentSync(catalogUrl: String, page: Int): Counter<VideoCover> {
-        return remote.getCatalogContentSync(catalogUrl, page)
+    fun getCatalogContentSync(catalog: Catalog, page: Int): Counter<VideoCover> {
+        return remote.getCatalogContentSync(catalog, page)
     }
 }
 
@@ -32,13 +32,13 @@ class CatalogRemoteDataSource(private val api: ApiService, private val converter
         }
     }
 
-    fun getCatalogContentSync(catalogUrl: String, page: Int): Counter<VideoCover> {
-        return converter.getVideoCoversByCatalog(catalogUrl, page)
+    fun getCatalogContentSync(catalog: Catalog, page: Int): Counter<VideoCover> {
+        return converter.getVideoCoversByCatalog(catalog, page)
     }
 
-    fun getCatalogContent(catalogUrl: String, page: Int): Observable<Counter<VideoCover>> {
+    fun getCatalogContent(catalog: Catalog, page: Int): Observable<Counter<VideoCover>> {
         return Observable.create {
-            it.onNext(converter.getVideoCoversByCatalog(catalogUrl, page))
+            it.onNext(converter.getVideoCoversByCatalog(catalog, page))
             it.onComplete()
         }
     }

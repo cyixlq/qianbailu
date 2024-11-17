@@ -9,6 +9,7 @@ import com.test.qianbailu.R
 import com.test.qianbailu.databinding.ActivitySearchResultBinding
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
+import com.test.qianbailu.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.activity.CommonActivity
 import top.cyixlq.core.utils.toastShort
@@ -78,12 +79,12 @@ class SearchResultActivity : CommonActivity<ActivitySearchResultBinding>() {
                 if (page <= 1) {
                     videoCoverAdapter.setNewInstance(it.counts.children)
                     // 防止一页就加载完全部数据，而网站传下一页的话仍然会返回数据，所以在第一页的时候就判断是否超过总数，超过就要加载所有完成
-                    if (videoCoverAdapter.itemCount >= it.counts.count) {
+                    if (page >= it.counts.totalPage) {
                         videoCoverAdapter.loadMoreModule.loadMoreEnd()
                     }
                 } else {
                     videoCoverAdapter.addData(it.counts.children)
-                    if (videoCoverAdapter.itemCount >= it.counts.count) {
+                    if (page >= it.counts.totalPage) {
                         videoCoverAdapter.loadMoreModule.loadMoreEnd()
                     } else {
                         videoCoverAdapter.loadMoreModule.loadMoreComplete()
@@ -95,7 +96,7 @@ class SearchResultActivity : CommonActivity<ActivitySearchResultBinding>() {
                 }
                 if (it.throwable != null) {
                     infoText.text =
-                        getString(R.string.error_and_click_retry, it.throwable.localizedMessage)
+                        getString(R.string.error_and_click_retry, Utils.parseNetworkErrorMessage(it.throwable))
                     videoCoverAdapter.setEmptyView(emptyView)
                     videoCoverAdapter.setNewInstance(null)
                 }

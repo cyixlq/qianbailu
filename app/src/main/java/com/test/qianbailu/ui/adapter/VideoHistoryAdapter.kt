@@ -3,10 +3,10 @@ package com.test.qianbailu.ui.adapter
 import android.annotation.SuppressLint
 import androidx.appcompat.widget.AppCompatCheckBox
 import cn.jzvd.JZUtils
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.test.qianbailu.GlideApp
 import com.test.qianbailu.R
 import com.test.qianbailu.model.bean.VideoCover
 import kotlin.math.abs
@@ -32,7 +32,7 @@ class VideoHistoryAdapter : BaseQuickAdapter<VideoCover, BaseViewHolder>(R.layou
             )
         val checkBox: AppCompatCheckBox = holder.getView(R.id.checkbox)
         checkBox.isChecked = mCheckedList.contains(item)
-        GlideApp.with(holder.itemView).load(item.image)
+        Glide.with(holder.itemView).load(item.image)
             .placeholder(R.drawable.ic_loading)
             .into(holder.getView(R.id.ivThumb))
     }

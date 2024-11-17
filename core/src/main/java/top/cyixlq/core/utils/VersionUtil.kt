@@ -9,7 +9,7 @@ object VersionUtil {
     fun getVersionName(): String {
         val packageManager = CoreManager.getApplication().packageManager
         val packageInfo = packageManager.getPackageInfo(CoreManager.getApplication().packageName, 0)
-        return packageInfo.versionName
+        return packageInfo.versionName ?: ""
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

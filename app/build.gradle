@@ -1,20 +1,22 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
     id 'kotlin-parcelize'
 }
 
 android {
-    compileSdk rootProject.ext.android.compileSdkVersion
+    namespace 'com.test.qianbailu'
+    compileSdk 35
     defaultConfig {
-        applicationId rootProject.ext.android.applicationId
-        minSdk rootProject.ext.android.minSdkVersion
-        targetSdk rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
+        applicationId "com.test.qianbailu"
+        minSdk 23
+        targetSdk 35
+        versionCode 10400
+        versionName "1.4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
+            //noinspection ChromeOsAbiSupport
             abiFilters 'arm64-v8a'
         }
         javaCompileOptions {
@@ -56,8 +58,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility = '17'
+        targetCompatibility = '17'
+    }
+    kotlinOptions {
+        jvmTarget = "17"
     }
     viewBinding {
         enabled = true
@@ -66,32 +71,31 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation rootProject.ext.support.appcompat
-    implementation rootProject.ext.support.constraintLayout
-    implementation rootProject.ext.support.kotlin
-    implementation rootProject.ext.support.ktx
-    implementation rootProject.ext.support.material
-    implementation rootProject.ext.support.swipeRefreshLayout
-    implementation rootProject.ext.support.splashScreen
-    implementation rootProject.ext.dependencies.jsoup
-    implementation rootProject.ext.dependencies.brvah
-    implementation rootProject.ext.dependencies.jzVideoPlayer
-    implementation rootProject.ext.dependencies.bugly
-    implementation rootProject.ext.dependencies.ijkJava
-    debugImplementation rootProject.ext.dependencies.leakcanary
-    implementation(rootProject.ext.dependencies.glide) {
+    implementation libs.androidx.appcompact
+    implementation libs.androidx.constraintLayout
+    implementation libs.org.jetbrains.kotlin
+    implementation libs.androidx.core.ktx
+    implementation libs.material
+    implementation libs.androidx.swiperefreshlayout
+    implementation libs.androidx.core.splashscreen
+    implementation libs.jsoup
+    implementation libs.brvah
+    implementation libs.jzVideoPlayer
+    implementation libs.bugly
+    implementation libs.ijkJava
+    debugImplementation libs.leakcanary.android
+    implementation(libs.glide) {
         exclude group: "com.android.support"
     }
-    kapt rootProject.ext.dependencies.glideCompiler
-    implementation rootProject.ext.dependencies.roomRuntime
-    implementation(rootProject.ext.dependencies.roomRxJava) {
+    implementation libs.androidx.room.runtime
+    implementation(libs.androidx.room.rvjava2) {
         exclude group: "io.reactivex.rxjava2"
     }
-    kapt rootProject.ext.dependencies.roomCompiler
+    ksp libs.androidx.room.compiler
     implementation project(path: ':core')
 
     // 测试用包
-    testImplementation rootProject.ext.support.junit
-    androidTestImplementation rootProject.ext.support.runner
-    androidTestImplementation rootProject.ext.support.espresso
+    testImplementation libs.junit
+    androidTestImplementation libs.runner
+    androidTestImplementation libs.androidx.espresso.core
 }

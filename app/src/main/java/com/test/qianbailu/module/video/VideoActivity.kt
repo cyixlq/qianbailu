@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import cn.jzvd.JZDataSource
 import cn.jzvd.Jzvd
 import cn.jzvd.JzvdStd
-import com.test.qianbailu.GlideApp
+import com.bumptech.glide.Glide
 import com.test.qianbailu.R
 import com.test.qianbailu.databinding.ActivityVideoBinding
 import com.test.qianbailu.model.PARSE_TYPE_NONE
@@ -54,7 +54,7 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
         }
         binds()
         videoCover?.let {
-            GlideApp.with(this).load(it.image)
+            Glide.with(this).load(it.image)
                 .placeholder(R.drawable.ic_loading)
                 .fitCenter()
                 .into(mBinding.videoPlayer.thumbImageView)
@@ -84,7 +84,7 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
                 finish()
             }
             mBinding.rvLikes.adapter = mAdapter
-            if (it.position > 1000) mViewModel.getVideo(it.videoId)
+            if (it.position > 1000) mViewModel.getVideo(it)
             else mViewModel.getVideoHistory(it.videoId)
         }
         mEmptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, mBinding.rvLikes, false)
@@ -174,7 +174,7 @@ class VideoActivity : CommonActivity<ActivityVideoBinding>() {
             if (it != null) {
                 videoCover = it
             }
-            mViewModel.getVideo(videoCover?.videoId)
+            mViewModel.getVideo(videoCover)
         }
     }
 

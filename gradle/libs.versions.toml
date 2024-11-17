@@ -1,0 +1,82 @@
+[versions]
+agp = "8.7.2"
+kotlin = "2.0.21"
+kotlin-ksp = "2.0.21-1.0.27"
+coreKtx = "1.15.0"
+runner ="1.6.2"
+appcompact = "1.7.0"
+constraintlayout = "2.2.0"
+lifecycle-extension = "2.2.0"
+junit = "4.13.2"
+espressoCore = "3.6.1"
+material = "1.12.0"
+splashScreen = "1.0.1"
+swiperefreshlayout = "1.1.0"
+jsoup = "1.16.1"
+brvah = "3.0.10"
+jiaozivideoplayer = "7.1.0"
+bugly = "latest.release"
+ijkplayer-java = "0.8.8"
+leakcanary-android = "2.11"
+glide = "4.14.2"
+room = "2.6.1"
+android-library = "8.7.2"
+autodispose = "1.1.0"
+okhttp = "4.11.0"
+retrofit = "2.6.2"
+adapter-rxjava2 = "2.3.0"
+converter-gson = "2.6.2"
+converter-scalars = "2.6.0"
+gson = "2.10.1"
+rxjava2 = "2.2.10"
+rxjava2-android = "2.1.1"
+rxjava2-kotlin = "2.3.0"
+logger = "2.2.0"
+koin-android = "3.4.0"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompact = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompact"}
+androidx-constraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout"}
+org-jetbrains-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin"}
+androix-lifecycle-extension = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle-extension" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material"}
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout"}
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen"}
+jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
+brvah = { group = "com.github.CymChad", name = "BaseRecyclerViewAdapterHelper", version.ref = "brvah" }
+jzVideoPlayer = { group = "cn.jzvd", name = "jiaozivideoplayer", version.ref = "jiaozivideoplayer" }
+bugly = {group = "com.tencent.bugly", name = "crashreport", version.ref = "bugly"}
+ijkJava = { group = "tv.danmaku.ijk.media", name = "ijkplayer-java", version.ref = "ijkplayer-java"}
+leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary-android"}
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide"}
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-rvjava2 = { group = "androidx.room", name = "room-rxjava2", version.ref = "room" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+runner = { group = "androidx.test", name = "runner", version.ref = "runner"}
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+com-uber-autodispose = { group = "com.uber.autodispose", name = "autodispose-android", version.ref = "autodispose" }
+com-uber-autodisposeKtx = { group = "com.uber.autodispose", name = "autodispose-ktx", version.ref = "autodispose" }
+com-uber-autodisposeAndroidKtx = { group = "com.uber.autodispose", name = "autodispose-android-ktx", version.ref = "autodispose" }
+com-uber-autodisposeArchsKtx = { group = "com.uber.autodispose", name = "autodispose-android-archcomponents-ktx", version.ref = "autodispose" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+okhttp-dnsOverHttps = { group = "com.squareup.okhttp3", name = "okhttp-dnsoverhttps", version.ref = "okhttp" }
+com-squareup-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+com-squareup-retrofit2-adapteRxJava2 = { group = "com.squareup.retrofit2", name = "adapter-rxjava2", version.ref = "adapter-rxjava2" }
+com-squareup-retrofit2-gsonConvert = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converter-gson" }
+com-squareup-retrofit-scalarsConvert = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "converter-scalars" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+rxjava2 = { group = "io.reactivex.rxjava2", name = "rxjava", version.ref = "rxjava2" }
+rxjava2-android = { group = "io.reactivex.rxjava2", name = "rxandroid", version.ref = "rxjava2-android" }
+rxjava2-kotlin = { group = "io.reactivex.rxjava2", name = "rxkotlin", version.ref = "rxjava2-kotlin" }
+logger = { group = "com.orhanobut", name = "logger", version.ref = "logger" }
+koinAndroid = { group = "io.insert-koin", name = "koin-android", version.ref = "koin-android" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "android-library"}
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
+
