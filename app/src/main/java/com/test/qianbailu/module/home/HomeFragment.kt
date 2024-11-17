@@ -11,6 +11,7 @@ import com.test.qianbailu.databinding.FragmentHomeBinding
 import com.test.qianbailu.module.main.MainActivity
 import com.test.qianbailu.module.video.VideoActivity
 import com.test.qianbailu.ui.adapter.VideoCoverAdapter
+import com.test.qianbailu.utils.Utils.parseNetworkErrorMessage
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import top.cyixlq.core.common.fragment.CommonFragment
@@ -43,7 +44,7 @@ class HomeFragment : CommonFragment<FragmentHomeBinding>() {
                 ready()
             }
             if (it.throwable != null) {
-                infoText.text = getString(R.string.error_and_click_retry, it.throwable.localizedMessage)
+                infoText.text = getString(R.string.error_and_click_retry, parseNetworkErrorMessage(it.throwable))
                 videoCoverAdapter.setEmptyView(emptyView)
                 videoCoverAdapter.setNewInstance(null)
                 ready()

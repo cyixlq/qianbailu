@@ -1,8 +1,8 @@
 package com.test.qianbailu.ui.adapter
 
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.test.qianbailu.GlideApp
 import com.test.qianbailu.R
 import com.test.qianbailu.model.bean.Platform
 
@@ -12,7 +12,7 @@ class LivePlatformAdapter :
     override fun convert(holder: BaseViewHolder, item: Platform) {
         holder.setText(R.id.tvOnlineCount, "在线主播：${item.number}")
             .setText(R.id.tvPlatformName, item.title)
-        GlideApp.with(context).load(item.image).placeholder(R.mipmap.ic_launcher)
+        Glide.with(context).load(item.image).placeholder(R.mipmap.ic_launcher)
             .into(holder.getView(R.id.ivPlatformIcon))
     }
 }

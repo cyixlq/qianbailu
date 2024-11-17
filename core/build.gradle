@@ -1,13 +1,14 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    namespace 'top.cyixlq.core'
+    compileSdk 35
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        minSdkVersion 23
+        targetSdkVersion 35
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -16,6 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '17'
+        targetCompatibility = '17'
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
     viewBinding {
         enabled = true
     }
@@ -23,29 +31,30 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    implementation rootProject.ext.support.kotlin
-    implementation rootProject.ext.support.appcompat
+    implementation libs.org.jetbrains.kotlin
+    implementation libs.androidx.appcompact
 
     // AutoDispose
-    api rootProject.ext.support.lifecycleExtensions
-    api rootProject.ext.dependencies.autodispose
-    api rootProject.ext.dependencies.autodisposeKtx
-    api rootProject.ext.dependencies.autodisposeAndroidKtx
-    api rootProject.ext.dependencies.autodisposeArchsKtx
+    api libs.androix.lifecycle.extension
+    api libs.com.uber.autodispose
+    api libs.com.uber.autodisposeKtx
+    api libs.com.uber.autodisposeAndroidKtx
+    api libs.com.uber.autodisposeArchsKtx
 
     // 网络库
-    api rootProject.ext.dependencies.okhttp
-    api rootProject.ext.dependencies.adapterRxJava
-    api rootProject.ext.dependencies.gsonConvert
-    api rootProject.ext.dependencies.gson
-    api rootProject.ext.dependencies.loggingInterceptor
-    api rootProject.ext.dependencies.rxjava
-    api rootProject.ext.dependencies.rxandroid
-    api rootProject.ext.dependencies.rxkotlin
-    api rootProject.ext.dependencies.dnsOverHttps // dns
+    api libs.okhttp
+    api libs.okhttp.dnsOverHttps // dns
+    api libs.okhttp.loggingInterceptor
+    api libs.com.squareup.retrofit2
+    api libs.com.squareup.retrofit2.adapteRxJava2
+    api libs.com.squareup.retrofit2.gsonConvert
+    api libs.gson
+    api libs.rxjava2
+    api libs.rxjava2.android
+    api libs.rxjava2.kotlin
 
-    api rootProject.ext.dependencies.logger // 日志打印工具
+    api libs.logger // 日志打印工具
 
     // koin
-    api rootProject.ext.dependencies.koinAndroid
+    api libs.koinAndroid
 }

@@ -20,17 +20,18 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
 
     override fun getHomeVideoCovers(): Counter<VideoCover> {
         val doc = Jsoup.parse(getHtml(getHost()))
-        val coversE = doc.select("li.p2.m1")
+        val coversE = doc.select("li.col-md-6.col-sm-4.col-xs-3")
         val addedVideos = mutableListOf<String>()
         val list = mutableListOf<VideoCover>()
         for (item in coversE) {
-            val videoId = item.select("a.link-hover").attr("href")
+            val elementA = item.select("a.stui-vodlist__thumb.lazyload")
+            val videoId = elementA.attr("href")
             if (addedVideos.contains(videoId)) {
                 continue
             }
             val videoCover = VideoCover(
-                item.select("span.lzbz > p.name").text(),
-                item.selectFirst("img")?.attr("src") ?: "",
+                elementA.attr("title"),
+                elementA.attr("data-original") ?: "",
                 videoId
             )
             addedVideos.add(videoId)
@@ -39,33 +40,44 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
         return Counter(-1, list)
     }
 
-    override fun getVideo(videoId: String): Video {
-        val doc = Jsoup.parse(getHtml(getHost() + videoId))
+    override fun getVideo(videoCover: VideoCover): Video {
+        val detailUri = if (videoCover.videoId.startsWith("http")) videoCover.videoId
+        else getHost() + videoCover.videoId
+        val doc = Jsoup.parse(getHtml(detailUri))
         val likes = mutableListOf<VideoCover>()
-        val vodListE = doc.selectFirst("div#vods_list")?.select("li.p1.m1")
+        val vodListE = doc.selectFirst("ul.stui-vodlist__bd.clearfix")
+            ?.select("a.stui-vodlist__thumb.lazyload")
         vodListE?.forEach { item ->
-            val videoCover = VideoCover(
-                item.select("span.lzbz > p.name").text(),
-                item.selectFirst("img")?.attr("src") ?: "",
-                item.select("a.link-hover").attr("href")
+            val itemVideoCover = VideoCover(
+                item.attr("title"),
+                item.attr("data-original") ?: "",
+                item.attr("href")
             )
-            likes.add(videoCover)
+            likes.add(itemVideoCover)
         }
-        val url = getHost() + doc.selectFirst("div.urlli.clearfix")
+        val playerUrl = doc.selectFirst("ul.stui-content__playlist.clearfix")
             ?.selectFirst("a")
-            ?.attr("href")
+            ?.attr("href") ?: ""
+        val url = if (!playerUrl.startsWith("http")) {
+            getHost() + playerUrl
+        } else {
+            playerUrl
+        }
         /*val playDoc = Jsoup.parse(getHtml(url))
         val divPlayer = playDoc.selectFirst("div.player")
         val scriptE = divPlayer?.selectFirst("script")
         val scriptText = scriptE?.html()
         val parsePlayUrl = parsePlayUrl(scriptText)*/
         val playerHtml = getHtml(url)
-        val parsePlayUrl = parsePlayUrl(playerHtml)
+        val playerDoc = Jsoup.parse(playerHtml)
+        val playerDiv = playerDoc.select("div.stui-player__video.clearfix")
+        val scriptE = playerDiv.select("script")
+        val parsePlayUrl = parsePlayUrl(scriptE.html())
         val playUrl = parsePlayUrl.ifEmpty { url }
         return Video(
-            doc.selectFirst("h1#vod_name")?.text() ?: UNKNOWN_VOD_NAME,
+            doc.selectFirst("h1.title")?.text() ?: UNKNOWN_VOD_NAME,
             playUrl,
-            doc.selectFirst("img#img_src")?.attr("src") ?: "",
+            videoCover.image,
             "",
             if (parsePlayUrl.isEmpty()) PARSE_TYPE_WEB_VIEW_SCAN else PARSE_TYPE_NONE,
             likes
@@ -76,7 +88,7 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
         if (scriptText.isNullOrEmpty())
             return ""
         else {
-            val regex = "\"source\": \"(.*?)\", \""
+            val regex = "thisUrl = \"(.*?)\";"
             val pattern = Pattern.compile(regex)
             val matcher = pattern.matcher(scriptText)
             if (matcher.find()) {
@@ -87,64 +99,48 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     }
 
     override fun getCatalogList(): Counter<Catalog> {
-        val doc = Jsoup.parse(getHtml(getHost()))
-        val catalogs1 = doc.selectFirst("div#headers")
-            ?.selectFirst("div.nav-down.clearfix")
-            ?.selectFirst("ul")
-            ?.select("li")
+        val doc = Jsoup.parse(getHtml(getHost() + "/category.html"))
+        val catalogs = doc.selectFirst("ul.stui-screen__list.type-slide.bottom-line-dot.clearfix")
+            ?.select("a.text-muted")
         val list = mutableListOf<Catalog>()
-        catalogs1?.forEach {
-            val name = it.selectFirst("a")?.text() ?: UNKNOWN_CAT_NAME
-            val id = it.selectFirst("a")
-                ?.attr("href")
-                ?.replace("1.html", "") ?: ""
-            val catalog = Catalog(id, name)
-            list.add(catalog)
-        }
-        val catalogs2 = doc.selectFirst("div.main > div.link-jingpin")?.select("a")
-        catalogs2?.forEach {
-            val name = it.selectFirst("a")?.text() ?: UNKNOWN_CAT_NAME
-            val id = it.selectFirst("a")?.attr("href")
-                ?.replace("1.html", "") ?: ""
-            val catalog = Catalog(id, name)
-            list.add(catalog)
-        }
-        val catalogs3 = doc.selectFirst("div.main > div.link-top")?.select("a")
-        catalogs3?.forEach {
-            val name = it.selectFirst("a")?.text() ?: UNKNOWN_CAT_NAME
-            val id = it.selectFirst("a")?.attr("href")
-                ?.replace("1.html", "") ?: ""
+        catalogs?.forEach {
+            val name = it.text() ?: UNKNOWN_CAT_NAME
+            val id = it.attr("href")
             val catalog = Catalog(id, name)
             list.add(catalog)
         }
         return Counter(-1, list)
     }
 
-    override fun getVideoCoversByCatalog(catalogId: String, page: Int): Counter<VideoCover> {
-        val doc = Jsoup.parse(getHtml("${getHost()}$catalogId$page.html"))
-        val videos = doc.selectFirst("div.index-area.clearfix")
-            ?.selectFirst("ul")?.select("li")
+    override fun getVideoCoversByCatalog(catalog: Catalog, page: Int): Counter<VideoCover> {
+        val url = catalog.catalogUrl.replace(".html", "/time-$page.html")
+        val doc = Jsoup.parse(getHtml(url))
+        val ul = doc.selectFirst("ul.stui-vodlist.clearfix")
+        val lis = ul?.select("li.col-md-6.col-sm-4.col-xs-3")
         val list = mutableListOf<VideoCover>()
-        videos?.forEach {
-            val videoId = it.selectFirst("a.link-hover")?.attr("href") ?: ""
-            val img = it.selectFirst("img#img_src")?.attr("src") ?: ""
-            val name = it.selectFirst("p.name")?.text() ?: UNKNOWN_VOD_NAME
+        lis?.forEach {
+            val elementA = it.selectFirst("a.stui-vodlist__thumb.lazyload")
+            val videoId = elementA?.attr("href") ?: ""
+            val img = elementA?.attr("data-original") ?: ""
+            val name = elementA?.attr("title") ?: UNKNOWN_VOD_NAME
             val videoCover = VideoCover(name, img, videoId)
             list.add(videoCover)
         }
-        val lastPageElement = doc.selectFirst("div.born-page")?.select("a")?.last()
+        val lastPageElement = doc.selectFirst("input#number")
         var count = -1
         if (lastPageElement != null) {
-            val lastHref = lastPageElement.attr("href")
-            val totalPage = findPage(lastHref)
-            if (totalPage > 0) {
-                count = totalPage * list.size
+            val totalPage = lastPageElement.attr("max").toIntOrNull()
+            if (totalPage != null && totalPage > 0) {
+                count = totalPage
             }
         }
         return Counter(count, list)
     }
 
-    private fun findPage(href: String): Int {
+    private fun findPage(href: String?): Int {
+        if (href.isNullOrEmpty()) {
+            return -1
+        }
         val p = Pattern.compile("[0-9]+(?=[^0-9]*$)")
         val m = p.matcher(href)
         if (m.find()) {
@@ -154,24 +150,24 @@ class HaiHtmlConverter(private val api: ApiService) : IHtmlConverter {
     }
 
     override fun search(keyword: String, page: Int): Counter<VideoCover> {
-        val doc = Jsoup.parse(getHtml("${getHost()}/search/$keyword-$page.html"))
-        val videos = doc.selectFirst("div.index-area.clearfix")
-            ?.selectFirst("ul")?.select("li")
+        //https://www.haikouyo.com/search/丝袜/time-2.html
+        val doc = Jsoup.parse(getHtml("${getHost()}/search/$keyword/time-$page.html"))
+        val videos = doc.selectFirst("ul.stui-vodlist.clearfix")?.select("li")?.select("a.stui-vodlist__thumb.lazyload")
         val list = mutableListOf<VideoCover>()
         videos?.forEach {
-            val videoId = it.selectFirst("a.link-hover")?.attr("href") ?: ""
-            val img = it.selectFirst("img#img_src")?.attr("src") ?: ""
-            val name = it.selectFirst("p.name")?.text() ?: UNKNOWN_VOD_NAME
+            val videoId = it.attr("href") ?: ""
+            val img = it.attr("data-original") ?: ""
+            val name = it.attr("title") ?: UNKNOWN_VOD_NAME
             val videoCover = VideoCover(name, img, videoId)
             list.add(videoCover)
         }
-        val lastPageElement = doc.selectFirst("div.born-page")?.select("a")?.last()
+        val lastPageElement = doc.selectFirst("ul.stui-page.text-center.clearfix")?.select("li")?.last()?.selectFirst("a")
         var count = -1
         if (lastPageElement != null) {
             val lastHref = lastPageElement.attr("href")
             val totalPage = findPage(lastHref)
             if (totalPage > 0) {
-                count = totalPage * list.size
+                count = totalPage
             }
         }
         return Counter(count, list)

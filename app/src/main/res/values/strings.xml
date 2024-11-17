@@ -51,4 +51,9 @@
     <string name="speed_play">倍速播放</string>
     <string name="video_detail_error">影片详情获取失败</string>
     <string name="share_content_error">分享内容解析失败</string>
+    <string name="unknown_error">未知错误</string>
+    <string name="socket_time_out">连接超时</string>
+    <string name="no_network">网络未连接</string>
+    <string name="server_unresponsive">网站无响应</string>
+    <string name="no_catalog_info">没有分类信息</string>
 </resources>

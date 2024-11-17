@@ -14,9 +14,9 @@ class VideoViewModel(
 
     val videoHistory: MutableLiveData<VideoCover?> = MutableLiveData()
 
-    fun getVideo(videoId: String?) {
-        videoId ?: return
-        repo.getVideo(videoId)
+    fun getVideo(videoCover: VideoCover?) {
+        videoCover ?: return
+        repo.getVideo(videoCover)
             .doOnSubscribe { viewState.postValue(VideoViewState(isLoading = true)) }
             .subscribeOn(RxSchedulers.io)
             .observeOn(RxSchedulers.ui)
